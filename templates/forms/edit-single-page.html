@@ -1,0 +1,23 @@
+{% load staticfiles %}
+{# load thumbnail #}
+
+
+
+{% if request.user.is_superuser %}
+	<form id="singlpage_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+		{% if edit %}
+			{{ form.post_text }}
+			Название страницы : {{ form.post_title }}<br>
+			Уровень страницы: {{ form.post_cat_level }}<br>
+			Приоритет: {{ form.post_priority }}
+			{% csrf_token %}<br>
+			<button type="submit">Сохранить</button>
+		{% else %}
+			{{ form.post_text.value|safe }}
+			<input type="hidden" name="edit" value="1">
+			<button type="submit"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> EDIT</button>
+		{% endif %}
+	</form>
+{% else %}
+	{{ form.post_text.value|safe }}
+{% endif %}
