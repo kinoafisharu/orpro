@@ -513,7 +513,7 @@ class SinglePageAjaxUpdateView(UpdateView):
     slug_field = "post_seourl"
     slug_url_kwarg = "post_seourl"
     template_name = "singlpage.html"
-    ajax_template_name = "forms/edit-single-page.html"
+    ajax_template_name = "singlpage_form.html"
 
     def post(self, request, *args, **kwargs):
         if request.user.is_superuser:
@@ -540,7 +540,7 @@ class SinglePageAjaxUpdateView(UpdateView):
 
     def form_valid(self, form):
         form.save()
-        return self.render_to_response(self.get_context_data(form=self.form_class(instance=self.object), is_save_form=True))
+        return self.render_to_response(self.get_context_data(form=self.form_class(instance=self.object)))
 
     def get_template_names(self):
         if self.request.is_ajax():
@@ -558,10 +558,8 @@ class SinglePageAjaxUpdateView(UpdateView):
         ctx['post_title'] = self.object
 
         if self.request.user.is_superuser:
-            #If the administrator has edited the text in the form and saved it, display the page
-            #Inherited from form_valid()
-            #At the first page load, edit = False
-            ctx['edit'] = True if 'edit' in self.request.GET and not kwargs.get('is_save_form', False) else False
+            if 'edit' in self.request.GET:
+                ctx['edit'] = True
         return ctx
 
 

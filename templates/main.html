@@ -6,7 +6,6 @@
         <title>Профсистемы-Крым (пгт Гурзуф, ул. Ялтинская, 12) | Прайс-лист компании Профсистемы-Крым</title>
         <meta charset="utf-8">
         <meta name="format-detection" content="telephone=no">
-        
         <link rel="icon" href="http://cdn.stpulscen.ru/system/images/apress/companies/templates/favicons/001/295/227_ico.ico" type="image/x-icon">
         <link rel="stylesheet" href="{% static 'css/grid.css' %}">
         <link rel="stylesheet" href="{% static 'css/colorScheme-5.css' %}">
@@ -15,7 +14,6 @@
         <link rel="stylesheet" href="{% static 'css/owl-carousel.css' %}">
         <link type="text/css" rel="stylesheet" href="{% static 'css/lightslider.css' %}">
         <link type="text/css" rel="stylesheet" href="{% static 'css/lightbox.css' %}">
-        
         <script src="{% static 'js/jquery.js' %}"></script>
         <script src="{% static 'js/jquery-migrate-1.2.1.js' %}"></script>
         <script src="{% static 'js/lightslider.js' %}"></script>
@@ -54,14 +52,18 @@
                                     <a href="/">Главная</a>
                                 </li>
                                 {% for k in topmenu_category %}
-                                    {% if k.post_cat_level == 1 %}
-                                    <li style="width:100%; background: #196743 !important" class="active {%if k.post_title.lower ==  'спецпредложения' %}special{% endif %}">
-                                        <a href="/{{ k.post_seourl }}">{{ k.post_title }}</a>
-                                    </li>
-                                    {% elif g.post_category == k.post_category and g.post_cat_level > 1 %}
-                                        <li class="active">
-                                            <a href="/{{ g.post_seourl }}">{{ g.post_title }}111</a></li>
-                                    {% endif %}
+                                {% if k.post_cat_level == 1 %}
+                                <li style="width:100%; background: #196743 !important" class="active {%if k.post_title.lower == 'спецпредложения' %}special{% endif %}">
+                                    <a href="/{{ k.post_seourl }}">{{ k.post_title }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                {% for g in topmenu_category %}
+                                {% if g.post_category == k.post_category and g.post_cat_level > 1 %}
+                                <li class="active">
+                                    <a href="/{{ g.post_seourl }}">{{ g.post_title }}111</a>
+                                </li>
+                                {% endif %}
                                 {% endfor %}
                             </ul>
                         </nav>
