@@ -1,12 +1,16 @@
 {% extends "base/base.html" %}
 {% load static %} {% load staticfiles %}
 
-{% block additional_head %}{% endblock %}
-
 
 {% block content %}
-    {% if post.post_seourl == 'price' %}
-         <div class="grid_3">
+    {% block additional_head %}
+    <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+{% endblock %}
+ <div class="container hr well1 ins2">
+     <div class="row">
+         {% if post.post_seourl == 'price' %}
+         <div class="grid_3" style="height: 160px">
              <div class="scrol-right-menu" >
                  <h2>Группа товаров</h2>
                  <ul class="marked-list">
@@ -34,50 +38,34 @@
          <div class="grid_9">
               {{ post.post_text|safe }}
          </div>
-    {% else %}
-        <div class="grid_8 content-view-from-database">
-            {% if request.user.is_superuser %}
+         {% else %}
+         <div class="grid_9">
               {% include 'forms/edit-single-page.html' %}
-            {% else %}
-              {{ form.post_text.value|safe }}
-            {% endif %}
-        </div>
-
-
-        <div class="grid_3">
-            <ul class="cloud">
+         </div>
+         <div class="grid_3">
+             <ul class="cloud">
                  {% for tag in tags %}
                  {% if forloop.counter < 100 %}
                  <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
                  {% endif %}
                  {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+             </ul>
+         </div>
+         {% endif %}
+     </div>
+ </div>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+{% block footer %}
+<footer>
+    <div class="container">
+        <div class="copyright">© Профсистемы-Крым 2016 г.
+            г. Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89
+            Время работы:
+            пн-вс 8:00-18:00, без перерыва
+        </div>
+    </div>
+</footer>
+{% endblock %}
 {% block additional_scripts %}
     <script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script>
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
