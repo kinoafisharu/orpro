@@ -571,7 +571,7 @@ class OfferAjaxUpdateView(UpdateView):
     slug_field = "offer_url"
     slug_url_kwarg = "off_url"
     template_name = "offer.html"
-    ajax_template_name = "offer_form.html"
+    ajax_template_name = "offer-form.html"
 
     def post(self, request, *args, **kwargs):
         if request.user.is_superuser:

@@ -1,0 +1,259 @@
+{% load staticfiles %}
+{% load thumbnail %}
+
+<!-- Add the slick-theme.css if you want default styling -->
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+<!-- Add the slick-theme.css if you want default styling -->
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+
+<!--{#<form id="update_offer_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+	<section class="well1 ins2">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-5 col-sm-6 col-xs-12">
+					<div class="col-md-12">
+						<h2 style="width: 100%; padding-bottom: 30px" >
+						{% if edit %}
+							{{ form.offer_title }}
+						{% else %}
+							{{ offer.offer_title }}
+						{% endif %}
+						</h2>
+					</div>
+					<div class="col-md-4 col-xs-12">
+						<div class="of_photo">
+							{% if request.user.is_superuser %}
+							<span type="button" data-toggle="modal" data-target="#imageModal"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></span>
+							{% endif %}
+							{% if offer.offer_photo or offer.images.all %}
+								<ul id="imageGallery">
+									{% if offer.images.first %}
+									{% for img in offer.images.all %}
+										{% if img.images_file %}
+										<li data-thumb="{{ img.images_file.url }}" data-src="{{ img.images_file.url }}" >
+											<a href="{{ img.images_file.url }}" data-lightbox="roadtrip"><img src="{{ img.images_file.url }}" width="220px"/></a>
+										</li>
+									{% endif %}
+									{% endfor %}
+									{% else %}
+										<li data-thumb="{{ offer.offer_photo.url }}" data-src="{{ offer.offer_photo.url }}">
+											<a href="{{ offer.offer_photo.url }}" data-lightbox="roadtrip"><img src="{{ offer.offer_photo.url }}" width="220px"/></a>
+										</li>
+									{% endif %}
+								</ul>
+							{% else %}
+								<img src="{% static 'images/nophoto.jpg' %}" width="200px" height="200px" alt="">
+							{% endif %}
+						</div>
+					</div>
+					{% if edit %}
+					<div class="col-md-8 col-xs-12 form-group">
+						<div>Мин. заказ: {{ form.offer_minorder }} {{ form.offer_minorder_value}}</div>
+						<div>Наличие: {{ form.offer_availability }}</div>
+						<div>Арт: {{ form.offer_article }}</div>
+					</div>
+					<div class="col-md-12 col-xs-12">
+						Метка:
+						{% for subtag in form.offer_subtags %}
+						{{ subtag }}
+						{% endfor %}
+					</div >
+					{% else %}
+					<div class="col-md-6 col-xs-12">
+						<div>Мин. заказ: {{ offer.offer_minorder }} {{ offer.offer_minorder_value}}</div>
+						<div>{{ offer.offer_availability }}</div>
+						<div>Арт: {{ offer.offer_article }}</div>
+						<div style="font-size: 20px; font-weight:bold; padding-top: 10px">
+							Цена  &nbsp;: &nbsp;
+							{% if offer.offer_price_from == 0 %}
+							{{ offer.offer_price|stringformat:"i" }}
+							{% else %}
+							{{ offer.offer_price_from|stringformat:"i" }} - {{ offer.offer_price_to|stringformat:"i" }}
+							{% endif%} руб.
+						</div>
+					</div>
+					{% endif %}
+					{% if request.user.is_superuser %}
+					<div class="info col-md-4 col-xs-12">
+						{% csrf_token %}
+						{% if edit %}
+						<button type="submit" value="Update" style="margin-top: 10px">Сохранить</button>
+						{% else %}
+						<p><a href="{{ offer.get_admin_url }}" target="_blank">Редактировать в Админке</a></p>
+						<input type="hidden" name="edit" value="1">
+						<button type="submit">Быстрое редактирование</button>
+						{% endif %}
+					</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+
+
+	<section class="well1 ins3">
+		<div class="container">
+			<h3>Описание</h3>
+			<div class="row off1">
+				<div class="grid_6">
+					{% if edit %}
+						{{ form.media }}
+						{{ form.offer_text }}
+					{% else %}
+						{{ form.offer_text.value|safe }}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</section>
+</form> #}-->
+
+
+
+
+<div class="container-offer">
+	<div class="offer-grid-images">
+		<!--{# {% if offer.offer_photo or offer.images.all %}
+			<ul id="imageGallery">
+				{% if offer.images.first %}
+					{% for img in offer.images.all %}
+						{% if img.images_file %}
+						<li data-thumb="{{ img.images_file.url }}" data-src="{{ img.images_file.url }}" >
+						<a href="{{ img.images_file.url }}" data-lightbox="roadtrip"><img src="{{ img.images_file.url }}" width="220px"/></a>
+						</li>
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<li data-thumb="{{ offer.offer_photo.url }}" data-src="{{ offer.offer_photo.url }}">
+						<a href="{{ offer.offer_photo.url }}" data-lightbox="roadtrip"><img src="{{ offer.offer_photo.url }}" width="220px"/></a>
+					</li>
+				{% endif %}
+			</ul>
+		{% else %}
+			<img src="{% static 'images/nophoto.jpg' %}" width="200px" height="200px" alt="">
+		{% endif %}#}-->
+		{% if offer.offer_photo or offer.images.all %}
+			<div class='slider-container'>
+			  <div class='slider-for'>
+			  	{% if offer.images.first %}
+					{% for img in offer.images.all %}
+						{% if img.images_file %}
+							<a onclick="viewImage('{{ img.images_file.url }}', true);"><img src="{{ img.images_file.url }}" width="220px"/></a>
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<a href="{{ offer.offer_photo.url }}"><img src="{{ offer.offer_photo.url }}" width="220px"/></a>
+				{% endif %}
+			  </div>
+			
+			  <div class='slider-nav'>
+			  	{% if offer.images.first %}
+					{% for img in offer.images.all %}
+						{% if img.images_file %}
+							<img src="{{ img.images_file.url }}" width="220px"/>
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<img src="{{ offer.offer_photo.url }}" width="220px"/>
+				{% endif %}
+			  </div>
+			</div>
+		{% else %}
+			<img src="{% static 'images/nophoto.jpg' %}" width="200px" height="200px" alt="">
+		{% endif %}
+	</div>
+
+
+
+	<div class="offer-grid-titles">
+		<h4 class="offer-title">
+			{% if edit %}
+				{{ form.offer_title }}
+			{% else %}
+				{{ offer.offer_title }}
+			{% endif %}
+		</h4>
+		
+		<div>Мин. заказ: {{ offer.offer_minorder }} {{ offer.offer_minorder_value}}</div>
+		<div>{{ offer.offer_availability }}</div>
+		<div>Арт: {{ offer.offer_article }}</div>
+		<div style="font-size: 20px; font-weight:bold; padding-top: 10px">
+			Цена  &nbsp;: &nbsp;
+			{% if offer.offer_price_from == 0 %}
+			{{ offer.offer_price|stringformat:"i" }}
+			{% else %}
+			{{ offer.offer_price_from|stringformat:"i" }} - {{ offer.offer_price_to|stringformat:"i" }}
+			{% endif%} руб.
+		</div>
+	</div>
+</div>
+
+<div class="offer-description">
+	<h3>Описание</h3>
+	
+	<p>
+	{% if edit %}
+		{{ form.media }}
+		{{ form.offer_text }}
+	{% else %}
+		{{ form.offer_text.value|safe }}
+	{% endif %}
+	</p>
+</div>
+
+
+
+<div class="view-pop-up-image" onclick="viewImage(0, false);"></div>
+
+
+
+
+
+
+
+
+
+<div class="custom-wide-line">
+	<a href="/catalog/{{ offer.offer_tag.tag_url }}">Вернутся в каталог "{{ offer.offer_tag.tag_title }}"</a>
+</div>
+
+
+
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script type="text/javascript">
+ $('.slider-for').slick({
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: false,
+  fade: true,
+  asNavFor: '.slider-nav'
+});
+
+
+$('.slider-nav').slick({
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  asNavFor: '.slider-for',
+  dots: true,
+  centerMode: true,
+  focusOnSelect: true,
+});
+
+$('.slick-arrow').css({
+	color: '#666',
+});
+
+
+function viewImage(image_url, is_view){
+	if (is_view){
+		$('.view-pop-up-image').css({display: 'block'});
+		$('.view-pop-up-image').html('<img class="opened-image-in-pop-up" src="'+ image_url +'" alt="Image offer" />');
+	} else {
+		$('.view-pop-up-image').css({display: 'none'});
+		$('.view-pop-up-image').html('');
+	}
+}
+</script>

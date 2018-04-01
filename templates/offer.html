@@ -1,72 +1,24 @@
-{% extends "main.html" %}
+{% extends "catalog.html" %}
 {% load static %}
 
 {% block additional_head %}
     {{ form.media }}
-    <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <!--  {#   <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">  #}-->
 {% endblock %}
 
-{% block content %}
 
- <div class="container hr well1 ins2">
-     <div class="row">
-         <div class="grid_3">
-             <div class="scrol-right-menu" >
-                 <h2>Группа товаров</h2>
-                 <ul class="marked-list">
-                     {% for i in tags %}<li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
-                     {% endfor %}
-                 </ul>
-             </div>
-         </div>
-         <div class="grid_6">
-             {% include 'offer_form.html' %}
-         </div>
-         <div class="grid_3">
-             <ul class="cloud">
-                 {% for tag in subtags %}
-                 <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
-                 {% endfor %}
-             </ul>
-         </div>
-     </div>
- </div>
 
- {% if request.user.is_superuser %}
-     <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel">
-         <div class="modal-dialog modal-lg" role="document">
-             <div class="modal-content">
-                 <form method="post" action="{% url 'offer_images' offer.offer_url %}" id="images_form">
-                     <div class="modal-header" style="text-align: center;">
-                         <button data-dismiss="modal" id="without_save" style="width: auto; margin-top:0; margin-right: 10px; float: left;" class="btn">Закрыть без применения изменений</button>
-                         <button style="width: auto; margin-top:0;" type="submit" class="btn">Применить изменения</button>
-                         <button style="margin-top: 0px; float: right;" type="button" class="btn" data-dismiss="modal" aria-label="Close">Закрыть окно</button>
-                     </div>
-                    <div class="modal-body">
-                        {% include 'images_inline_form.html' %}
-                    </div>
 
-                 </form>
-             </div>
-         </div>
-     </div>
- {% endif %}
+{% block container_list_offers %}
+    {% include 'forms/offer-form.html' %}
 {% endblock %}
 
-{% block footer %}
-    <footer>
-        <div class="container">
-            <div class="copyright">© Профсистемы-Крым 2016 г.
-г. Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89
-Время работы:
-пн-вс 8:00-18:00, без перерыва
-            </div>
-          </div>
-    </footer>
-{% endblock %}
 
-<script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script>
+
+
+
+<!--{# <script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script> #}-->
 
 {% block additional_scripts %}
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -100,10 +52,10 @@
                 enableDrag: false,
             });
 
-             tinyMCE.init({
-                 mode : "textareas",
-                 theme : "advanced",
-             });
+             //tinyMCE.init({
+              //   mode : "textareas",
+              //   theme : "advanced",
+             //});
 
         }
 

@@ -1,20 +1,45 @@
 {% load static %}
-
+<!-- saved from url=(0014)about:internet -->
 <!DOCTYPE html>
-<html lang="en">
+<html manifest="default.appcache" lang="ru-RU">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="format-detection" content="telephone=no">
+	<meta http-equiv="cleartype" content="on"/>
+	<meta http-equiv="imagetoolbar" content="no"/>
+	<meta http-equiv="Cache-Control" content="no-cache"/>
+	<meta http-equiv="msthemecompatible" content="no"/>
+
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0"/>
+	<meta name="HandheldFriendly" content="True"/>
+
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+	<meta name="application-name" content="Title"/> 
+	<meta name="msapplication-tooltip" content="Description"/>
 	
+	<meta name="format-detection" content="telephone=no">
+	<meta name="format-detection" content="address=no"/>
+	
+	<meta name="theme-color" content="#0c623b">
+	
+	<meta name="description" content="Orpro company"/>
+	<meta name="keywords" content="Профсистемы-Крым (пгт Гурзуф, ул. Ялтинская, 12)"/>
+	<meta name="author" content="Kortem Digital"/>
+	<meta name="copyright" content="(c) Профсистемы-Крым 2016г."> 
+	<meta http-equiv="Reply-to" content="@">
+	
+
+
+
+
 	<title>Профсистемы-Крым (пгт Гурзуф, ул. Ялтинская, 12) | Прайс-лист компании Профсистемы-Крым</title>
+	<link rel="stylesheet" href="{% static 'new-frontend/css/grid.css' %}" type="text/css" />
+	<link rel="stylesheet" href="{% static 'new-frontend/css/style.css' %}" type="text/css" />
 
-	<link rel="stylesheet" href="{% static 'css/grid.css' %}">
-	<link rel="stylesheet" href="{% static 'new-frontend/css/style.css' %}">
 
-
-	<script src="{% static 'js/jquery.js' %}"></script>
+	<script src="{% static 'new-frontend/js/jquery.js' %}"></script>
 	{% block additional_head %}{% endblock %}
 
 
@@ -23,11 +48,11 @@
                 для формы изменения содержимого страницы.(Only admin)
 
     	include libraries(jQuery, bootstrap) -->
-    	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet" type="text/css" />
     	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
     	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
     		<!-- include summernote css/js -->
-    	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+    	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet" type="text/css" />
     	<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
     {% endif %}
 </head>
