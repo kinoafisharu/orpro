@@ -124,6 +124,8 @@
 	align-content: flex-start;
 			}
 		</style>#}-->
+		{% block container_list_offers %}
+		
 		<div class="catalog-subtags">
 			<ul class="catalog-subtags-ul">
 			{% for tag in subtags %}
@@ -134,7 +136,6 @@
 				{% endif %}
 			{% endfor %}
 		</div>
-
 
 
 
@@ -170,6 +171,7 @@
 				</div>
 			{% endfor %}
 		</div>
+		{% endblock container_list_offers %}
 
 
 
@@ -204,7 +206,9 @@
 {% endblock %}
 
 
-<!--{#{% block additional_scripts %}
+{% block additional_scripts %}{% endblock %}
+
+<!--{#
 <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
 <script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
@@ -346,4 +350,4 @@
 }
 
 </style>
-	{% endblock %}#}-->
+	#}-->

@@ -1,9 +1,9 @@
-{% extends "main.html" %}
+{% extends "base/base.html" %}
 {% load static %}
 {% block additional_head %}
 
-    <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <!--<link rel="stylesheet" href="{% static 'css/preloader.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">-->
 {% endblock %}
 
 
@@ -31,7 +31,7 @@
             </div>
         </section>
         <section>
-            <div class="container banner_wr">
+            <div class="custom-container banner_wr">
                 <ul class="banner">
                     <li>
                         <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
@@ -117,7 +117,7 @@
             </div>
         </section>
         <section class="well ins1">
-            <div class="container hr">
+            <div class="custom-container hr">
                 <ul class="row product-list">
                     <li class="grid_6">
                         <div class="box wow fadeInRight wp">
@@ -215,7 +215,7 @@
             </div>
         </section>
         <section class="well1">
-            <div class="container">
+            <div class="custom-container">
                 <div class="row">
                     <div class="grid_4">
                         <form action="/ac_post" id="ac_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
@@ -326,7 +326,7 @@
 {% block footer %}
     <footer>
         <section class="well3">
-            <div class="container">
+            <div class="custom-container">
                 <ul class="row contact-list">
                     <form action="/company_post" id="company_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                         <span class="company_form_id">
@@ -389,7 +389,7 @@
             </div>
         </section>
         <section>
-            <div class="container">
+            <div class="custom-container">
                 <div class="copyright">© Профсистемы-Крым 2016 г.
                     г. Гурзуф, ул. Ялтинская, 12 , {{ company.rob_phone }}.
                     Время работы:
