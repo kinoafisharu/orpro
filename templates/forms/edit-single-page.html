@@ -1,29 +1,25 @@
-{% load staticfiles %}{% load static %}
-
-{% block additional_head %}
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet" type="text/css" async />
-<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js" async></script>
-{% endblock %}
+{% load staticfiles %}
+{# load thumbnail #}
 
 
 
-
-<form class="admin-relative-block" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-	{% if edit %}
-		{{ form.post_text|safe }}
-		Название страницы : {{ form.post_title }}<br>
-		Уровень страницы: {{ form.post_cat_level }}<br>
-		Приоритет: {{ form.post_priority }}
-		
-		{% csrf_token %}<br>
-		<button type="submit">Сохранить</button>
-	{% else %}
-		{{ form.post_text.value|safe }}
-		<span class="super_user">
-			<input type="hidden" name="edit" value="1">
-			<button type="submit"><span class="admin-icon-edit" aria-hidden="true"></span></button>
-		</span>
-	{% endif %}
-</form>
+{% if request.user.is_superuser %}
+	<form id="singlpage_form" class="admin-relative-block" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+		{% if edit %}
+			{{ form.post_text }}
+			Название страницы : {{ form.post_title }}<br>
+			Уровень страницы: {{ form.post_cat_level }}<br>
+			Приоритет: {{ form.post_priority }}
+			{% csrf_token %}<br>
+			<button type="submit">Сохранить</button>
+		{% else %}
+			{{ form.post_text.value|safe }}
+			<span class="super_user">
+				<input type="hidden" name="edit" value="1">
+				<button type="submit"><span class="admin-icon-edit" aria-hidden="true"></span></button>
+			</span>
+		{% endif %}
+	</form>
+{% else %}
+	{{ form.post_text.value|safe }}
+{% endif %}

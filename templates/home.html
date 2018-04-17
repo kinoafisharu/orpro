@@ -4,8 +4,12 @@
 
 
 {% block additional_head %}
+	<!--<link rel="stylesheet" href="{% static 'css/preloader.css' %}">
+	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">-->
+	<!-- Add the slick-theme.css if you want default styling -->
+<!--<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>-->
+<!-- Add the slick-theme.css if you want default styling -->
 <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
-
 <link rel="stylesheet" type="text/css" href="{% static 'new-frontend/css/animate.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'new-frontend/css/home-style.css' %}">
 {% endblock %}
@@ -16,14 +20,27 @@
 {% block without_container %}
 <section class="slider-section" style="background: #fff;">
 	<div class="custom-container">
-		<div class="custom-slider">
-			{% for baner_element in baner %}
-			<div>
-				<a href="{{ baner_element.baner_url }}">
-					<img src="{{ baner_element.baner_img.url }}">
-				</a>
+		<!--{#{% for baner_element in baner %}
+			<div data-src="{{ baner_element.baner_img.url }}" >
+				<div class="camera_caption fadeIn">
+					<div class="container">
+						<div class="row">
+							<a href="{{ baner_element.baner_url }}" style="display: block"></a>
+						</div>
+					</div>
+				</div>
 			</div>
-			{% endfor %}
+		{% endfor %}#}-->
+		<div class="custom-slider">
+			<div>
+				<a href="#"><img src="https://orpro-assets-1.s3.amazonaws.com/media/banners%D0%BA%D0%B0%D0%B1%D0%B5%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D1%8F.jpg?1523177740816"></a></div>
+		
+			<div>
+				<a href="#"><img src="https://orpro-assets-1.s3.amazonaws.com/media/banners%D1%8D%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B0%D1%8F_%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D1%8F.jpg?1523177716179"></a></div>
+		
+			<div>
+				<a href="#"><img src="https://orpro-assets-1.s3.amazonaws.com/media/%D0%A1%D0%BC%D0%B5%D1%81%D0%B8_%D0%B8_%D0%B3%D1%80%D1%83%D0%BD%D1%82%D1%8B_%D0%BD%D0%B0%D1%88%D0%B5%D0%B3%D0%BE_%D0%BF%D1%80%D0%BE%D0%B8%D0%B7%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%B0_%D1%81_%D0%BC%D0%B0%D1%80%D0%BA%D0%BE%D0%B92.jpg?1523177714742"></a></div>
+
 		</div>
 	</div>
 </section>
@@ -34,110 +51,220 @@
 		
 <section class="section-two">
 	<div class="custom-container">
-		
-
 		{% block content %}
-		<section> <!-- Контейнер 4-х елементов находящихся сразу под слайдером.-->
+		<section>
 			<div class="custom-container banner_wr">
 				<ul class="banner">
-					{% for element_banner in fb_elements %}
 					<li>
-						{% if edit_home_fb and element_banner.id == edit_home_fb %}
-							<!-- Отображение формы быстрого редактирования -->
-
-							<form action="{% url 'home' %}" class="fb_form editable" method="post" novalidate enctype="multipart/form-data">
-								{% csrf_token %}
-								<p>{{ message_text }}</p>
-								<input type="text" name="fb_icon" value="{{ element_banner.fb_icon }}" placeholder="FontAwesome Icon Class" onkeyup="$('#preview-edit-icon').removeClass(); $('#preview-edit-icon').addClass(this.value);">
-								<span id="preview-edit-icon" class="{{ element_banner.fb_icon }}"></span>
-
-								<input type="text" name="fb_title" value="{{ element_banner.fb_title }}" placeholder="Title">
-								<textarea type="text" name="fb_text" placeholder="Text">{{ element_banner.fb_text }}</textarea>
-								<input type="text" name="fb_url" value="{{ element_banner.fb_url }}" placeholder="Url">
-
-								<input type="hidden" name="edit-home-fb" value="{{ element_banner.id }}">
-								<input type="submit" value="Сохранить">
-								<a href="{% url 'home' %}">Отмена</a>
-							</form>
-						{% else %}
-							<form action="{% url 'home' %}" id="fb_form" method="get" novalidate enctype="multipart/form-data">
-								<a href="{{ element_banner.fb_url }}">
-									<div class="{{ element_banner.fb_icon }}"></div>
-									<span>
-										<h3>{{ element_banner.fb_title }}</h3>
-										<p>{{ element_banner.fb_text|safe  }}</p>
-									</span>
-								</a>
-							
-								{% if request.user.is_superuser %}
-									{% csrf_token %}
-									<span class="super_user">
-										<input type="hidden" name="edit-home-fb" value="{{ element_banner.id }}">
-										<button type="submit" class="fast-set">
-											<span class="admin-icon-edit"></span>
-										</button>
-									</span>
-								{% endif %}
-							</form>
-						{% endif %}
+						<form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+							<a href="{{ fb1.fb_url }}" id="url_fb_1">
+								<div class="fa-code-fork"></div>
+								<span class="form-fb-1">
+									<h3>{{ fb1.fb_title }}</h3>
+									<p>{{ fb1.fb_text|safe  }}</p>
+								</span>
+							</a>
+							{% if request.user.is_superuser %}
+							{% csrf_token %}
+							<span class="super_user">
+								<input type="hidden" name="edit" value="1">
+								<button type="submit" class="fast-set">
+									<span class="admin-icon-edit" aria-hidden="true"></span>
+								</button>
+							</span>
+							{% endif %}
+						</form>
 					</li>
-					{% endfor %}
+					<li>
+						<form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+							<a href="{{ fb2.fb_url }}"  id="url_fb_2">
+								<div class="fa-fire"></div>
+								<span class="form-fb-2">
+									<h3>{{ fb2.fb_title }}<br></h3>
+									<p>{{ fb2.fb_text|safe  }}</p>
+								</span>
+							</a>
+							{% if request.user.is_superuser %}
+							{% csrf_token %}
+							<span class="super_user">
+								<input type="hidden" name="edit" value="2">
+								<button type="submit" class="fast-set" >
+									<span class="admin-icon-edit" aria-hidden="true"></span>
+								</button>
+							</span>
+							{% endif %}
+						</form>
+					</li>
+					<li>
+						<form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+							<a href="{{ fb3.fb_url }}"  id="url_fb_3">
+								<div class="fa-bolt"></div>
+								<span class="form-fb-3">
+									<h3>{{ fb3.fb_title }}</h3>
+									<p>{{ fb3.fb_text|safe  }}</p>
+								</span>
+							</a>
+							{% if request.user.is_superuser %}
+							{% csrf_token %}
+							<span class="super_user">
+								<input type="hidden" name="edit" value="3">
+								<button type="submit" class="fast-set">
+									<span class="admin-icon-edit" aria-hidden="true"></span>
+								</button>
+							</span>
+							{% endif %}
+						</form>
+					</li>
+					<li>
+						<form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+							<a href="{{ fb4.fb_url }}"  id="url_fb_4">
+								<div class="fa-pie-chart"></div>
+								<span class="form-fb-4">
+									<h3>{{ fb4.fb_title }}</h3>
+									<p>{{ fb4.fb_text|safe  }}</p>
+								</span>
+							</a>
+							{% if request.user.is_superuser %}
+							{% csrf_token %}
+							<span class="super_user">
+								<input type="hidden" name="edit" value="4">
+								<button type="submit" class="fast-set">
+									<span class="admin-icon-edit" aria-hidden="true"></span>
+								</button>
+							</span>
+							{% endif %}
+						</form>
+					</li>
 				</ul>
 			</div>
 		</section>
 
-	
-
-
-
-
-		<section class="container-view-2-sec">
-			<div class="custom-container">
-				<div class="row">
-
-					{% for element_subbanner in lb_elements %}
-					<div class="grid_6 box-form wow fadeInRight" data-wow-delay=".{{ forloop.counter }}s">
-						{% if edit_home_lb and element_subbanner.id == edit_home_lb %}
-							<form action="{% url 'home' %}" class="lb_form editable" method="post" novalidate enctype="multipart/form-data">
-								{% csrf_token %}
-								<p>{{ message_text }}</p>
-								<input type="text" name="lb_icon" value="{{ element_subbanner.lb_icon }}" placeholder="FontAwesome Icon Class" onkeyup="$('#preview-edit-icon').removeClass(); $('#preview-edit-icon').addClass(this.value);">
-								<span id="preview-edit-icon" class="{{ element_subbanner.lb_icon }}"></span>
-
-								<input type="text" name="lb_title" value="{{ element_subbanner.lb_title }}" placeholder="Title">
-								<textarea type="text" name="lb_text" placeholder="Text">{{ element_subbanner.lb_text }}</textarea>
-								<input type="text" name="lb_url" value="{{ element_subbanner.lb_link }}" placeholder="Url">
-
-								<input type="hidden" name="edit-home-lb" value="{{ element_subbanner.id }}">
-								<input type="submit" value="Сохранить">
-								<a href="{% url 'home' %}">Отмена</a>
-							</form>
-						{% else %}
-							<form action="/" id="lb_form" method="get" novalidate enctype="multipart/form-data">
+		<!--{#<section class="well container-view-2-sec">
+			<div class="custom-container hr">
+				<ul class="row product-list">
+					<li class="grid_6">
+						<div class="box wow fadeInRight wp">
+							<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
 								<span class="form_lb_1">
 									<div class="box_aside">
-										<div class="icon {{ element_subbanner.lb_icon }}"></div>
+										<div class="icon {{ lb1.lb_icon }}"></div>
 									</div>
 									<div class="box_cnt__no-flow">
-										<h3><a href="{{ element_subbanner.lb_link }}">{{ element_subbanner.lb_title }}</a></h3>
-										<p>{{ element_subbanner.lb_text|safe }}</p>
+										<h3><a href="{{ lb1.lb_link }}" id="url_lb_1">{{ lb1.lb_title }}</a></h3>
+										<p>{{ lb1.lb_text|safe }}</p>
 									</div>
 								</span>
 								{% if request.user.is_superuser %}
 								{% csrf_token %}
 								<span class="super_user">
-									<input type="hidden" name="edit-home-lb" value="{{ element_subbanner.id }}">
+									<input type="hidden" name="edit" value="1">
 									<button type="submit" class="fast-set">
 										<span class="admin-icon-edit" aria-hidden="true"></span>
 									</button>
 								</span>
 								{% endif %}
 							</form>
-						{% endif %}
-					</div>
-					{% endfor %}
+						</div>
+						<hr>
+						<div data-wow-delay="0.2s" class="box wow fadeInRight wp">
+							<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+								<span class="form_lb_2">
+									<div class="box_aside">
+										<div class="icon {{ lb2.lb_icon }}"></div>
+									</div>
+									<div class="box_cnt__no-flow">
+										<h3><a href="{{ lb2.lb_link }}" id="url_lb_2">{{ lb2.lb_title }}</a></h3>
+										<p>{{ lb2.lb_text|safe  }}</p>
+									</div>
+								</span>
+								{% if request.user.is_superuser %}
+								{% csrf_token %}
+								<span class="super_user">
+									<input type="hidden" name="edit" value="2">
+									<button type="submit" class="fast-set">
+										<span class="admin-icon-edit" aria-hidden="true"></span>
+									</button>
+								</span>
+								{% endif %}
+							</form>
+						</div>
+					</li>
+					<li class="grid_6">
+						<div data-wow-delay="0.3s" class="box wow fadeInRight wp">
+							<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+								<span class="form_lb_3">
+									<div class="box_aside">
+										<div class="icon {{ lb3.lb_icon }}"></div>
+									</div>
+									<div class="box_cnt__no-flow">
+										<h3><a href="{{ lb3.lb_link }}" id="url_lb_3">{{ lb3.lb_title }}</a></h3>
+										<p>{{ lb3.lb_text|safe  }}</p>
+									</div>
+								</span>
+								{% if request.user.is_superuser %}
+								{% csrf_token %}
+								<span class="super_user">
+									<input type="hidden" name="edit" value="3">
+									<button type="submit" class="fast-set"><span class="admin-icon-edit" aria-hidden="true"></span></button>
+								</span>
+								{% endif %}
+							</form>
+						</div>
+						<hr>
+						<div data-wow-delay="0.4s" class="box wow fadeInRight wp">
+							<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+								<span class="form_lb_4">
+									<div class="box_aside">
+										<div class="icon {{ lb4.lb_icon }}"></div>
+									</div>
+									<div class="box_cnt__no-flow">
+										<h3><a href="{{ lb4.lb_link }}" id="url_lb_4">{{ lb4.lb_title }}</a></h3>
+										<p>{{ lb4.lb_text|safe  }}</p>
+									</div>
+								</span>
+								{% if request.user.is_superuser %}
+								{% csrf_token %}
+								<span class="super_user">
+									<input type="hidden" name="edit" value="4">
+									<button type="submit" class="fast-set">
+										<span class="admin-icon-edit" aria-hidden="true"></span>
+									</button>
+								</span>
+								{% endif %}
+							</form>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</section>#}-->
+		<section class="container-view-2-sec">
+			<div class="custom-container">
+				<div class="row">
 
-					<!--{# <div class="grid_6 box-form wow fadeInRight" data-wow-delay=".2s">
+					<div class="grid_6 box-form wow fadeInRight">
+						<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+								<span class="form_lb_1">
+									<div class="box_aside">
+										<div class="icon {{ lb1.lb_icon }}"></div>
+									</div>
+									<div class="box_cnt__no-flow">
+										<h3><a href="{{ lb1.lb_link }}" id="url_lb_1">{{ lb1.lb_title }}</a></h3>
+										<p>{{ lb1.lb_text|safe }}</p>
+									</div>
+								</span>
+								{% if request.user.is_superuser %}
+								{% csrf_token %}
+								<span class="super_user">
+									<input type="hidden" name="edit" value="1">
+									<button type="submit" class="fast-set">
+										<span class="admin-icon-edit" aria-hidden="true"></span>
+									</button>
+								</span>
+								{% endif %}
+							</form>
+					</div>
+
+					<div class="grid_6 box-form wow fadeInRight" data-wow-delay=".2s">
 						<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
 								<span class="form_lb_2">
 									<div class="box_aside">
@@ -202,7 +329,7 @@
 								</span>
 								{% endif %}
 							</form>
-					</div>#}-->
+					</div>
 				</div>
 			</div>
 		</section>
@@ -391,6 +518,9 @@
 			<div class="copyright">© Профсистемы-Крым 2016г. г.Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89 Время работы: пн-вс 8:00-18:00, без перерыва</div>
 		</div></footer>
 {% endblock footer %}
+
+
+
 
 
 
