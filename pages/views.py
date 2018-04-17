@@ -6,7 +6,6 @@ import random
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
-from django.views import View
 from django.views.generic import UpdateView, FormView
 from django.conf import settings
 from django.contrib import messages
@@ -116,69 +115,69 @@ def review(request):
     return render(request, 'reviews.html', args)
 
 
-#def fb_post(request):
-#    if request.user.is_superuser:
-#        if request.method == 'POST':
-#            response_data = {}
-#            post_text = request.POST
-#            print(post_text)
-#            f = FBlocks.objects.get(id=post_text.get("edit")).id
-#            FBlocks.objects.filter(id=f).update(fb_title=post_text["fb_title"],
-#                                                fb_text=post_text["fb_text"],
-#                                                fb_url=post_text["fb_url"])
-#            response_data['fb_title'] = FBlocks.objects.get(id=f).fb_title
-#            response_data['fb_text'] = FBlocks.objects.get(id=f).fb_text
-#            response_data['fb_url'] = FBlocks.objects.get(id=f).fb_url
-#            response_data['id'] = f
-#            print(response_data)
-#            return JsonResponse(response_data)
-#        else:
-#            args = {}
-#            if 'edit' in request.GET:
-#                print(request.GET["edit"])
-#                args['edit'] = True
-#            id_edit = request.GET["edit"]
-#            fb_initial = FBlocks.objects.get(id=id_edit)
-#            form = FBlocksForm(
-#                initial={'fb_title': fb_initial.fb_title,
-#                         'fb_text': fb_initial.fb_text,
-#                         'fb_url': fb_initial.fb_url},
-#            )
-#
-#            return render(request, 'fb_form.html', locals())
-#    return HttpResponseForbidden()
+def fb_post(request):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            response_data = {}
+            post_text = request.POST
+            print(post_text)
+            f = FBlocks.objects.get(id=post_text.get("edit")).id
+            FBlocks.objects.filter(id=f).update(fb_title=post_text["fb_title"],
+                                                fb_text=post_text["fb_text"],
+                                                fb_url=post_text["fb_url"])
+            response_data['fb_title'] = FBlocks.objects.get(id=f).fb_title
+            response_data['fb_text'] = FBlocks.objects.get(id=f).fb_text
+            response_data['fb_url'] = FBlocks.objects.get(id=f).fb_url
+            response_data['id'] = f
+            print(response_data)
+            return JsonResponse(response_data)
+        else:
+            args = {}
+            if 'edit' in request.GET:
+                print(request.GET["edit"])
+                args['edit'] = True
+            id_edit = request.GET["edit"]
+            fb_initial = FBlocks.objects.get(id=id_edit)
+            form = FBlocksForm(
+                initial={'fb_title': fb_initial.fb_title,
+                         'fb_text': fb_initial.fb_text,
+                         'fb_url': fb_initial.fb_url},
+            )
+
+            return render(request, 'fb_form.html', locals())
+    return HttpResponseForbidden()
 
 
-#def lb_post(request):
-#    if request.user.is_superuser:
-#        if request.method == 'POST':
-#            response_data = {}
-#            post_text = request.POST
-#            edit_id = LBlocks.objects.get(id=post_text.get("edit")).id
-#            LBlocks.objects.filter(id=edit_id).update(lb_title=post_text["lb_title"],
-#                                                      lb_text=post_text["lb_text"],
-#                                                      lb_icon=post_text["lb_icon"],
-#                                                      lb_link=post_text["lb_link"]
-#                                                      )
-#            response_data['lb_title'] = LBlocks.objects.get(id=edit_id).lb_title
-#            response_data['lb_text'] = LBlocks.objects.get(id=edit_id).lb_text
-#            response_data['lb_icon'] = LBlocks.objects.get(id=edit_id).lb_icon
-#            response_data['lb_link'] = LBlocks.objects.get(id=edit_id).lb_link
-#            response_data['id'] = edit_id
-#            return JsonResponse(response_data)
-#        else:
-#            args = {}
-#            if 'edit' in request.GET:
-#                print(request.GET["edit"])
-#                args['edit'] = True
-#                id_edit = request.GET["edit"]
-#            lb_initial = LBlocks.objects.get(id=id_edit)
-#            form = LBlocksForm(initial={'lb_title': lb_initial.lb_title,
-#                                        'lb_text': lb_initial.lb_text,
-#                                        'lb_icon': lb_initial.lb_icon,
-#                                        'lb_link': lb_initial.lb_link})
-#            return render(request, 'lb_form.html', locals())
-#    return HttpResponseForbidden()
+def lb_post(request):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            response_data = {}
+            post_text = request.POST
+            edit_id = LBlocks.objects.get(id=post_text.get("edit")).id
+            LBlocks.objects.filter(id=edit_id).update(lb_title=post_text["lb_title"],
+                                                      lb_text=post_text["lb_text"],
+                                                      lb_icon=post_text["lb_icon"],
+                                                      lb_link=post_text["lb_link"]
+                                                      )
+            response_data['lb_title'] = LBlocks.objects.get(id=edit_id).lb_title
+            response_data['lb_text'] = LBlocks.objects.get(id=edit_id).lb_text
+            response_data['lb_icon'] = LBlocks.objects.get(id=edit_id).lb_icon
+            response_data['lb_link'] = LBlocks.objects.get(id=edit_id).lb_link
+            response_data['id'] = edit_id
+            return JsonResponse(response_data)
+        else:
+            args = {}
+            if 'edit' in request.GET:
+                print(request.GET["edit"])
+                args['edit'] = True
+                id_edit = request.GET["edit"]
+            lb_initial = LBlocks.objects.get(id=id_edit)
+            form = LBlocksForm(initial={'lb_title': lb_initial.lb_title,
+                                        'lb_text': lb_initial.lb_text,
+                                        'lb_icon': lb_initial.lb_icon,
+                                        'lb_link': lb_initial.lb_link})
+            return render(request, 'lb_form.html', locals())
+    return HttpResponseForbidden()
 
 
 def tag_post(request):
@@ -470,79 +469,30 @@ def company_post(request):
     return HttpResponseForbidden()
 
 
+def home(request):
+    args = {}
+    if 'edit' in request.GET:
+        args['edit'] = True
+    args['form'] = FBlocksForm()
+    args['baner'] = MainBaner.objects.all()
+    args['TO'] = TopOffers.objects.all()
+    args['sup'] = Support.objects.all()[0]
+    args['p'] = Personal.objects.all()
+    args['fb1'] = FBlocks.objects.get(id=1)
+    args['fb2'] = FBlocks.objects.get(id=2)
+    args['fb3'] = FBlocks.objects.get(id=3)
+    args['fb4'] = FBlocks.objects.get(id=4)
+    args['lb1'] = LBlocks.objects.get(id=1)
+    args['lb2'] = LBlocks.objects.get(id=2)
+    args['lb3'] = LBlocks.objects.get(id=3)
+    args['lb4'] = LBlocks.objects.get(id=4)
+    args['ac1'] = AboutCompany.objects.get(id=1)
+    args['hf'] = HeaderPhoto.objects.get(id=1)
+    args['company'] = Company.objects.get(id=1)
 
-class Home(View):
+    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
 
-    template_name = 'home.html'
-
-    def get(self, request):
-        ''' Displays the main page. In addition, if the query's get parameters have "edit-", 
-                the item ID is passed to the template, and the editing form of the same element is displayed '''
-        
-        for name_edit_block in ['fb', 'lb']:
-            reduction_name = 'edit-home-' + name_edit_block
-
-            if reduction_name in request.GET and request.user.is_superuser:
-                self.context_data['edit_home_'+ name_edit_block] = int(request.GET.get(reduction_name))
-                continue
-
-        return render(request, self.template_name, self.context_data)
-
-
-    def post(self, request):
-        ''' A handler for editing element fields. Gets the identifier in the "edit-home-" field '''
-
-        if 'edit-home-fb' in request.POST and request.user.is_superuser:
-            try:
-                element = FBlocks.objects.get(id=request.POST['edit-home-fb'])
-                element.fb_url = request.POST['fb_url']
-                element.fb_text = request.POST['fb_text']
-                element.fb_title = request.POST['fb_title']
-                element.fb_icon = request.POST['fb_icon']
-                element.save()
-                self.context_data['edit_home_fb'] = None
-            except:
-                self.context_data['edit_home_fb'] = int(request.POST['edit-home-fb'])
-                self.context_data['message_text'] = "Что-то пошло не так, попробуйте заново."
-
-        elif 'edit-home-lb' in request.POST and request.user.is_superuser:
-            try:
-                element = LBlocks.objects.get(id=request.POST['edit-home-lb'])
-                element.lb_link = request.POST['lb_url']
-                element.lb_text = request.POST['lb_text']
-                element.lb_title = request.POST['lb_title']
-                element.lb_icon = request.POST['lb_icon']
-                element.save()
-                self.context_data['edit_home_lb'] = None
-            except:
-                self.context_data['edit_home_lb'] = int(request.POST['edit-home-lb'])
-                self.context_data['message_text'] = "Что-то пошло не так, попробуйте заново."
-
-        return render(request, self.template_name, self.context_data)
-
-
-    @property
-    def get_static_context(self):
-        self.context_data['fb_elements'] = FBlocks.objects.all()[:4]
-        self.context_data['lb_elements'] = LBlocks.objects.all()[:4]
-
-        self.context_data['form'] = FBlocksForm()
-        self.context_data['baner'] = MainBaner.objects.all()
-        self.context_data['TO'] = TopOffers.objects.all()
-        self.context_data['sup'] = Support.objects.all()[0]
-        self.context_data['p'] = Personal.objects.all()
-        self.context_data['ac1'] = AboutCompany.objects.get(id=1)
-        self.context_data['hf'] = HeaderPhoto.objects.get(id=1)
-        self.context_data['company'] = Company.objects.get(id=1)
-        self.context_data['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
-
-
-    def __init__(self, *args, **kwargs):
-        ''' Each time the class is initialized, it is required to clear the context variable '''
-        self.context_data = {}
-        self.get_static_context
-
-
+    return render(request, 'home.html', args)
 
 
 def get_signature(request):

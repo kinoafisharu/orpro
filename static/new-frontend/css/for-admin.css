@@ -55,85 +55,18 @@
 .box-form, .info-box, .admin-relative-block{position: relative;}
 
 
-.banner > li{margin-top: 30px;height: 358px;}
-.banner > li:hover{margin-top: 30px;height: 358px;}
 
 
-
-/*  Главная страница. FBlocks */
-.fb_form.editable > input:not([type="submit"]) {
-	width: 100%;
-	border-radius: 0;
-	height: 25px;
-	margin-bottom: 5px;
-	border: 1px solid #555;
-}
-
-.fb_form.editable > input[name="fb_icon"]{
-	width: calc(100% - 40px);
-}
-
-.fb_form.editable > textarea{
-	width: 100%;
-	height: 170px;
-}
-.fb_form.editable > input[type="submit"]{
-	cursor: pointer;
-	color: #fff;
-	font-size: 16px;
-	padding: 0 18px;
-	border: none;
-	border-radius: 0;
-	height: 30px;
-	background: #0c623b !important;
-}
-.fb_form > #preview-edit-icon{font-size: 23px;margin-left: 7px;}
-
-
-
-
-/*  Главная страница. LBlocks */
-.lb_form.editable > input:not([type="submit"]) {
-	width: 100%;
-	border-radius: 0;
-	height: 25px;
-	margin-bottom: 5px;
-	border: 1px solid #CFCFCF;
-}
-
-.lb_form.editable > input[name="lb_icon"]{
-	width: calc(100% - 40px);
-}
-
-.lb_form.editable > textarea{
-	width: 100%;
-	height: 170px;
-	border: 1px solid #CFCFCF;
-	padding: 10px 1px;
-}
-.lb_form.editable > input[type="submit"]{
-	cursor: pointer;
-	color: #fff;
-	font-size: 16px;
-	padding: 0 18px;
-	border: none;
-	border-radius: 0;
-	height: 30px;
-	background: #0c623b !important;
-}
-.lb_form > #preview-edit-icon{font-size: 23px;margin-left: 7px;}
 
 
 
 
 @media (max-width: 767px) {
 	.admin-visible-lg{display: none;}
-
 }
 
 @media (min-width: 768px) and (max-width: 1000px) {
 	.admin-visible-lg{display: none;}
-
 
 }
 
@@ -143,6 +76,5 @@
 }
 
 @media (min-width: 1200px) {
-
 
 }

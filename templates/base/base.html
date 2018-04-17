@@ -26,9 +26,9 @@
 	
 	<meta name="theme-color" content="#0c623b">
 	
-	<meta name="description" content="Orpro.ru"/>
+	<meta name="description" content="Orpro company"/>
 	<meta name="keywords" content="Профсистемы-Крым (пгт Гурзуф, ул. Ялтинская, 12)"/>
-	<meta name="author" content="Orpro Digital"/>
+	<meta name="author" content="Kortem Digital"/>
 	<meta name="copyright" content="(c) Профсистемы-Крым 2016г."> 
 	<meta http-equiv="Reply-to" content="@">
 	
@@ -41,9 +41,8 @@
 	<link rel="stylesheet" href="{% static 'new-frontend/css/style.css' %}" type="text/css" />
 
 
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="{% static 'new-frontend/js/jquery.js' %}"></script>
 	{% block additional_head %}{% endblock %}
-
 
 
 	{% if request.user.is_superuser %}
@@ -52,22 +51,24 @@
 		-->
 		<link rel="stylesheet" href="{% static 'new-frontend/css/for-admin.css' %}">
 
-		<!--<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet" async>
-		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js" async></script>
-
-		<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet" type="text/css" async />
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js" async></script>-->
+		<!--include libraries(jQuery, bootstrap) 
+		<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet" type="text/css" />-->
+		<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>-->
+			<!-- include summernote css/js -->
+		<!--<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet" type="text/css" />
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>-->
 	{% endif %}
 </head>
 
 
 
+
+<!--{# Отступ требуется для корректного отображения логотипа на странице каталога, 
+			так как в мобильной версии появляется панель отображения товаров(списком или блочно). #}-->
 <body style="background: #F1F1F1;" class="{% if category_page %} catalog-margin-top-30 {% endif %}">
-	<!-- Отступ требуется для корректного отображения логотипа на странице каталога, 
-			так как в мобильной версии появляется панель отображения товаров(списком или блочно). -->
 	<header style="background-image: url({{ hf.hp_photo.url }});{%if request.path == '/' %}margin-bottom: 0;{%endif%}">
-		
-		<!--  Изменение фоновой картинки в шапке  -->
+		<!--{#  Изменение фоновой картинки в шапке  #}-->
 		{% if request.user.is_superuser %}
 		<form class="admin-visible-lg" action="hp_post" id="hp_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
 			<span class="hp_form_id"></span>
@@ -90,7 +91,7 @@
 				<h1 class="brand_name"><a href="/">Профсистемы-Крым</a></h1>
 			</div>
 			
-			<a href="callto:#"><i class="fa-phone"></i> +7 (978) 213-51-74</a>
+			<a href="callto:#"><i class="fa-phone"></i> +7 (978) 213-40-89</a>
 			<p>Время работы: пн-вс 8:00-18:00, без перерыва</p>
 		</div>
 		
@@ -98,22 +99,15 @@
 		<div id="header-menu-container" class="header-menu-container">
 			<div class="custom-container">
 				<nav class="custom-navbar">
-
-
-					<!-- Отображается при малых размерах экрана(мобильные, планшеты и тд.)
-							Номер телефона отображается на мобильном(только альбомный режим) и на планшетах в любом режиме.	-->
 					<div class="custom-menu-icon">
 						<span></span><span></span><span></span><span></span>
-						<p><b>Профсистемы-Крым</b> <b class="visible-phone-mobile-landscape"> | +7 (978) 213-51-74</b> <br>
-							пгт Гурзуф, ул. Ялтинская, 12</p></div>
+						<p><b>Профсистемы-Крым</b> <b class="visible-phone-mobile-landscape"> | +7 (978) 213-40-89</b> <br>
+							пгт Гурзуф, ул. Ялтинская, 12</p>
+					</div>
 
-
-					<!-- Логотип в шапке. Отображается, если размер экрана сравним с мобильным и более
-							(до малых десктопных размеров). -->
 					<div class="logo-mobile-in-navbar">
 						<img src="{% static 'images/imgpsh_fullsize.png' %}" width="80px">
 					</div>
-
 
 					<ul class="custom-list-menu">
 						<li {%if request.path == '/' %} class="active-mobile" {%endif%}>
@@ -173,7 +167,7 @@
 	{% block footer %}
 	<footer>
 		<div class="custom-container">
-			<div class="copyright">© Профсистемы-Крым 2016г. г.Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-51-74 Время работы: пн-вс 8:00-18:00, без перерыва</div>
+			<div class="copyright">© Профсистемы-Крым 2016г. г.Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89 Время работы: пн-вс 8:00-18:00, без перерыва</div>
 		</div></footer>
 	{% endblock footer %}
 
@@ -210,19 +204,6 @@
 			});
 		})(jQuery);
 	</script>
-
-
-
-
-
-	<!--{#{% if request.user.is_superuser %}
-		 Инициализация текстового редактора для изменения содержимого страниц.
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$('#custom-admin-summernote').summernote();
-			});
-		</script>	
-	{% endif %}#}-->
 	
 
 	</body>

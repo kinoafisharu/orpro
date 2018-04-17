@@ -42,10 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'django_summernote',
-    #'tinymce',
-    
+    'tinymce',
     'django_extensions',
     'crispy_forms',
     'sorl.thumbnail',
