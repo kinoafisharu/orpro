@@ -1,0 +1,11 @@
+<div class="admin-form-group">
+    <input type="hidden" name="template-name-edit" value="{{ template_send }}">
+
+
+    <div><input type="hidden" name="model-id" value="{{ model_id }}"></div>
+    <div>Название страницы : <p style="color: black">{{ form.to_title }}</p></div>
+    <div>Url: <p style="color: black"> {{ form.to_link }}</p></div>
+
+
+    <div><button class="home-button" type="submit">Сохранить</button></div>
+</div>

@@ -11,11 +11,12 @@ body {
 	font: 400 14px/28px "Roboto", sans-serif;
 	-webkit-text-size-adjust: none;
 	height: 100%;
+	overflow-x: hidden;
 
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 	-webkit-focus-ring-color: rgba(255, 255, 255, 0);
 	outline: none;
-	
+
 	-moz-user-select: none;
 	-o-user-select: none;
 	-khtml-user-select: none;
@@ -49,6 +50,7 @@ p, h1, h2, h3, h4, h5, h6, a, div{
 	-ms-hyphens: auto;
 	hyphens: auto;
 }
+b{font-weight: 700;}
 p a:hover, .list a:hover {text-decoration: underline;}
 p .fa, .list .fa {text-decoration: none;}
 time {display: block;}
@@ -439,7 +441,7 @@ footer .copyright a:hover {
 }
 
 .custom-navbar.menu_state_open .custom-list-menu {
-  display: block;  
+  display: block;
 }
 
 .logo-mobile-in-navbar{
@@ -473,6 +475,20 @@ footer .copyright a:hover {
 	background: #E7EBE6;
 	z-index: 100;
 }
+.catalog-order-image{position: relative;}
+.catalog-order-image img:after {
+	font-family: "FontAwesome";
+	content: "\f03e";
+	padding-top: 16px;
+	font-size: 32px;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 80%;
+	background-color: #eee;
+	display: block;
+	position: absolute;
+}
 .catalog-order.order-show-block{
 	height: 450px;
 	width: 210px;
@@ -498,7 +514,6 @@ footer .copyright a:hover {
 	text-align: center;
 	margin-bottom: 10px;
 }
-.catalog-order.order-show-list > .catalog-order-image img{box-shadow: 0 0 5px #888;}
 .catalog-order > .catalog-order-image img{width: auto;height: 100%;}
 .catalog-order.order-show-block > .catalog-order-text{
 	overflow: hidden;
@@ -518,7 +533,7 @@ footer .copyright a:hover {
 	font-weight: 700;
 }
 .catalog-order > .catalog-order-button > a{
-	background: #196743 !important;	
+	background: #196743 !important;
 	padding: 3px 15px;
 	color: #fff;
 	border-radius: 5px;
@@ -552,10 +567,12 @@ footer .copyright a:hover {
 	width: 50%;
 	text-align: center;
 	text-transform: uppercase;
-	font-size: 16px;
+	font-size: 18px;
+	font-weight: 700;
 	height: 35px;
 	overflow: hidden;
 	line-height: 18px;
+	color: #424242;
 }
 .catalog-subtags > .catalog-subtags-ul > li > a{}
 
@@ -851,7 +868,7 @@ footer .copyright a:hover {
 		-webkit-box-shadow: inset 0 1px 5px #B5B5B5;
 		box-shadow: inset 0 1px 5px #B5B5B5;
 	}
-	
+
 	.custom-navbar > .custom-list-menu > li > a {
 		background: none;
 		font-weight: 600;
@@ -937,7 +954,7 @@ footer .copyright a:hover {
 	.custom-list-menu > li{
 		background: #0c623b !important;
 	}
-	
+
 	/* Каталог. Боковое меню.*/
 	.custom-category-list > ul.marked-list li a i{width: 30px;}
 	.custom-category-list > ul.marked-list li a p{width: 180px;}
@@ -970,4 +987,3 @@ footer .copyright a:hover {
 	.custom-category-list > ul.marked-list li a i{width: 30px;}
 	.custom-category-list > ul.marked-list li a p{width: 220px;}
 }
-

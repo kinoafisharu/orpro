@@ -179,7 +179,6 @@ class Subtags(models.Model):
     def create(cls, tag_title):
         tag = cls(tag_title=tag_title, tag_url=slugify_url(tag_title))
         tag.save()
-        # do something with the book
         return tag
 
 
@@ -300,7 +299,9 @@ class MainBaner(models.Model):
 class FBlocks(models.Model):
     fb_title = models.CharField(max_length=80)  # Текст на банере
     fb_text = models.TextField()                # Текст на банере
+    fb_icon = models.CharField(max_length=50, blank=True, null=True)
     fb_url = models.CharField(max_length=250)
+    fb_color = models.CharField(max_length=30, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Блоки под слайдером'
@@ -315,6 +316,7 @@ class LBlocks(models.Model):
     lb_text = models.TextField()                # Текст на банере
     lb_icon = models.CharField(max_length=80)
     lb_link = models.CharField(max_length=250, blank=True)
+    lb_color = models.CharField(max_length=30, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Список под 4 блоками'

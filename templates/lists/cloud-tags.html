@@ -1,5 +1,7 @@
+ {% load path_list %}
+
 <div class="cloud">
-	{% for tag in subtags reversed %}
+	{% for tag in subtags|random_sort %}
 	{% if forloop.counter > 4 and forloop.counter <= count or forloop.counter > 4 and forloop.counter <= 20 and not count %}
 		{% if request.user.is_superuser %}
 			<form action="/stag_post" class="admin-relative-block" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
@@ -41,7 +43,7 @@
 		.cloud li > a{margin-top: 2px;}
 		.cloud li{
 			list-style: none;
-			padding-left: 30px; 
+			padding-left: 30px;
 		}
 	{% else %}
 		.cloud{

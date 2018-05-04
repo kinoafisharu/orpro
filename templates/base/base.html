@@ -18,110 +18,94 @@
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
-	<meta name="application-name" content="Title"/> 
+	<meta name="application-name" content="Title"/>
 	<meta name="msapplication-tooltip" content="Description"/>
-	
+
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no"/>
-	
+
 	<meta name="theme-color" content="#0c623b">
-	
-	<meta name="description" content="Orpro company"/>
-	<meta name="keywords" content="Профсистемы-Крым (пгт Гурзуф, ул. Ялтинская, 12)"/>
-	<meta name="author" content="Kortem Digital"/>
-	<meta name="copyright" content="(c) Профсистемы-Крым 2016г."> 
+
+	<meta name="description" content="Orpro.ru"/>
+	<meta name="keywords" content="{{orpro_data}} ({{orpro_data.address}})"/>
+	<meta name="author" content="Orpro Inc"/>
+	<meta name="copyright" content="(c) {{orpro_data}} 2016г.">
 	<meta http-equiv="Reply-to" content="@">
-	
 
 
 
 
-	<title>Профсистемы-Крым (пгт Гурзуф, ул. Ялтинская, 12) | Прайс-лист компании Профсистемы-Крым</title>
+
+	<title>{{orpro_data}} ({{orpro_data.address}}) | Прайс-лист компании {{orpro_data}}</title>
 	<link rel="stylesheet" href="{% static 'new-frontend/css/grid.css' %}" type="text/css" />
 	<link rel="stylesheet" href="{% static 'new-frontend/css/style.css' %}" type="text/css" />
 
 
-	<script src="{% static 'new-frontend/js/jquery.js' %}"></script>
-	{% block additional_head %}{% endblock %}
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
 	{% if request.user.is_superuser %}
-		<!-- Если вошёл администратор, подключаются стили и скрипты 
-				для формы изменения содержимого страницы.(Only admin)
-		-->
-		<link rel="stylesheet" href="{% static 'new-frontend/css/for-admin.css' %}">
-
-		<!--include libraries(jQuery, bootstrap) 
-		<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet" type="text/css" />-->
-		<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>-->
-			<!-- include summernote css/js -->
-		<!--<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet" type="text/css" />
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>-->
+		<!-- Если вошёл администратор, подключаются стили и скрипты
+				для формы изменения содержимого страницы.(Only admin)-->
+		<link rel="stylesheet" href="{% static 'new-frontend/css/admin-style.css' %}">
+		<script src="{% static 'new-frontend/js/admin-script.js' %}"></script>
 	{% endif %}
+
+	{% block additional_head %}{% endblock %}
 </head>
 
 
 
-
-<!--{# Отступ требуется для корректного отображения логотипа на странице каталога, 
-			так как в мобильной версии появляется панель отображения товаров(списком или блочно). #}-->
 <body style="background: #F1F1F1;" class="{% if category_page %} catalog-margin-top-30 {% endif %}">
+	<!-- Отступ требуется для корректного отображения логотипа на странице каталога,
+			так как в мобильной версии появляется панель отображения товаров(списком или блочно). -->
 	<header style="background-image: url({{ hf.hp_photo.url }});{%if request.path == '/' %}margin-bottom: 0;{%endif%}">
-		<!--{#  Изменение фоновой картинки в шапке  #}-->
-		{% if request.user.is_superuser %}
-		<form class="admin-visible-lg" action="hp_post" id="hp_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-			<span class="hp_form_id"></span>
-			{% csrf_token %}
-			<span class="super_user">
-				<input type="hidden" name="edit" value="1">
-				<button type="submit" class="fast-set">
-					<span class="admin-icon-edit" aria-hidden="true"></span>
-				</button>
-			</span>
-		</form>
-		{% endif %}
-
-
 
 
 		<div class="custom-container hidden-mobile-logo">
 			<div class="custom-brand">
 				<img src="{% static 'images/imgpsh_fullsize.png' %}" width="180px">
-				<h1 class="brand_name"><a href="/">Профсистемы-Крым</a></h1>
+				<h1 class="brand_name"><a href="/">{{orpro_data}}</a></h1>
 			</div>
-			
-			<a href="callto:#"><i class="fa-phone"></i> +7 (978) 213-40-89</a>
+
+			<a href="callto:#"><i class="fa-phone"></i> {{orpro_data.mob_phone}}</a>
 			<p>Время работы: пн-вс 8:00-18:00, без перерыва</p>
 		</div>
-		
+
 
 		<div id="header-menu-container" class="header-menu-container">
 			<div class="custom-container">
 				<nav class="custom-navbar">
+
+
+					<!-- Отображается при малых размерах экрана(мобильные, планшеты и тд.)
+							Номер телефона отображается на мобильном(только альбомный режим) и на планшетах в любом режиме.	-->
 					<div class="custom-menu-icon">
 						<span></span><span></span><span></span><span></span>
-						<p><b>Профсистемы-Крым</b> <b class="visible-phone-mobile-landscape"> | +7 (978) 213-40-89</b> <br>
-							пгт Гурзуф, ул. Ялтинская, 12</p>
-					</div>
+						<p><b>{{orpro_data}}</b> <b class="visible-phone-mobile-landscape"> | {{orpro_data.mob_phone}}</b> <br>
+							{{orpro_data.address}}</p></div>
 
+
+					<!-- Логотип в шапке. Отображается, если размер экрана сравним с мобильным и более
+							(до малых десктопных размеров). -->
 					<div class="logo-mobile-in-navbar">
 						<img src="{% static 'images/imgpsh_fullsize.png' %}" width="80px">
 					</div>
+
 
 					<ul class="custom-list-menu">
 						<li {%if request.path == '/' %} class="active-mobile" {%endif%}>
 							<a href="/">Главная</a>
 						</li>
-							
-						
+
+
 
 						<!--{# Список страниц в главном меню #}-->
 						{% for single_menu_item in topmenu_category %}
 							{% if single_menu_item.post_cat_level == 1 %}
-								
+
 								<!--{#  Если пользователь открывает страницу каталога на мобильном телефоне, список категорий
-											выводится в верхнем(открывающемся) меню. ВАЖНО: url должен быть 'catalog' 
+											выводится в верхнем(открывающемся) меню. ВАЖНО: url должен быть 'catalog'
 
 										Также, добавляется класс "active-mobile" к активной ссылке #}-->
 								{% if request.path|path_list:0 == 'catalog' and single_menu_item.post_seourl == 'catalog' %}
@@ -130,7 +114,7 @@
 											<i class="fa fa-arrow-down visible-mobile" style="margin-left: 10px;"></i>
 										</a>
 									</li>
-									
+
 									<div class="open-catalog-menu-mobile">
 										{% include 'lists/catalog-menu.html' with tags_menu=tags %}
 									</div>
@@ -157,33 +141,46 @@
 		</div>
 	</section>
 	{% endblock without_container %}
-	
 
 
+	{% if request.user.is_superuser %}
+			<!--  Изменение фоновой картинки в шапке.
+							Здесь, потому что по другому не показывается и не работает -->
+			{% csrf_token %}
+			<span class="super_user admin-visible-lg">
+				<a href="javascript:viewFormEdit('button-edit-form-hp');" id="button-edit-form-hp" data-template-name="hp_form.html" data-model-id="1">
+					<span class="admin-icon-edit"></span></a>
+			</span>
 
+
+		<!-- Всплывающее окно для форм быстрого редактирования -->
+		<div class="admin-panel-pop-up" style="display: none;">
+			<div class="custom-pop-up-blur"></div>
+			<div class="custom-container container-pop">
+				<div class="alert-pop-up" id="alert-pop-up"></div>
+				{% csrf_token %}
+				<form action="javascript:sendData();" class="admin-relative-block" id="send-form-ajax" method="POST" novalidate enctype="multipart/form-data">
+
+				</form>
+			</div>
+		</div>
+	{% endif %}
 
 
 
 	{% block footer %}
 	<footer>
 		<div class="custom-container">
-			<div class="copyright">© Профсистемы-Крым 2016г. г.Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89 Время работы: пн-вс 8:00-18:00, без перерыва</div>
+			<div class="copyright">© {{orpro_data}} 2016г. {{orpro_data.address}} , {{orpro_data.mob_phone}} Время работы: пн-вс 8:00-18:00, без перерыва</div>
 		</div></footer>
 	{% endblock footer %}
 
 
-	<!--{#
-	{% if request.user.is_superuser %}
-		<div class="admin-panel-pop-up"><div class="custom-container"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p></div></div>
-	{% endif %}#}-->
+
+
 
 	{% block additional_scripts %}{% endblock %}
-	
+
 
 	<!--{# Мобильная версия. Кнопка открытия меню. #}-->
 	<script type="text/javascript">
@@ -204,7 +201,7 @@
 			});
 		})(jQuery);
 	</script>
-	
+
 
 	</body>
 </html>

@@ -4,7 +4,6 @@
 __pycache__/
 *.py[cod]
 *$py.class
-settings-run-local.py
 
 # C extensions
 *.so
@@ -55,6 +54,8 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
+settings-run-local.py
+staticfiles/
 
 # Flask stuff:
 instance/
@@ -74,7 +75,6 @@ target/
 
 # pyenv
 .python-version
-.virtual/
 
 # celery beat schedule file
 celerybeat-schedule
@@ -88,6 +88,7 @@ celerybeat-schedule
 env/
 venv/
 ENV/
+.virtual/
 
 # Spyder project settings
 .spyderproject

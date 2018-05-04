@@ -1,0 +1,17 @@
+<div class="admin-form-group">
+    <input type="hidden" name="template-name-edit" value="{{ template_send }}">
+
+
+    <div><input type="hidden" name="model-id" value="{{ model_id }}"></div>
+    <div>Название блока: <p style="color: black">{{ form.lb_title }}</p></div>
+    <div>Текст: <p style="color: black"> {{ form.lb_text }}</p></div>
+    <div>Иконка( <a href="https://fontawesome.com/v4.7.0/icons/" target="_blank">Font Awesome
+          <i class="fa fa-share" aria-hidden="true"></i></a>): <p style="color: black"> {{ form.lb_icon }}</p></div>
+    <div>Цвет( <a href="https://www.w3schools.com/colors/colors_picker.asp" target="_blank">Color Picker
+          <i class="fa fa-share" aria-hidden="true"></i></a>): <p style="color: black"> {{ form.lb_color }}</p></div>
+
+    <div>Url: <p style="color: black"> {{ form.lb_link }}</p></div>
+
+
+    <div><button class="home-button" type="submit">Сохранить</button></div>
+</div>

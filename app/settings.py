@@ -42,9 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tinymce',
+
+    'django_summernote',
+    #'tinymce',
+
     'django_extensions',
-    'crispy_forms',
     'sorl.thumbnail',
     'captcha',
     'pages',
@@ -174,15 +176,17 @@ AWS_PUBLIC_MEDIA_LOCATION = 'media'
 # MEDIA_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA)
 # Создаем внешнийф файл storage_backends.py, в котором укажем путь для сохранения файлов
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
 
-#Tiny-MCE configuration
 
-# TINYMCE_DEFAULT_CONFIG = {
-#     'theme': "lightgray",
-#     'relative_urls': False}
-# TINYMCE_JS_ROOT = STATIC_URL + 'tiny_mce'
-# TINYMCE_JS_URL = STATIC_URL + 'tiny_mce/tiny_mce.js'
-# TINYMCE_INCLUDE_JQUERY = False
+
+
+#django-summernote
+SUMMERNOTE_CONFIG = {
+    'width': '100%',
+	'default_css': (
+        'new-frontend/css/summernote.css',
+		'summernote/django_summernote.css',
+    ),
+}

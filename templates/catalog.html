@@ -65,7 +65,7 @@
 			}
 		</style>#}-->
 		{% block container_list_offers %}
-		
+
 		<div class="catalog-subtags">
 			<ul class="catalog-subtags-ul">
 			{% for tag in subtags %}
@@ -85,7 +85,7 @@
 
 
 		<!--{# Панель отображения товаров(списком или блочно) и способ сортировки #}-->
-		<div class="custom-viewers-line">			
+		<div class="custom-viewers-line">
 			<div class="block-settings-type-sorted"></div>
 			<div class="block-settings-type-view">
 				<!--<p id="text-settings-list-or-block"></p>-->
@@ -101,17 +101,17 @@
 		<div class="custom-orders-list" {% if offer|length <= 2 %}style="justify-content: flex-start;"{% endif %}>
 			{% for p in offer %}
 				<div class="catalog-order order-show-list" {% if offer|length <= 2 %}style="margin-right: 20px;"{% endif %}>
-					
+
 
 					<div class="catalog-order-image">
-						<a href="/goods/{{ p.offer_url }}/"><img src="{{ p.get_main_image }}"  alt="{{ p.offer_title }}"></a>
+						<a href="/goods/{{ p.offer_url }}/"><img src="{{ p.get_main_image }}"  alt=" "></a>
 					</div>
 
 
 					<div class="catalog-order-text">
-							<h5 class="hidden-in-list title">{{ p.offer_title|truncatechars:40 }}</h5>
+							<h5 class="hidden-in-list title">{{ p.offer_title|truncatechars:55 }}</h5>
 							<a href="/goods/{{ p.offer_url }}/" class="hidden-in-block title"><h5>{{ p.offer_title|truncatechars:40 }}</h5></a>
-							
+
 							{% if p.offer_price != 0 %}
 								<b class="order-price">{{ p.offer_price|stringformat:"i" }} руб.</b>
 							{% elif p.offer_price_from != 0 %}
@@ -119,7 +119,7 @@
 							{% else %}
 								<b class="order-price">Нет в наличии</b>
 							{% endif %}
-							
+
 							<p>{{ p.offer_pre_text|safe|truncatechars:160 }}</p>
 					</div>
 
@@ -130,7 +130,7 @@
 				</div>
 			{% endfor %}
 		</div>
-		
+
 			{% if not request.user.is_superuser %}
 			<div class="visible-mobile">
 				{% include 'lists/cloud-tags.html' %}
@@ -156,168 +156,17 @@
 {% block additional_scripts %}
 	<script type="text/javascript">
 		$('#offer-show-block').on('click', function() {
-			//alert($('.custom-orders-list').length());
 			if ($('.custom-orders-list > .catalog-order').hasClass('order-show-list')){
 				$('.custom-orders-list > .catalog-order').toggleClass('order-show-list order-show-block');
-				//$('#text-settings-list-or-block').text('Таблицей');
 				$('.block-settings-type-view > a:not(.return-to-category)').toggleClass('active');
-			} else {
-				//Is already show
 			}
 		});
 
 		$('#offer-show-list').on('click', function() {
 			if ($('.custom-orders-list > .catalog-order').hasClass('order-show-block')){
 				$('.custom-orders-list > .catalog-order').toggleClass('order-show-list order-show-block');
-				//$('#text-settings-list-or-block').text('Списком');
 				$('.block-settings-type-view > a:not(.return-to-category)').toggleClass('active');
-			} else {
-				//Is already show
 			}
 		});
 	</script>
 {% endblock %}
-
-<!--{#
-<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
-<script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
-<script>
-   $(document).on('submit', '#tag_form', function(e)  {
-			e.preventDefault();
-			$('#tag_form').preloader({setRelative: false});
-			var form = e.target;
-			$form = $(form);
-			$form.ajaxSubmit({
-				url: form.action,
-				method: form.method,
-				success: function (data) {
-					try{
-					if( data.indexOf('<span style="display: none">') > -1 ) {
-						$(".tag_form_"+data.slice(data.indexOf('none">')+6, data.indexOf('</span>'))).html(data);
-						$form.attr("method", "post");
-						$(".fast-set").css("display","none");
-						$('#tag_form').preloader('remove');
-					}}
-					catch (TypeError){
-						 $form.attr("method", "get");
-						$(".fast-set").css("display","block");
-						if (data.del){
-							 $(".tag_form_" + data.id).parent().remove();
-						}
-						else {
-							$(".tag_form_" + data.id).html(
-								'<li>' + '<a href="/catalog/' + data.tag_url + '">' + data.tag_title + '</a>' + '</li>'
-							);
-							$('.super_user').html();
-						}
-					}
-					$('#tag_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-				},
-				error: function (xhr, textStatus, error) {
-					alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-					$('#tag_form').preloader('remove');
-				}
-			});
-		});
-	   $(document).on('click', '.cancel', function(evt) {
-			evt.preventDefault();
-			$.ajax({
-				url: evt.href,
-				success: function(data){
-					$(evt.target).closest('form').replaceWith($.parseHTML(data));
-				}
-			});
-	   });
-	   $(document).on('submit', '#stag_form', function(e)  {
-			e.preventDefault();
-			$('#stag_form').preloader({setRelative: false});
-			var form = e.target;
-			$form = $(form);
-			$form.ajaxSubmit({
-				url: form.action,
-				method: form.method,
-				success: function (data) {
-
-					try{
-					if( data.indexOf('<span style="display: none">') > -1 ) {
-						$(".stag_form_"+data.slice(data.indexOf('none">')+6, data.indexOf('</span>'))).html(data);
-						$form.attr("method", "post");
-						$(".fast-set").css("display","none");
-						$('#stag_form').preloader('remove');
-					}}
-					catch (TypeError){
-						 $form.attr("method", "get");
-						$(".fast-set").css("display","block");
-						if (data.del){
-							 $(".stag_form_" + data.id).parent().remove();
-						}
-						else{
-						$(".stag_form_"+data.id).html(
-							'<li>'+'<a href="/catalog/'+data.tag_url+'">'+ data.tag_title +'</a>'+'</li>'
-						);
-						}
-						$('.super_user').html();
-					};
-					$('#stag_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-				},
-				error: function (xhr, textStatus, error) {
-					alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-					$('#stag_form').preloader('remove');
-				}
-			});
-		});
-</script>
-<style>
-	.cloud span > li {
-	list-style: none;
-	display: inline;
-}
-
-.cloud span:nth-of-type(3n + 1) > li {
-	font-size: 1.15em;
-	color: darkgreen!important;
-}
-
-.cloud span:nth-of-type(4n+3) > li {
-	font-size: 0.85em;
-	color: darkolivegreen!important;
-}
-
-.cloud span:nth-of-type(5n - 3) > li {
-	font-size: 1em;
-	color: green!important;
-
-}
-
-.cloud span:nth-of-type(4n - 3) > li {
-	font-size: 0.9em;
-	color: forestgreen!important;
-}
-
-.stag-center {
-	list-style: none;
-}
-
-.stag-center {
-	margin: 0;
-	display: flex;
-	flex-wrap: wrap;
-	font-size: 17px;
-}
-
-.stag-center .col-6 {
-	flex-grow: 1;
-	flex-basis: 50%;
-	margin-bottom: 30px;
-}
-
-.stag-center form {
-	justify-content: center;
-	text-align: center;
-}
-
-</style>
-	#}-->

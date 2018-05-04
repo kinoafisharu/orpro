@@ -1,0 +1,13 @@
+<div class="admin-form-group">
+    <input type="hidden" name="template-name-edit" value="{{ template_send }}">
+
+    <div><input type="hidden" name="model-id" value="{{ model_id }}"></div>
+    <div>Название страницы : <p style="color: black">{{ form.ac_title }}</p></div>
+    <div>Текст страницы: <p style="color: black"> {{ form.ac_text|safe }}</p></div>
+
+
+
+
+
+    <div><button class="home-button" type="submit">Сохранить</button></div>
+</div>

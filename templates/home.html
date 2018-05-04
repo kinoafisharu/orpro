@@ -4,12 +4,8 @@
 
 
 {% block additional_head %}
-	<!--<link rel="stylesheet" href="{% static 'css/preloader.css' %}">
-	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">-->
-	<!-- Add the slick-theme.css if you want default styling -->
-<!--<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>-->
-<!-- Add the slick-theme.css if you want default styling -->
 <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+
 <link rel="stylesheet" type="text/css" href="{% static 'new-frontend/css/animate.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'new-frontend/css/home-style.css' %}">
 {% endblock %}
@@ -20,27 +16,14 @@
 {% block without_container %}
 <section class="slider-section" style="background: #fff;">
 	<div class="custom-container">
-		<!--{#{% for baner_element in baner %}
-			<div data-src="{{ baner_element.baner_img.url }}" >
-				<div class="camera_caption fadeIn">
-					<div class="container">
-						<div class="row">
-							<a href="{{ baner_element.baner_url }}" style="display: block"></a>
-						</div>
-					</div>
-				</div>
-			</div>
-		{% endfor %}#}-->
 		<div class="custom-slider">
+			{% for baner_element in baner %}
 			<div>
-				<a href="#"><img src="https://orpro-assets-1.s3.amazonaws.com/media/banners%D0%BA%D0%B0%D0%B1%D0%B5%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D1%8F.jpg?1523177740816"></a></div>
-		
-			<div>
-				<a href="#"><img src="https://orpro-assets-1.s3.amazonaws.com/media/banners%D1%8D%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B0%D1%8F_%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D1%8F.jpg?1523177716179"></a></div>
-		
-			<div>
-				<a href="#"><img src="https://orpro-assets-1.s3.amazonaws.com/media/%D0%A1%D0%BC%D0%B5%D1%81%D0%B8_%D0%B8_%D0%B3%D1%80%D1%83%D0%BD%D1%82%D1%8B_%D0%BD%D0%B0%D1%88%D0%B5%D0%B3%D0%BE_%D0%BF%D1%80%D0%BE%D0%B8%D0%B7%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%B0_%D1%81_%D0%BC%D0%B0%D1%80%D0%BA%D0%BE%D0%B92.jpg?1523177714742"></a></div>
-
+				<a href="{{ baner_element.baner_url }}">
+					<img src="{{ baner_element.baner_img.url }}">
+				</a>
+			</div>
+			{% endfor %}
 		</div>
 	</div>
 </section>
@@ -48,288 +31,68 @@
 
 
 
-		
+
 <section class="section-two">
 	<div class="custom-container">
+
+
 		{% block content %}
-		<section>
+		<section> <!-- Контейнер 4-х елементов находящихся сразу под слайдером.-->
 			<div class="custom-container banner_wr">
 				<ul class="banner">
-					<li>
-						<form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-							<a href="{{ fb1.fb_url }}" id="url_fb_1">
-								<div class="fa-code-fork"></div>
-								<span class="form-fb-1">
-									<h3>{{ fb1.fb_title }}</h3>
-									<p>{{ fb1.fb_text|safe  }}</p>
-								</span>
-							</a>
-							{% if request.user.is_superuser %}
-							{% csrf_token %}
-							<span class="super_user">
-								<input type="hidden" name="edit" value="1">
-								<button type="submit" class="fast-set">
-									<span class="admin-icon-edit" aria-hidden="true"></span>
-								</button>
-							</span>
-							{% endif %}
-						</form>
+					{% for element_banner in fb_elements %}
+					<li class="admin-relative-block" style="{% if element_banner.fb_color %}background: {{element_banner.fb_color}};{%endif%}">
+								<a href="{{ element_banner.fb_url }}">
+									<div class="{{ element_banner.fb_icon }}"></div>
+									<span>
+										<h3>{{ element_banner.fb_title }}</h3>
+										<p>{{ element_banner.fb_text|safe  }}</p>
+									</span>
+								</a>
+
+								{% if request.user.is_superuser %}
+									{% csrf_token %}
+									<span class="super_user">
+										<a href="javascript:viewFormEdit('button-edit-form-fb{{ element_banner.id }}');" id="button-edit-form-fb{{ element_banner.id }}" data-template-name="fb_form.html" data-model-id="{{ element_banner.id }}">
+											<span class="admin-icon-edit"></span></a>
+									</span>
+								{% endif %}
 					</li>
-					<li>
-						<form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-							<a href="{{ fb2.fb_url }}"  id="url_fb_2">
-								<div class="fa-fire"></div>
-								<span class="form-fb-2">
-									<h3>{{ fb2.fb_title }}<br></h3>
-									<p>{{ fb2.fb_text|safe  }}</p>
-								</span>
-							</a>
-							{% if request.user.is_superuser %}
-							{% csrf_token %}
-							<span class="super_user">
-								<input type="hidden" name="edit" value="2">
-								<button type="submit" class="fast-set" >
-									<span class="admin-icon-edit" aria-hidden="true"></span>
-								</button>
-							</span>
-							{% endif %}
-						</form>
-					</li>
-					<li>
-						<form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-							<a href="{{ fb3.fb_url }}"  id="url_fb_3">
-								<div class="fa-bolt"></div>
-								<span class="form-fb-3">
-									<h3>{{ fb3.fb_title }}</h3>
-									<p>{{ fb3.fb_text|safe  }}</p>
-								</span>
-							</a>
-							{% if request.user.is_superuser %}
-							{% csrf_token %}
-							<span class="super_user">
-								<input type="hidden" name="edit" value="3">
-								<button type="submit" class="fast-set">
-									<span class="admin-icon-edit" aria-hidden="true"></span>
-								</button>
-							</span>
-							{% endif %}
-						</form>
-					</li>
-					<li>
-						<form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-							<a href="{{ fb4.fb_url }}"  id="url_fb_4">
-								<div class="fa-pie-chart"></div>
-								<span class="form-fb-4">
-									<h3>{{ fb4.fb_title }}</h3>
-									<p>{{ fb4.fb_text|safe  }}</p>
-								</span>
-							</a>
-							{% if request.user.is_superuser %}
-							{% csrf_token %}
-							<span class="super_user">
-								<input type="hidden" name="edit" value="4">
-								<button type="submit" class="fast-set">
-									<span class="admin-icon-edit" aria-hidden="true"></span>
-								</button>
-							</span>
-							{% endif %}
-						</form>
-					</li>
+					{% endfor %}
 				</ul>
 			</div>
 		</section>
 
-		<!--{#<section class="well container-view-2-sec">
-			<div class="custom-container hr">
-				<ul class="row product-list">
-					<li class="grid_6">
-						<div class="box wow fadeInRight wp">
-							<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-								<span class="form_lb_1">
-									<div class="box_aside">
-										<div class="icon {{ lb1.lb_icon }}"></div>
-									</div>
-									<div class="box_cnt__no-flow">
-										<h3><a href="{{ lb1.lb_link }}" id="url_lb_1">{{ lb1.lb_title }}</a></h3>
-										<p>{{ lb1.lb_text|safe }}</p>
-									</div>
-								</span>
-								{% if request.user.is_superuser %}
-								{% csrf_token %}
-								<span class="super_user">
-									<input type="hidden" name="edit" value="1">
-									<button type="submit" class="fast-set">
-										<span class="admin-icon-edit" aria-hidden="true"></span>
-									</button>
-								</span>
-								{% endif %}
-							</form>
-						</div>
-						<hr>
-						<div data-wow-delay="0.2s" class="box wow fadeInRight wp">
-							<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-								<span class="form_lb_2">
-									<div class="box_aside">
-										<div class="icon {{ lb2.lb_icon }}"></div>
-									</div>
-									<div class="box_cnt__no-flow">
-										<h3><a href="{{ lb2.lb_link }}" id="url_lb_2">{{ lb2.lb_title }}</a></h3>
-										<p>{{ lb2.lb_text|safe  }}</p>
-									</div>
-								</span>
-								{% if request.user.is_superuser %}
-								{% csrf_token %}
-								<span class="super_user">
-									<input type="hidden" name="edit" value="2">
-									<button type="submit" class="fast-set">
-										<span class="admin-icon-edit" aria-hidden="true"></span>
-									</button>
-								</span>
-								{% endif %}
-							</form>
-						</div>
-					</li>
-					<li class="grid_6">
-						<div data-wow-delay="0.3s" class="box wow fadeInRight wp">
-							<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-								<span class="form_lb_3">
-									<div class="box_aside">
-										<div class="icon {{ lb3.lb_icon }}"></div>
-									</div>
-									<div class="box_cnt__no-flow">
-										<h3><a href="{{ lb3.lb_link }}" id="url_lb_3">{{ lb3.lb_title }}</a></h3>
-										<p>{{ lb3.lb_text|safe  }}</p>
-									</div>
-								</span>
-								{% if request.user.is_superuser %}
-								{% csrf_token %}
-								<span class="super_user">
-									<input type="hidden" name="edit" value="3">
-									<button type="submit" class="fast-set"><span class="admin-icon-edit" aria-hidden="true"></span></button>
-								</span>
-								{% endif %}
-							</form>
-						</div>
-						<hr>
-						<div data-wow-delay="0.4s" class="box wow fadeInRight wp">
-							<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-								<span class="form_lb_4">
-									<div class="box_aside">
-										<div class="icon {{ lb4.lb_icon }}"></div>
-									</div>
-									<div class="box_cnt__no-flow">
-										<h3><a href="{{ lb4.lb_link }}" id="url_lb_4">{{ lb4.lb_title }}</a></h3>
-										<p>{{ lb4.lb_text|safe  }}</p>
-									</div>
-								</span>
-								{% if request.user.is_superuser %}
-								{% csrf_token %}
-								<span class="super_user">
-									<input type="hidden" name="edit" value="4">
-									<button type="submit" class="fast-set">
-										<span class="admin-icon-edit" aria-hidden="true"></span>
-									</button>
-								</span>
-								{% endif %}
-							</form>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</section>#}-->
+
+
+
+
+
 		<section class="container-view-2-sec">
 			<div class="custom-container">
 				<div class="row">
 
-					<div class="grid_6 box-form wow fadeInRight">
-						<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+					{% for element_subbanner in lb_elements %}
+					<div class="grid_6 box-form wow fadeInRight admin-relative-block" data-wow-delay=".{{ forloop.counter }}s">
 								<span class="form_lb_1">
 									<div class="box_aside">
-										<div class="icon {{ lb1.lb_icon }}"></div>
+										<div class="icon {{ element_subbanner.lb_icon }}" style="{% if element_subbanner.lb_color %}background: {{element_subbanner.lb_color}}!important;{%endif%}"></div>
 									</div>
 									<div class="box_cnt__no-flow">
-										<h3><a href="{{ lb1.lb_link }}" id="url_lb_1">{{ lb1.lb_title }}</a></h3>
-										<p>{{ lb1.lb_text|safe }}</p>
+										<h3><a href="{{ element_subbanner.lb_link }}">{{ element_subbanner.lb_title }}</a></h3>
+										<p>{{ element_subbanner.lb_text|safe }}</p>
 									</div>
 								</span>
-								{% if request.user.is_superuser %}
-								{% csrf_token %}
-								<span class="super_user">
-									<input type="hidden" name="edit" value="1">
-									<button type="submit" class="fast-set">
-										<span class="admin-icon-edit" aria-hidden="true"></span>
-									</button>
-								</span>
-								{% endif %}
-							</form>
-					</div>
 
-					<div class="grid_6 box-form wow fadeInRight" data-wow-delay=".2s">
-						<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-								<span class="form_lb_2">
-									<div class="box_aside">
-										<div class="icon {{ lb2.lb_icon }}"></div>
-									</div>
-									<div class="box_cnt__no-flow">
-										<h3><a href="{{ lb2.lb_link }}" id="url_lb_2">{{ lb2.lb_title }}</a></h3>
-										<p>{{ lb2.lb_text|safe  }}</p>
-									</div>
-								</span>
 								{% if request.user.is_superuser %}
 								{% csrf_token %}
 								<span class="super_user">
-									<input type="hidden" name="edit" value="2">
-									<button type="submit" class="fast-set">
-										<span class="admin-icon-edit" aria-hidden="true"></span>
-									</button>
+									<a href="javascript:viewFormEdit('button-edit-form-lb{{ element_subbanner.id }}');" id="button-edit-form-lb{{ element_subbanner.id }}" data-template-name="lb_form.html" data-model-id="{{ element_subbanner.id }}">
+										<span class="admin-icon-edit"></span></a>
 								</span>
 								{% endif %}
-							</form>
 					</div>
-
-					<div class="grid_6 box-form wow fadeInRight" data-wow-delay=".4s">
-						<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-								<span class="form_lb_3">
-									<div class="box_aside">
-										<div class="icon {{ lb3.lb_icon }}"></div>
-									</div>
-									<div class="box_cnt__no-flow">
-										<h3><a href="{{ lb3.lb_link }}" id="url_lb_3">{{ lb3.lb_title }}</a></h3>
-										<p>{{ lb3.lb_text|safe  }}</p>
-									</div>
-								</span>
-								{% if request.user.is_superuser %}
-								{% csrf_token %}
-								<span class="super_user">
-									<input type="hidden" name="edit" value="3">
-									<button type="submit" class="fast-set"><span class="admin-icon-edit" aria-hidden="true"></span></button>
-								</span>
-								{% endif %}
-							</form>
-					</div>
-
-					<div class="grid_6 box-form wow fadeInRight" data-wow-delay=".6s">
-						<form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-								<span class="form_lb_4">
-									<div class="box_aside">
-										<div class="icon {{ lb4.lb_icon }}"></div>
-									</div>
-									<div class="box_cnt__no-flow">
-										<h3><a href="{{ lb4.lb_link }}" id="url_lb_4">{{ lb4.lb_title }}</a></h3>
-										<p>{{ lb4.lb_text|safe  }}</p>
-									</div>
-								</span>
-								{% if request.user.is_superuser %}
-								{% csrf_token %}
-								<span class="super_user">
-									<input type="hidden" name="edit" value="4">
-									<button type="submit" class="fast-set">
-										<span class="admin-icon-edit" aria-hidden="true"></span>
-									</button>
-								</span>
-								{% endif %}
-							</form>
-					</div>
+					{% endfor %}
 				</div>
 			</div>
 		</section>
@@ -341,26 +104,27 @@
 			<div class="custom-container">
 				<div class="row">
 					<div class="grid_4">
-						<form action="/ac_post" class="admin-relative-block" id="ac_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+
+
+						<div class="admin-relative-block" id="ac_form">
 							<span>
 								<h2>{{ ac1.ac_title }}</h2>
 								<p style="margin-top: 20px;">{{ ac1.ac_text|safe }}</p>
 							</span>
-							
-							<div style="margin-top: 30px;"></div>
 
+							<div style="margin-top: 30px;"></div>
 							<a href="/about" class="home-button">Читать больше</a>
-							
+
 
 							{% if request.user.is_superuser %}
 							{% csrf_token %}
 							<span class="super_user">
-								<input type="hidden" name="edit" value="1">
-								<button type="submit" class="fast-set"><span class="admin-icon-edit" aria-hidden="true"></span>
-								</button>
+								<a href="javascript:viewFormEdit('button-edit-form-ac');" id="button-edit-form-ac" data-template-name="ac_form.html" data-model-id="1">
+									<span class="admin-icon-edit"></span></a>
 							</span>
 							{% endif %}
-						</form>
+
+						</div>
 					</div>
 
 					<div class="grid_4 home-goods-list">
@@ -368,7 +132,7 @@
 						<p>Список самых покупаемых товаров</p>
 						<ul class="marked-list-buy-orders">
 							{% for i in TO %}
-									<form action="/to_post" class="admin-relative-block" id="to_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+								<div class="admin-relative-block">
 										<span class="to_form_{{i.id}}">
 											<li><a href="/goods/{{i.to_link}}">{{ i.to_title }}</a></li>
 										</span>
@@ -377,13 +141,11 @@
 										{% if request.user.is_superuser %}
 										{% csrf_token %}
 										<span class="super_user">
-											<input type="hidden" name="edit" value="{{i.id}}">
-											<button type="submit" class="fast-set">
-												<span class="admin-icon-edit" aria-hidden="true"></span>
-											</button>
+											<a href="javascript:viewFormEdit('button-edit-form-to{{i.id}}');" id="button-edit-form-to{{i.id}}" data-template-name="to_form.html" data-model-id="{{ i.id }}">
+												<span class="admin-icon-edit"></span></a>
 										</span>
 										{% endif %}
-									</form>
+									</div>
 							{% endfor %}
 						</ul>
 						<a href="/catalog" class="home-button">Читать больше</a>
@@ -391,7 +153,7 @@
 
 					<div class="grid_4">
 						<div class="info-box">
-							<form action="/sup_post" id="sup_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+							<div class="admin-relative-block">
 								<span class="sup_form">
 									<h2 class="fa-comment">{{ sup.sup_title  }}</h2>
 									<hr>
@@ -401,16 +163,15 @@
 									</dl>
 									<p>{{ sup.sup_phone }}</p>
 								</span>
+
 								{% if request.user.is_superuser %}
 								{% csrf_token %}
 								<span class="super_user">
-									<input type="hidden" name="edit" value="1">
-									<button type="submit" class="fast-set">
-										<span class="admin-icon-edit" aria-hidden="true"></span>
-									</button>
+									<a href="javascript:viewFormEdit('button-edit-form-sup');" id="button-edit-form-sup" data-template-name="sup_form.html" data-model-id="1">
+										<span class="admin-icon-edit"></span></a>
 								</span>
 								{% endif %}
-							</form>
+							</div>
 						</div>
 						<div class="owl-carousel">
 							{% for p in personal %}
@@ -451,10 +212,14 @@
 </section>
 
 
+
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+		//Анимирование елемента при прокрутке.
+		new WOW().init();
+
 		$('.custom-slider').slick({
 			dots: false,
 			slidesToShow: 1,
@@ -465,10 +230,6 @@
 			prevArrow: '<button type="button" class="custom-slick-prev custom-slick-prev-in"><i class="fa-angle-left"></i></button>',
 			nextArrow: '<button type="button" class="custom-slick-next custom-slick-next-in"><i class="fa-angle-right"></i></button>',
 		});
-		
-
-		//Анимирование елемента при прокрутке.
-		new WOW().init();
 	});
 </script>
 {% endblock without_container %}
@@ -483,32 +244,32 @@
 		<div class="row">
 			<div class="grid_4 wow fadeInRight">
 				<div class="icon-container"><i class="fa-map-marker"></i></div>
-				<a class="text-container">{{ company.address }}</a>
+				<a class="text-container">{{ orpro_data.address }}</a>
 			</div>
 
 			<div class="grid_4 wow fadeInRight" data-wow-delay=".1s">
 				<div class="icon-container"><i class="fa-skype"></i></div>
-				<a class="text-container">{{ company.skype }}</a>
+				<a class="text-container">{{ orpro_data.skype }}</a>
 			</div>
 
 			<div class="grid_4 wow fadeInRight" data-wow-delay=".2s">
 				<div class="icon-container"><i class="fa-phone"></i></div>
-				<a class="text-container">{{ company.mob_phone }}</a>
+				<a class="text-container">{{ orpro_data.mob_phone }}</a>
 			</div>
 
 			<div class="grid_4 wow fadeInRight" data-wow-delay=".3s">
 				<div class="icon-container"><i class="fa-fax"></i></div>
-				<a class="text-container">{{ company.rob_phone }}</a>
+				<a class="text-container">{{ orpro_data.rob_phone }}</a>
 			</div>
 
 			<div class="grid_4 wow fadeInRight" data-wow-delay=".4s">
 				<div class="icon-container"><i class="fa-facebook"></i></div>
-				<a class="text-container" href="{{ company.facebook_link }}">Мы в Фейсбуке</a>
+				<a class="text-container" href="{{ orpro_data.facebook_link }}">Мы в Фейсбуке</a>
 			</div>
 
 			<div class="grid_4 wow fadeInRight" data-wow-delay=".5s">
 				<div class="icon-container"><i class="fa-twitter"></i></div>
-				<a class="text-container" href="{{ company.twitter_link }}">Мы в Твиттере</a>
+				<a class="text-container" href="{{ orpro_data.twitter_link }}">Мы в Твиттере</a>
 			</div>
 			</div>
 		</div>
@@ -518,364 +279,3 @@
 			<div class="copyright">© Профсистемы-Крым 2016г. г.Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89 Время работы: пн-вс 8:00-18:00, без перерыва</div>
 		</div></footer>
 {% endblock footer %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	<!--{#  <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
-	<script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
-	<script>
-	$(document).on('submit', '#sup_form', function(e)  {
-			e.preventDefault();
-			$('#sup_form').preloader({setRelative: false});
-			var form = e.target;
-			$form = $(form);
-			$form.ajaxSubmit({
-				url: form.action,
-				method: form.method,
-				success: function (data) {
-					try{
-					if( data.indexOf('<span style="display: none">') > -1 ) {
-						$(".sup_form").html(data);
-						$form.attr("method", "post");
-						$(".fast-set").css("display","none");
-						$('#sup_form').preloader('remove');
-					}}
-					catch (TypeError){
-						 $form.attr("method", "get");
-						$(".fast-set").css("display","block");
-						$(".sup_form").html(
-							'<h2 class="fa-comment">'+data.sup_title+'</h2>'
-							+'<hr>'
-							+'<h3>'+ data.sup_slogan +'</h3>'
-							+'<dl>'
-							+'<dd>'+data.sup_time+'</dd>'
-							+'</dl>'
-							+'<p>'+data.sup_phone+'</p>'
-						);
-						$('.super_user').html();
-					};
-					$('#sup_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-				},
-				error: function (xhr, textStatus, error) {
-					alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-					$('#sup_form').preloader('remove');
-				}
-			});
-		});
-	 $(document).on('submit', '#p_form', function(e)  {
-			e.preventDefault();
-			$('#p_form').preloader({setRelative: false});
-			var form = e.target;
-			$form = $(form);
-			$form.ajaxSubmit({
-				url: form.action,
-				method: form.method,
-				success: function (data) {
-					try{
-					if( data.indexOf('<span style="display: none">') > -1 ) {
-						$(".p_form_"+data[28]).html(data);
-						$form.attr("method", "post");
-						$(".fast-set").css("display","none");
-						$('#p_form').preloader('remove');
-					}}
-					catch (TypeError){
-						 $form.attr("method", "get");
-						$(".fast-set").css("display","block");
-						$(".p_form_"+data.id).html(
-							 '<div class="box_aside">'+'<img src="'+data.p_photo.url+'"alt="">'+
-							 '</div>'+'<div class="box_cnt__no-flow">'+'<p>'+
-							 '<q>'+data.p_doljnost +'</q>'+ '</p>'+
-							 '<cite>'+'<a href="/about">'+data.p_name+'</a>'+'</cite>'+
-							 '</div>'
-						);
-						$('.super_user').html();
-					};
-					$('#p_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-				},
-				error: function (xhr, textStatus, error) {
-					alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-					$('#p_form').preloader('remove');
-				}
-			});
-		});
-	  $(document).on('submit', '#company_form', function(e)  {
-			e.preventDefault();
-			$('#company_form').preloader({setRelative: false});
-			var form = e.target;
-			$form = $(form);
-			$form.ajaxSubmit({
-				url: form.action,
-				method: form.method,
-				success: function (data) {
-					try{
-					if( data.indexOf('<span style="display: none">') > -1 ) {
-						$(".company_form_id").html(data);
-						$form.attr("method", "post");
-						$(".fast-set").css("display","none");
-						$('#company_form').preloader('remove');
-					}}
-					catch (TypeError){
-						 $form.attr("method", "get");
-						$(".fast-set").css("display","block");
-						$(".company_form_id").html(
-							 '<li class="grid_4">'+
-						'<div class="box">'+
-							'<div class="box_aside">'+
-								'<div class="icon2 fa-map-marker">'+'</div>'+
-							'</div>'+
-							'<div class="box_cnt__no-flow">'+
-								'<address>'+data.address+'</address>'+
-							'</div>'+
-						'</div>'+
-						'<div class="box">'+
-							'<div class="box_aside">'+
-								'<div class="icon2 fa-skype">'+'</div>'+
-							'</div>'+
-							'<div class="box_cnt__no-flow">'+data.skype+'</div>'+
-						'</div>'+
-					'</li>'+
-					'<li class="grid_4">'+
-						'<div class="box">'+
-							'<div class="box_aside">'+
-								'<div class="icon2 fa-phone">'+'</div>'+
-							'</div>'+
-							'<div class="box_cnt__no-flow">'+data.mob_phone+'</div>'+
-						'</div>'+
-						'<div class="box">'+
-							'<div class="box_aside">'+
-							   ' <div class="icon2 fa-fax">'+'</div>'+
-							'</div>'+
-							'<div class="box_cnt__no-flow">'+data.rob_phone+'</div>'+
-						'</div>'+
-					'</li>'+
-					'<li class="grid_4">'+
-						'<div class="box">'+
-							'<div class="box_aside">'+
-								'<div class="icon2 fa-facebook">'+'</div>'+
-							'</div>'+
-							'<div class="box_cnt__no-flow">'+'<a href="'+data.facebook_link+'">'+'Мы в Фейсбуке'+'</a>'+'</div>'+
-						'</div>'+
-						'<div class="box">'+
-							'<div class="box_aside">'+
-							   ' <div class="icon2 fa-twitter">'+'</div>'+
-							'</div>'+
-							'<div class="box_cnt__no-flow">'+'<a href="'+ data.twitter_link+'">'+'Мы в Твиттере'+'</a>'+'</div>'+
-						'</div>'+
-					'</li>'
-						);
-						$('.super_user').html();
-					};
-					$('#company_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-				},
-				error: function (xhr, textStatus, error) {
-					alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-					$('#company_form').preloader('remove');
-				}
-			});
-		});
-	 $(document).on('submit', '#hp_form', function(e)  {
-			e.preventDefault();
-			$('#hp_form').preloader({setRelative: false});
-			var form = e.target;
-			$form = $(form);
-			$form.ajaxSubmit({
-				url: form.action,
-				method: form.method,
-				success: function (data) {
-					try{
-					if( data.indexOf('<span style="display: none">') > -1 ) {
-						$(".hp_form_id").html(data);
-						$form.attr("method", "post");
-						$(".fast-set").css("display","none");
-						$('#hp_form').preloader('remove');
-					}}
-					catch (TypeError){
-						 $form.attr("method", "get");
-						$(".fast-set").css("display","block");
-						$(".hp_form_id").html(''
-						);
-						$(".hp").attr("style","'background-image: url('+ data.hp_photo.url+')'");
-						$('.super_user').html();
-					};
-					$('#hp_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-				},
-				error: function (xhr, textStatus, error) {
-					alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-					$('#hp_form').preloader('remove');
-				}
-			});
-		});
-	 $(document).on('submit', '#to_form', function(e)  {
-			e.preventDefault();
-			$('#to_form').preloader({setRelative: false});
-			var form = e.target;
-			$form = $(form);
-			$form.ajaxSubmit({
-				url: form.action,
-				method: form.method,
-				success: function (data) {
-					try{
-					if( data.indexOf('<span style="display: none">') > -1 ) {
-						$(".to_form_"+data[28]).html(data);
-						$form.attr("method", "post");
-						$(".fast-set").css("display","none");
-						$('#to_form').preloader('remove');
-					}}
-					catch (TypeError){
-						 $form.attr("method", "get");
-						$(".fast-set").css("display","block");
-						$(".to_form_"+data.id).html(
-							'<li>'+'<a href="/goods/'+data.to_link+'">'+data.to_title+'</a>'+'</li>'
-						);
-						$('.super_user').html();
-					};
-					$('#to_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-				},
-				error: function (xhr, textStatus, error) {
-					alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-					$('#to_form').preloader('remove');
-				}
-			});
-		});
-	$(document).on('submit', '#fb_form', function(e)  {
-			e.preventDefault();
-			$('#fb_form').preloader({setRelative: false});
-			var form = e.target;
-			$form = $(form);
-			$form.ajaxSubmit({
-				url: form.action,
-				method: form.method,
-				success: function (data) {
-					try{
-					if( data.indexOf('<span style="display: none">') > -1 ) {
-						$(".form-fb-"+data[28]).html(data);
-						$form.attr("method", "post");
-						$(".fast-set").css("display","none");
-						$("#url_fb_"+data[28]).attr("href", "javascript:");
-{#                        init_data();#}
-						$('#fb_form').preloader('remove');
-					}}
-					catch (TypeError){
-						 $form.attr("method", "get");
-						$(".fast-set").css("display","block");
-						$(".form-fb-"+data.id).html(
-							'<h3>' + data.fb_title + '</h3>' +
-							'<p>' + data.fb_text + '</p>'
-						);
-						$('.super_user').html();
-						$("#url_fb_"+data.id).attr("href", data.fb_url);
-					};
-					$('#fb_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-				},
-				error: function (xhr, textStatus, error) {
-					alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-					$('#fb_form').preloader('remove');
-				}
-			});
-		});
-	function init_data(){
-			 tinyMCE.init({
-				 mode : "textareas",
-				 theme : "advanced",
-				 width : "30%"
-			 });
-
-		}
-		init_data();
-	$(document).on('submit', '#lb_form', function(e)  {
-			e.preventDefault();
-			$('#lb_form').preloader({setRelative: false});
-			var form = e.target;
-			$form = $(form);
-			$form.ajaxSubmit({
-				url: form.action,
-				method: form.method,
-				success: function (data) {
-					try{
-					if( data.indexOf('<span style="display: none">') > -1 ) {
-						$(".form_lb_"+data[28]).html(data);
-						$form.attr("method", "post");
-						$(".fast-set").css("display","none");
-						$("#url_lb_"+data[28]).attr("href", "javascript:");
-						init_data();
-						$('#lb_form').preloader('remove');
-					}}
-					catch (TypeError){
-						 $form.attr("method", "get");
-						$(".fast-set").css("display","block");
-						$(".form_lb_"+data.id).html(
-							'<div class="box_aside">'+'<div class="icon' + data.lb_icon + '">'+'</div>'+ '</div>'+ '<div class="box_cnt__no-flow">'+'<h3>'
-							+'<a href="'+ data.lb_link + '"'+ 'id="url_lb_'+data.id+'">'+data.lb_title+'</a>'+'</h3>'
-								+'<p>'+data.lb_text+'</p>'+
-							'</div>'
-						);
-						$('.super_user').html();
-						$("#url_fb_"+data.id).attr("href", data.lb_link);
-					};
-					$('#lb_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-				},
-				error: function (xhr, textStatus, error) {
-					alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-					$('#lb_form').preloader('remove');
-				}
-			});
-		});
-	$(document).on('submit', '#ac_form', function(e)  {
-			e.preventDefault();
-			$('#ac_form').preloader({setRelative: false});
-			var form = e.target;
-			$form = $(form);
-			$form.ajaxSubmit({
-				url: form.action,
-				method: form.method,
-				success: function (data) {
-					try{
-					if( data.indexOf('<span style="display: none">') > -1 ) {
-						$(".ac_form_"+data[28]).html(data);
-						$form.attr("method", "post");
-						$(".fast-set").css("display","none");
-						init_data();
-						$('#ac_form').preloader('remove');
-					}}
-					catch (TypeError){
-						 $form.attr("method", "get");
-						$(".fast-set").css("display","block");
-						$(".ac_form_1").html(
-							'<h2>'+data.ac_title+'</h2>'+
-						'<p>'+data.ac_text+'</p>'
-						);
-						$('.super_user').html();
-					};
-					$('#ac_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-				},
-				error: function (xhr, textStatus, error) {
-					alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-					$('#ac_form').preloader('remove');
-				}
-			});
-		});
-
-	</script> #}-->
