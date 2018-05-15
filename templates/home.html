@@ -11,57 +11,48 @@
 {% endblock %}
 
 
-
-
 {% block without_container %}
 <section class="slider-section" style="background: #fff;">
-	<div class="custom-container">
-		<div class="custom-slider">
-			{% for baner_element in baner %}
-			<div>
-				<a href="{{ baner_element.baner_url }}">
-					<img src="{{ baner_element.baner_img.url }}">
-				</a>
-			</div>
-			{% endfor %}
-		</div>
-	</div>
+    <div class="custom-container">
+        <div class="custom-slider">
+	    {% for baner_element in baner %}
+                <div>
+                    <a href="{{ baner_element.baner_url }}"> <img src="{{ baner_element.baner_img.url }}"> </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 </section>
 
 
-
-
-
 <section class="section-two">
-	<div class="custom-container">
-
-
-		{% block content %}
-		<section> <!-- Контейнер 4-х елементов находящихся сразу под слайдером.-->
-			<div class="custom-container banner_wr">
-				<ul class="banner">
-					{% for element_banner in fb_elements %}
-					<li class="admin-relative-block" style="{% if element_banner.fb_color %}background: {{element_banner.fb_color}};{%endif%}">
-								<a href="{{ element_banner.fb_url }}">
-									<div class="{{ element_banner.fb_icon }}"></div>
-									<span>
-										<h3>{{ element_banner.fb_title }}</h3>
-										<p>{{ element_banner.fb_text|safe  }}</p>
-									</span>
-								</a>
-
-								{% if request.user.is_superuser %}
-									{% csrf_token %}
-									<span class="super_user">
-										<a href="javascript:viewFormEdit('button-edit-form-fb{{ element_banner.id }}');" id="button-edit-form-fb{{ element_banner.id }}" data-template-name="fb_form.html" data-model-id="{{ element_banner.id }}">
-											<span class="admin-icon-edit"></span></a>
-									</span>
-								{% endif %}
-					</li>
-					{% endfor %}
-				</ul>
-			</div>
-		</section>
+    <div class="custom-container">
+        {% block content %}
+        <section> <!-- Контейнер 4-х элементов, находящихся сразу под слайдером -->
+        <div class="custom-container banner_wr">
+        <ul class="banner">
+        {% for element_banner in fb_elements %}
+        <li class="admin-relative-block" style="{% if element_banner.fb_color %}background: {{element_banner.fb_color}};{%endif%}">
+        <a href="{{ element_banner.fb_url }}">
+            <div class="{{ element_banner.fb_icon }}"></div>
+                <span>
+                    <h3>{{ element_banner.fb_title }}</h3>
+                    <p>{{ element_banner.fb_text|safe  }}</p>
+                </span>
+        </a>
+        {% if request.user.is_superuser %}
+            {% csrf_token %}
+                <span class="super_user">
+                <a href="javascript:viewFormEdit('button-edit-form-fb{{ element_banner.id }}');" id="button-edit-form-fb{{ element_banner.id }}" data-template-name="fb_form.html" data-model-id="{{ element_banner.id }}">
+                <span class="admin-icon-edit"></span>
+                </a>
+                </span>
+        {% endif %}
+        </li>
+        {% endfor %}
+        </ul>
+        </div>
+        </section>
 
 
 
