@@ -29,110 +29,96 @@
     <div class="custom-container">
         {% block content %}
         <section> <!-- Контейнер 4-х элементов, находящихся сразу под слайдером -->
-        <div class="custom-container banner_wr">
-        <ul class="banner">
-        {% for element_banner in fb_elements %}
-        <li class="admin-relative-block" style="{% if element_banner.fb_color %}background: {{element_banner.fb_color}};{%endif%}">
-        <a href="{{ element_banner.fb_url }}">
-            <div class="{{ element_banner.fb_icon }}"></div>
-                <span>
-                    <h3>{{ element_banner.fb_title }}</h3>
-                    <p>{{ element_banner.fb_text|safe  }}</p>
+          <div class="custom-container banner_wr">
+            <ul class="banner">
+              {% for element_banner in fb_elements %}
+                <li class="admin-relative-block" style="{% if element_banner.fb_color %}background: {{element_banner.fb_color}};{%endif%}">
+                  <a href="{{ element_banner.fb_url }}">
+                  <div class="{{ element_banner.fb_icon }}"> </div>
+                    <span>
+                      <h3>{{ element_banner.fb_title }}</h3>
+                      <p>{{ element_banner.fb_text|safe  }}</p>
+                    </span>
+                  </a>
+                  {% if request.user.is_superuser %}
+                    {% csrf_token %}
+                    <span class="super_user">
+                      <a href="javascript:viewFormEdit('button-edit-form-fb{{ element_banner.id }}');" id="button-edit-form-fb{{ element_banner.id }}" data-template-name="fb_form.html" data-model-id="{{ element_banner.id }}">
+                      <span class="admin-icon-edit"></span>
+                      </a>
+                    </span>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </section> <!-- конец контейнера 4-х элементов, находящихся сразу под слайдером -->
+
+
+        <section class="container-view-2-sec"> <!-- что это за контейнер? -->
+          <div class="custom-container">
+            <div class="row">
+            {% for element_subbanner in lb_elements %}
+              <div class="grid_6 box-form wow fadeInRight admin-relative-block" data-wow-delay=".{{ forloop.counter }}s">
+                <span class="form_lb_1">
+                  <div class="box_aside">
+                    <div class="icon {{ element_subbanner.lb_icon }}" style="{% if element_subbanner.lb_color %}background: {{element_subbanner.lb_color}}!important;{%endif%}"></div>
+                  </div>
+                  <div class="box_cnt__no-flow">
+                    <h3><a href="{{ element_subbanner.lb_link }}">{{ element_subbanner.lb_title }}</a></h3>
+                    <p>{{ element_subbanner.lb_text|safe }}</p>
+                  </div>
                 </span>
-        </a>
-        {% if request.user.is_superuser %}
-            {% csrf_token %}
-                <span class="super_user">
-                <a href="javascript:viewFormEdit('button-edit-form-fb{{ element_banner.id }}');" id="button-edit-form-fb{{ element_banner.id }}" data-template-name="fb_form.html" data-model-id="{{ element_banner.id }}">
-                <span class="admin-icon-edit"></span>
-                </a>
-                </span>
-        {% endif %}
-        </li>
-        {% endfor %}
-        </ul>
-        </div>
+
+                {% if request.user.is_superuser %}
+                  {% csrf_token %}
+                  <span class="super_user">
+                    <a href="javascript:viewFormEdit('button-edit-form-lb{{ element_subbanner.id }}');" id="button-edit-form-lb{{ element_subbanner.id }}" data-template-name="lb_form.html" data-model-id="{{ element_subbanner.id }}">
+                    <span class="admin-icon-edit"></span>
+                    </a>
+                  </span>
+                {% endif %}
+              </div>
+            {% endfor %}
+            </div>
+          </div>
         </section>
 
 
-
-
-
-
-		<section class="container-view-2-sec">
-			<div class="custom-container">
-				<div class="row">
-
-					{% for element_subbanner in lb_elements %}
-					<div class="grid_6 box-form wow fadeInRight admin-relative-block" data-wow-delay=".{{ forloop.counter }}s">
-								<span class="form_lb_1">
-									<div class="box_aside">
-										<div class="icon {{ element_subbanner.lb_icon }}" style="{% if element_subbanner.lb_color %}background: {{element_subbanner.lb_color}}!important;{%endif%}"></div>
-									</div>
-									<div class="box_cnt__no-flow">
-										<h3><a href="{{ element_subbanner.lb_link }}">{{ element_subbanner.lb_title }}</a></h3>
-										<p>{{ element_subbanner.lb_text|safe }}</p>
-									</div>
-								</span>
-
-								{% if request.user.is_superuser %}
-								{% csrf_token %}
-								<span class="super_user">
-									<a href="javascript:viewFormEdit('button-edit-form-lb{{ element_subbanner.id }}');" id="button-edit-form-lb{{ element_subbanner.id }}" data-template-name="lb_form.html" data-model-id="{{ element_subbanner.id }}">
-										<span class="admin-icon-edit"></span></a>
-								</span>
-								{% endif %}
-					</div>
-					{% endfor %}
-				</div>
-			</div>
-		</section>
-
-
-
-
-		<section class="well1">
-			<div class="custom-container">
-				<div class="row">
-					<div class="grid_4">
-
-
-						<div class="admin-relative-block" id="ac_form">
-							<span>
-								<h2>{{ ac1.ac_title }}</h2>
-								<p style="margin-top: 20px;">{{ ac1.ac_text|safe }}</p>
-							</span>
-
-							<div style="margin-top: 30px;"></div>
-							<a href="/about" class="home-button">Читать больше</a>
-
-
-							{% if request.user.is_superuser %}
-							{% csrf_token %}
-							<span class="super_user">
-								<a href="javascript:viewFormEdit('button-edit-form-ac');" id="button-edit-form-ac" data-template-name="ac_form.html" data-model-id="1">
-									<span class="admin-icon-edit"></span></a>
-							</span>
-							{% endif %}
-
-						</div>
-					</div>
-
-					<div class="grid_4 home-goods-list">
-						<h2>Товары</h2>
-						<p>Список самых покупаемых товаров</p>
-						<ul class="marked-list-buy-orders">
-							{% for i in TO %}
-								<div class="admin-relative-block">
-										<span class="to_form_{{i.id}}">
-											<li><a href="/goods/{{i.to_link}}">{{ i.to_title }}</a></li>
-										</span>
-
-
-										{% if request.user.is_superuser %}
-										{% csrf_token %}
-										<span class="super_user">
-											<a href="javascript:viewFormEdit('button-edit-form-to{{i.id}}');" id="button-edit-form-to{{i.id}}" data-template-name="to_form.html" data-model-id="{{ i.id }}">
+        <section class="well1"> <!-- что это за контейнер? -->
+          <div class="custom-container">
+            <div class="row">
+              <div class="grid_4"> <!-- блок "О компании" -->
+                <div class="admin-relative-block" id="ac_form"> 
+                  <span>
+                    <h2>{{ ac1.ac_title }}</h2>
+                    <p style="margin-top: 20px;">{{ ac1.ac_text|safe }}</p>
+                  </span>
+                  <div style="margin-top: 30px;"></div>
+                  <a href="/contacts" class="home-button">Читать больше</a>
+                  {% if request.user.is_superuser %}
+                    {% csrf_token %}
+                    <span class="super_user">
+                      <a href="javascript:viewFormEdit('button-edit-form-ac');" id="button-edit-form-ac" data-template-name="ac_form.html" data-model-id="1">
+                      <span class="admin-icon-edit"></span>
+                      </a>
+                    </span>
+                  {% endif %}
+                </div> 
+              </div> <!-- конец блока "О компании" -->
+              <div class="grid_4 home-goods-list"> <!-- блок топа продаж -->
+                <h2>Товары</h2>
+                <p>Список самых покупаемых товаров</p>
+                <ul class="marked-list-buy-orders">
+                  {% for i in TO %}
+                    <div class="admin-relative-block">
+                      <span class="to_form_{{i.id}}">
+                        <li><a href="/goods/{{i.to_link}}">{{ i.to_title }}</a></li>
+                      </span>
+                      {% if request.user.is_superuser %}
+                        {% csrf_token %}
+                        <span class="super_user">
+                        <a href="javascript:viewFormEdit('button-edit-form-to{{i.id}}');" id="button-edit-form-to{{i.id}}" data-template-name="to_form.html" data-model-id="{{ i.id }}">
 												<span class="admin-icon-edit"></span></a>
 										</span>
 										{% endif %}
