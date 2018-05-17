@@ -52,125 +52,120 @@
 <body style="background: #F1F1F1;" class="{% if category_page %} catalog-margin-top-30 {% endif %}">
     <!-- Отступ требуется для корректного отображения логотипа на странице каталога,
          так как в мобильной версии появляется панель отображения товаров(списком или блочно). -->
-	
-  <header style="background-image: url({{ hf.hp_photo.url }});{%if request.path == '/' %}margin-bottom: 0;{%endif%}">
-	  
-    <div class="custom-container hidden-mobile-logo">
-      <div class="custom-brand">
-        <img src="{% static 'images/imgpsh_fullsize.png' %}" width="180px">
-        <h1 class="brand_name"><a href="/">{{orpro_data}}</a></h1>
-      </div>
-      <a href="callto:#"><i class="fa-phone"></i> {{orpro_data.mob_phone}}</a>
-      <p>Время работы: пн-пт 8:00-18:00, сб-вс 9:00-15:00</p>
+
+<!-- ШАПКА (ХЭДЕР) -->
+<header style="background-image: url({{ hf.hp_photo.url }});{%if request.path == '/' %}margin-bottom: 0;{%endif%}">
+  <div class="custom-container hidden-mobile-logo">
+    <div class="custom-brand">
+      <img src="{% static 'images/imgpsh_fullsize.png' %}" width="180px">
+      <h1 class="brand_name"><a href="/">{{orpro_data}}</a></h1>
     </div>
+    <a href="callto:#"><i class="fa-phone"></i> {{orpro_data.mob_phone}}</a>
+    <p>Время работы: пн-пт 8:00-18:00, сб-вс 9:00-15:00</p>
+  </div>
 
-    <div id="header-menu-container" class="header-menu-container">
-      <div class="custom-container">
-        <nav class="custom-navbar">
-          <!-- Отображается при малых размерах экрана (мобильные, планшеты и тд.)
-               Номер телефона отображается на мобильном (только альбомный режим) и на планшетах в любом режиме.	-->
-          <div class="custom-menu-icon">
-            <span></span><span></span><span></span><span></span>
-            <p><b>{{orpro_data}}</b> <b class="visible-phone-mobile-landscape"> | {{orpro_data.mob_phone}}</b>
-            <br>{{orpro_data.address}}</p>
-          </div>
-          <!-- Логотип в шапке. Отображается, если размер экрана сравним с мобильным и более
-               (до малых десктопных размеров). -->
-          <div class="logo-mobile-in-navbar">
-            <img src="{% static 'images/imgpsh_fullsize.png' %}" width="80px">
-          </div>
+  <div id="header-menu-container" class="header-menu-container">
+    <div class="custom-container">
+      <nav class="custom-navbar">
+        <!-- Отображается при малых размерах экрана (мобильные, планшеты и тд.)
+             Номер телефона отображается на мобильном (только альбомный режим) и на планшетах в любом режиме.	-->
+        <div class="custom-menu-icon">
+          <span></span><span></span><span></span><span></span>
+          <p><b>{{orpro_data}}</b> <b class="visible-phone-mobile-landscape"> | {{orpro_data.mob_phone}}</b>
+          <br>{{orpro_data.address}}</p>
+        </div>
+        <!-- Логотип в шапке. Отображается, если размер экрана сравним с мобильным и более
+             (до малых десктопных размеров). -->
+        <div class="logo-mobile-in-navbar">
+          <img src="{% static 'images/imgpsh_fullsize.png' %}" width="80px">
+        </div>
+        <ul class="custom-list-menu">
+          <li {%if request.path == '/' %} class="active-mobile" {%endif%}>
+            <a href="/">Главная</a>
+          </li>
+          <!--{# Список страниц в главном меню #}-->
+          {% for single_menu_item in topmenu_category %}
+            {% if single_menu_item.post_cat_level == 1 %}
+            <!--{#  Если пользователь открывает страницу каталога на мобильном телефоне, список категорий
+                    выводится в верхнем(открывающемся) меню. ВАЖНО: url должен быть 'catalog'
+                    Также добавляется класс "active-mobile" к активной ссылке #}-->
+              {% if request.path|path_list:0 == 'catalog' and single_menu_item.post_seourl == 'catalog' %}
+                <li class="active-mobile">
+                  <a href="/{{ single_menu_item.post_seourl }}">{{ single_menu_item.post_title }}
+                    <i class="fa fa-arrow-down visible-mobile" style="margin-left: 10px;"></i>
+                  </a>
+                </li>
+                <div class="open-catalog-menu-mobile">
+                  {% include 'lists/catalog-menu.html' with tags_menu=tags %}
+                </div>
+              {% else %}
+                <li {%if request.path|path_list:0 == single_menu_item.post_seourl %} class="active-mobile" {%endif%}>
+                  <a href="/{{ single_menu_item.post_seourl }}">{{ single_menu_item.post_title }}</a>
+                </li>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+<!-- КОНЕЦ ШАПКИ (ХЭДЕРА) -->
 
-
-					<ul class="custom-list-menu">
-						<li {%if request.path == '/' %} class="active-mobile" {%endif%}>
-							<a href="/">Главная</a>
-						</li>
-
-
-
-						<!--{# Список страниц в главном меню #}-->
-						{% for single_menu_item in topmenu_category %}
-							{% if single_menu_item.post_cat_level == 1 %}
-
-								<!--{#  Если пользователь открывает страницу каталога на мобильном телефоне, список категорий
-											выводится в верхнем(открывающемся) меню. ВАЖНО: url должен быть 'catalog'
-
-										Также, добавляется класс "active-mobile" к активной ссылке #}-->
-								{% if request.path|path_list:0 == 'catalog' and single_menu_item.post_seourl == 'catalog' %}
-									<li class="active-mobile">
-										<a href="/{{ single_menu_item.post_seourl }}">{{ single_menu_item.post_title }}
-											<i class="fa fa-arrow-down visible-mobile" style="margin-left: 10px;"></i>
-										</a>
-									</li>
-
-									<div class="open-catalog-menu-mobile">
-										{% include 'lists/catalog-menu.html' with tags_menu=tags %}
-									</div>
-								{% else %}
-									<li {%if request.path|path_list:0 == single_menu_item.post_seourl %} class="active-mobile" {%endif%}>
-										<a href="/{{ single_menu_item.post_seourl }}">{{ single_menu_item.post_title }}</a>
-									</li>
-								{% endif %}
-
-							{% endif %}
-						{% endfor %}
-					</ul>
-				</nav>
-			</div>
-		</div>
-	</header>
-
-
-
-	{% block without_container %}
-	<section> <!--{# Содержимое всех страниц. #}-->
-		<div class="custom-container">
-			{% block content %}{% endblock content %}
-		</div>
-	</section>
-	{% endblock without_container %}
+	
+<!-- БЛОК, ОБОРАЧИВАЮЩИЙ КОНТЕЙНЕРЫ-БЛОКИ КОНТЕНТА -->
+{% block without_container %}
+  <section> <!--{# Содержимое всех страниц. #}-->
+    <div class="custom-container">
+      {% block content %}{% endblock content %}
+    </div>
+  </section>
+{% endblock without_container %}
+<!-- КОНЕЦ БЛОКА, ОБОРАЧИВАЮЩЕГО КОНТЕЙНЕРЫ-БЛОКИ КОНТЕНТА -->
 
 
-	{% if request.user.is_superuser %}
-			<!--  Изменение фоновой картинки в шапке.
-							Здесь, потому что по другому не показывается и не работает -->
-			{% csrf_token %}
-			<span class="super_user admin-visible-lg">
-				<a href="javascript:viewFormEdit('button-edit-form-hp');" id="button-edit-form-hp" data-template-name="hp_form.html" data-model-id="1">
-					<span class="admin-icon-edit"></span></a>
-			</span>
+<!--  ИЗМЕНЕНИЕ ФОНОВОЙ КАРТИНКИ В ШАПКЕ --> 
+{% if request.user.is_superuser %}
+<!--  Здесь потому, что по другому не показывается и не работает -->
+  {% csrf_token %}
+  <span class="super_user admin-visible-lg">
+    <a href="javascript:viewFormEdit('button-edit-form-hp');" id="button-edit-form-hp" data-template-name="hp_form.html" data-model-id="1">
+      <span class="admin-icon-edit"></span>
+    </a>
+  </span>
+
+  <!-- Всплывающее окно для форм быстрого редактирования -->
+    <div class="admin-panel-pop-up" style="display: none;">
+      <div class="custom-pop-up-blur">
+      </div>
+      <div class="custom-container container-pop">
+        <div class="alert-pop-up" id="alert-pop-up">
+        </div>
+        {% csrf_token %}
+        <form action="javascript:sendData();" class="admin-relative-block" id="send-form-ajax" method="POST" novalidate enctype="multipart/form-data">
+        </form>
+      </div>
+    </div>
+	
+{% endif %}
+<!--  КОНЕЦ ИЗМЕНЕНИЯ ФОНОВОЙ КАРТИНКИ В ШАПКЕ --> 
 
 
-		<!-- Всплывающее окно для форм быстрого редактирования -->
-		<div class="admin-panel-pop-up" style="display: none;">
-			<div class="custom-pop-up-blur"></div>
-			<div class="custom-container container-pop">
-				<div class="alert-pop-up" id="alert-pop-up"></div>
-				{% csrf_token %}
-				<form action="javascript:sendData();" class="admin-relative-block" id="send-form-ajax" method="POST" novalidate enctype="multipart/form-data">
-
-				</form>
-			</div>
-		</div>
-	{% endif %}
+<!--  ФУТЕР ПРОСТОЙ: КОПИРАЙТ, АДРЕС, ТЕЛЕФОН -->
+{% block footer %}
+  <footer>
+    <div class="custom-container">
+      <div class="copyright">© {{orpro_data}} 2018г. {{orpro_data.address}} , {{orpro_data.mob_phone}} Время работы: пн-вс 8:00-18:00, сб-вс 9:00-15:00</div>
+      </div>
+  </footer>
+{% endblock footer %}
+<!--  КОНЕЦ ФУТЕРА ПРОСТОГО -->
 
 
-
-	{% block footer %}
-	<footer>
-		<div class="custom-container">
-			<div class="copyright">© {{orpro_data}} 2018г. {{orpro_data.address}} , {{orpro_data.mob_phone}} Время работы: пн-вс 8:00-18:00, сб-вс 9:00-15:00</div>
-		</div></footer>
-	{% endblock footer %}
+{% block additional_scripts %}{% endblock %}
 
 
-
-
-
-	{% block additional_scripts %}{% endblock %}
-
-
-	<!--{# Мобильная версия. Кнопка открытия меню. #}-->
+<!--{# МОБИЛЬНАЯ ВЕРСИЯ, КНОПКА ОТКРЫТИЯ МЕНЮ #}-->
 	<script type="text/javascript">
 		(function($){
 			$(function() {
@@ -191,5 +186,5 @@
 	</script>
 
 
-	</body>
+</body>
 </html>
