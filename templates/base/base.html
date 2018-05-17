@@ -2,7 +2,7 @@
 {% load path_list %}
 
 <!-- saved from url=(0014)about:internet -->
-<!DOCTYPE html>
+<!DOCTYPE html> <!-- HTML 5 -->
 <html lang="ru-RU">
 <head>
     <meta charset="UTF-8">
@@ -26,71 +26,59 @@
 
     <meta name="theme-color" content="#0c623b">
 
-	<meta name="description" content="Orpro.ru"/>
-	<meta name="keywords" content="{{orpro_data}} ({{orpro_data.address}})"/>
-	<meta name="author" content="Orpro Inc"/>
-	<meta name="copyright" content="(c) {{orpro_data}} 2018г."> <!-- заменить год на переменную текущего года -->
-	<meta http-equiv="Reply-to" content="@">
+    <meta name="description" content="Orpro.ru"/>
+    <meta name="keywords" content="{{orpro_data}} ({{orpro_data.address}})"/>
+    <meta name="author" content="ООО Профсистемы-Крым"/>
+    <meta name="copyright" content="(c) {{orpro_data}} 2018г."> <!-- заменить год на переменную текущего года -->
+    <meta http-equiv="Reply-to" content="@">
 
+    <title>{{orpro_data}} ({{orpro_data.address}}) - сухие строительные смеси в Крыму от производителя</title>
+    <link rel="stylesheet" href="{% static 'new-frontend/css/grid.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'new-frontend/css/style.css' %}" type="text/css" />
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
+    {% if request.user.is_superuser %}
+      <!-- Если вошёл администратор, подключаются стили и скрипты
+            для формы изменения содержимого страницы.(Only admin)-->
+      <link rel="stylesheet" href="{% static 'new-frontend/css/admin-style.css' %}">
+      <script src="{% static 'new-frontend/js/admin-script.js' %}"></script>
+    {% endif %}
 
-
-	<title>{{orpro_data}} ({{orpro_data.address}}) - сухие строительные смеси в Крыму от производителя</title>
-	<link rel="stylesheet" href="{% static 'new-frontend/css/grid.css' %}" type="text/css" />
-	<link rel="stylesheet" href="{% static 'new-frontend/css/style.css' %}" type="text/css" />
-
-
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-
-	{% if request.user.is_superuser %}
-		<!-- Если вошёл администратор, подключаются стили и скрипты
-				для формы изменения содержимого страницы.(Only admin)-->
-		<link rel="stylesheet" href="{% static 'new-frontend/css/admin-style.css' %}">
-		<script src="{% static 'new-frontend/js/admin-script.js' %}"></script>
-	{% endif %}
-
-	{% block additional_head %}{% endblock %}
+    {% block additional_head %}{% endblock %}
 </head>
 
 
-
 <body style="background: #F1F1F1;" class="{% if category_page %} catalog-margin-top-30 {% endif %}">
-	<!-- Отступ требуется для корректного отображения логотипа на странице каталога,
-			так как в мобильной версии появляется панель отображения товаров(списком или блочно). -->
-	<header style="background-image: url({{ hf.hp_photo.url }});{%if request.path == '/' %}margin-bottom: 0;{%endif%}">
+    <!-- Отступ требуется для корректного отображения логотипа на странице каталога,
+         так как в мобильной версии появляется панель отображения товаров(списком или блочно). -->
+	
+  <header style="background-image: url({{ hf.hp_photo.url }});{%if request.path == '/' %}margin-bottom: 0;{%endif%}">
+	  
+    <div class="custom-container hidden-mobile-logo">
+      <div class="custom-brand">
+        <img src="{% static 'images/imgpsh_fullsize.png' %}" width="180px">
+        <h1 class="brand_name"><a href="/">{{orpro_data}}</a></h1>
+      </div>
+      <a href="callto:#"><i class="fa-phone"></i> {{orpro_data.mob_phone}}</a>
+      <p>Время работы: пн-пт 8:00-18:00, сб-вс 9:00-15:00</p>
+    </div>
 
-
-		<div class="custom-container hidden-mobile-logo">
-			<div class="custom-brand">
-				<img src="{% static 'images/imgpsh_fullsize.png' %}" width="180px">
-				<h1 class="brand_name"><a href="/">{{orpro_data}}</a></h1>
-			</div>
-
-			<a href="callto:#"><i class="fa-phone"></i> {{orpro_data.mob_phone}}</a>
-			<p>Время работы: пн-пт 8:00-18:00, сб-вс 9:00-15:00</p>
-		</div>
-
-
-		<div id="header-menu-container" class="header-menu-container">
-			<div class="custom-container">
-				<nav class="custom-navbar">
-
-
-					<!-- Отображается при малых размерах экрана(мобильные, планшеты и тд.)
-							Номер телефона отображается на мобильном(только альбомный режим) и на планшетах в любом режиме.	-->
-					<div class="custom-menu-icon">
-						<span></span><span></span><span></span><span></span>
-						<p><b>{{orpro_data}}</b> <b class="visible-phone-mobile-landscape"> | {{orpro_data.mob_phone}}</b> <br>
-							{{orpro_data.address}}</p></div>
-
-
-					<!-- Логотип в шапке. Отображается, если размер экрана сравним с мобильным и более
-							(до малых десктопных размеров). -->
-					<div class="logo-mobile-in-navbar">
-						<img src="{% static 'images/imgpsh_fullsize.png' %}" width="80px">
-					</div>
+    <div id="header-menu-container" class="header-menu-container">
+      <div class="custom-container">
+        <nav class="custom-navbar">
+          <!-- Отображается при малых размерах экрана (мобильные, планшеты и тд.)
+               Номер телефона отображается на мобильном (только альбомный режим) и на планшетах в любом режиме.	-->
+          <div class="custom-menu-icon">
+            <span></span><span></span><span></span><span></span>
+            <p><b>{{orpro_data}}</b> <b class="visible-phone-mobile-landscape"> | {{orpro_data.mob_phone}}</b>
+            <br>{{orpro_data.address}}</p>
+          </div>
+          <!-- Логотип в шапке. Отображается, если размер экрана сравним с мобильным и более
+               (до малых десктопных размеров). -->
+          <div class="logo-mobile-in-navbar">
+            <img src="{% static 'images/imgpsh_fullsize.png' %}" width="80px">
+          </div>
 
 
 					<ul class="custom-list-menu">
