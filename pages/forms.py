@@ -126,10 +126,8 @@ class OfferForm(forms.ModelForm):
 
     class Meta:
         model = Offers
-        fields = ['offer_title', 'offer_minorder', 'offer_minorder_value',
-                  'offer_availability', 'offer_article', 'offer_subtags',
-                  'offer_price', 'offer_price_from', 'offer_price_to',
-                  'offer_text']
+        fields = ['offer_title', 'offer_availability', 'offer_subtags',
+                  'offer_price', 'offer_text']
 
         widgets = {
             'offer_text': SummernoteWidget(attrs={'rows': 45}),
