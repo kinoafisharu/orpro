@@ -148,26 +148,26 @@
                   {% for p in personal %}
                     <div class="item">
                       <blockquote class="box">
-                      <form action="/p_post" id="p_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                      <span class="p_form_{{p.id}}">
-                        <div class="box_aside">
-                          <img src="{{ p.p_photo.url }}" alt="Менеджер">
-                        </div>
-                        <div class="box_cnt__no-flow">
-                          <p><q>{{ p.p_doljnost }}</q></p>
-                          <cite><a href="/about">{{ p.p_name }}</a></cite>
-                        </div>
-                      </span>
-                      {% if request.user.is_superuser %} <!-- кнопка редактирования (Only admin)-->
-                        {% csrf_token %}
-                        <span class="super_user">
-                          <input type="hidden" name="edit" value="{{p.id}}">
-                          <button type="submit" class="fast-set">
-                            <span class="admin-icon-edit" aria-hidden="true"></span>
-                          </button>
+                        <form action="/p_post" id="p_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <span class="p_form_{{p.id}}">
+                          <div class="box_aside">
+                            <img src="{{ p.p_photo.url }}" alt="Менеджер">
+                          </div>
+                          <div class="box_cnt__no-flow">
+                            <p><q>{{ p.p_doljnost }}</q></p>
+                            <cite><a href="/about">{{ p.p_name }}</a></cite>
+                          </div>
                         </span>
-                      {% endif %}
-                      </form>
+                        {% if request.user.is_superuser %} <!-- кнопка редактирования (Only admin)-->
+                          {% csrf_token %}
+                          <span class="super_user">
+                            <input type="hidden" name="edit" value="{{p.id}}">
+                            <button type="submit" class="fast-set">
+                              <span class="admin-icon-edit" aria-hidden="true"></span>
+                            </button>
+                          </span>
+                        {% endif %}
+                        </form>
                       </blockquote>
                     </div>
                   {% endfor %}
