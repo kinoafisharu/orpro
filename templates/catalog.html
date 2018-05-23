@@ -79,7 +79,7 @@
               <p>{{ tag.tag_description|safe }}</p>
             </div>
 
-            {% include 'forms/admin-button-edit.html' with abe_title="subtag" abe_template="subtag_form.html" abe_model=tag %}
+            {% include 'forms/admin-button-edit.html' with abe_title=tag.tag_url abe_template="subtag_form.html" abe_model=tag %}
 					</li>
 				{% endif %}
 			{% endfor %}
