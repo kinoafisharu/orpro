@@ -211,10 +211,11 @@ class Company(models.Model):
 
 
 # Модель товара
+# Закомментированный код подлежит удалению до 1 июня 2018г.
 class Offers(models.Model):
     offer_title = models.CharField(max_length=250, verbose_name='Название')
     offer_price = models.FloatField(default=0, verbose_name='Цена')
-    offer_price_discount = models.FloatField(blank=True, default=0, verbose_name='Цена со скидкой', null=True) #ЛИШНЕЕ
+    # offer_price_discount = models.FloatField(blank=True, default=0, verbose_name='Цена со скидкой', null=True) #ЛИШНЕЕ
     # offer_discount_term = models.DateTimeField(blank=True, null=True, verbose_name='Срок действия скидки') #ЛИШНЕЕ
     # offer_price_from = models.FloatField(blank=True, default=0, verbose_name='Цена от') #ЛИШНЕЕ
     # offer_price_to = models.FloatField(blank=True, default=0, verbose_name='Цена до') #ЛИШНЕЕ
