@@ -127,6 +127,7 @@ class AdminAjaxEditForm(BaseAjaxView):
         'sup_form.html': SupportForm,
         'lb_form.html': LBlocksForm,
         'fb_form.html': FBlocksForm,
+        'subtag_form.html': SubtagsForCatalog,
     }
 
 
@@ -582,6 +583,3 @@ def catalog(request, cat_url='nothing'):
     args['category_page'] = True
 
     return render(request, 'catalog.html', args)
-
-
-

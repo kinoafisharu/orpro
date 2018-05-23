@@ -167,6 +167,8 @@ class Subtags(models.Model):
     tag_priority = models.IntegerField(null=True, blank=True)
     tag_description = models.CharField(max_length=400, blank=True, null=True)
 
+    tag_image = models.ImageField(blank=True, null=True, verbose_name='Изображение тега')
+
     class Meta:
         verbose_name = 'Дополнительные теги'
         verbose_name_plural = 'Дополнительные теги'

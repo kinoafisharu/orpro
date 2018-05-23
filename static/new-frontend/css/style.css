@@ -555,27 +555,47 @@ footer .copyright a:hover {
 
 .catalog-subtags {}
 .catalog-subtags > .catalog-subtags-ul {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	align-items: flex-start;
-	flex-wrap: wrap;
-	padding-bottom: 10px;
-	align-content: space-around;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+  align-content: space-around;
 }
 .catalog-subtags > .catalog-subtags-ul > li{
-	width: 50%;
-	text-align: center;
-	text-transform: uppercase;
-	font-size: 18px;
-	font-weight: 700;
-	height: 35px;
-	overflow: hidden;
-	line-height: 18px;
-	color: #424242;
+  width: 50%;
+  text-align: left;
+  overflow: hidden;
+  margin-bottom: 5px;
 }
-.catalog-subtags > .catalog-subtags-ul > li > a{}
-
+.catalog-subtags > .catalog-subtags-ul > li .tag_text{
+  display: inline-block;
+  margin-left: 5%;
+  width: 45%;
+  vertical-align: text-top;
+}
+.catalog-subtags > .catalog-subtags-ul > li .tag_text p{
+  line-height: 17px;
+  font-size: 15px;
+}
+.catalog-subtags > .catalog-subtags-ul > li .tag_text a{
+  text-transform: uppercase;
+  font-size: 18px;
+  font-weight: 700;
+  color: #424242;
+  height: 100%;
+  line-height: 28px;
+}
+.catalog-subtags > .catalog-subtags-ul > li > a{
+  height: auto;
+  position: relative;
+}
+.catalog-subtags > .catalog-subtags-ul > li img{
+  width: 25%;
+  min-width: 80px;
+  height: auto;
+}
 
 
 
