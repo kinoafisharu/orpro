@@ -1,7 +1,7 @@
 from django import forms, views
 from django.template import loader
 from django.http import HttpResponse, HttpResponseForbidden
-
+from django.utils.datastructures import MultiValueDictKeyError
 
 __all__ = ('FormAjaxBase', )
 
@@ -19,7 +19,12 @@ class FormAjaxBase(forms.ModelForm):
                 raise IndexError('Model not found')
 
             for field_model in self.__list_fields:
-                exist_model.__dict__[field_model] = request.POST[field_model]
+                field_sv_file = request.FILES.get(field_model, None)
+                try:
+                    field_sv = field_sv_file if field_sv_file else request.POST[field_model]
+                except MultiValueDictKeyError:
+                    continue
+                exist_model.__dict__[field_model] = field_sv
             exist_model.save()
         else:
             raise AttributeError('Field "model-id" not found.')

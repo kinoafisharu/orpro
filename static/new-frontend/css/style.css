@@ -567,7 +567,7 @@ footer .copyright a:hover {
   width: 50%;
   text-align: left;
   overflow: hidden;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 .catalog-subtags > .catalog-subtags-ul > li .tag_text{
   display: inline-block;
@@ -575,11 +575,14 @@ footer .copyright a:hover {
   width: 45%;
   vertical-align: text-top;
 }
+.catalog-subtags > .catalog-subtags-ul > li .tag_text > p a{
+  color: #6d79c2;
+}
 .catalog-subtags > .catalog-subtags-ul > li .tag_text p{
   line-height: 17px;
   font-size: 15px;
 }
-.catalog-subtags > .catalog-subtags-ul > li .tag_text a{
+.catalog-subtags > .catalog-subtags-ul > li .tag_text > a{
   text-transform: uppercase;
   font-size: 18px;
   font-weight: 700;
