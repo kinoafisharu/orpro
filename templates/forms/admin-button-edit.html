@@ -1,0 +1,7 @@
+{% if request.user.is_superuser %}
+{% csrf_token %}
+<span class="super_user">
+  <a href="javascript:viewFormEdit('button-edit-form-{{ abe_title }}');" id="button-edit-form-{{ abe_title }}" data-template-name="{{ abe_template }}" data-model-id="{{ abe_model.id }}">
+    <span class="admin-icon-edit"></span></a>
+</span>
+{% endif %}

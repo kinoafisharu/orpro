@@ -22,8 +22,8 @@ url(r'^edit-ajax-forms/.*\.html$', AdminAjaxEditForm.as_view(), name='admin-edit
 
 url(r'^comment_admin$', comment_admin, name='comment_admin'),
 url(r'^delete$', comment_delete, name='comment_delete'),
-url(r'^1g$', pars_cat),
-url(r'^2g$', pars_goods),
+# url(r'^1g$', pars_cat),
+# url(r'^2g$', pars_goods),
 url(r'^catalog/(?P<cat_url>[A-Za-z0-9_-]+)$', catalog, name='catalog'),
 url(r'^otzyvy', review, name='review'),
 url(r'^catalog', catalog, name='cat_redirect'),
