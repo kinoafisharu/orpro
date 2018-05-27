@@ -1,8 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
 
-
-
 {% block additional_head %}
 <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
 
@@ -11,8 +9,8 @@
 {% endblock %}
 
 
-{% block without_container %}
-<section class="slider-section" style="background: #fff;">
+{% block without_container %} <!-- блок, оборачивающий контейнеры -->
+<section class="slider-section" style="background: #fff;"> <!-- Слайдер -->
     <div class="custom-container">
         <div class="custom-slider">
 	    {% for baner_element in baner %}
@@ -26,183 +24,163 @@
 
 
 <section class="section-two">
-    <div class="custom-container">
-        {% block content %}
-        <section> <!-- Контейнер 4-х элементов, находящихся сразу под слайдером -->
-            <div class="custom-container banner_wr">
-                <ul class="banner">
-                    {% for element_banner in fb_elements %}
-                    <li class="admin-relative-block" style="{% if element_banner.fb_color %}background: {{element_banner.fb_color}};{%endif%}">
-                        <a href="{{ element_banner.fb_url }}">
-                            <div class="{{ element_banner.fb_icon }}"></div>
-                            <span>
-                                <h3>{{ element_banner.fb_title }}</h3>
-								<p>{{ element_banner.fb_text|safe  }}</p>
-							</span>
-						</a>
-                        {% if request.user.is_superuser %}
-                            {% csrf_token %}
-                        <span class="super_user">
-                        <a href="javascript:viewFormEdit('button-edit-form-fb{{ element_banner.id }}');" id="button-edit-form-fb{{ element_banner.id }}" data-template-name="fb_form.html" data-model-id="{{ element_banner.id }}">
-                            <span class="admin-icon-edit"></span>
-                        </a>
-						</span>
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </section>
-		<section class="container-view-2-sec">
-			<div class="custom-container">
-				<div class="row">
-
+  <div class="custom-container">
+    {% block content %}
+      <section> <!-- Контейнер 4-х элементов, находящихся сразу под слайдером -->
+        <div class="custom-container banner_wr">
+          <ul class="banner">
+            {% for element_banner in fb_elements %}
+              <li class="admin-relative-block" style="{% if element_banner.fb_color %}background: {{element_banner.fb_color}};{%endif%}">
+                <a href="{{ element_banner.fb_url }}">
+                  <div class="{{ element_banner.fb_icon }}"></div>
+                  <span>
+                    <h3>{{ element_banner.fb_title }}</h3>
+								      <p>{{ element_banner.fb_text|safe  }}</p>
+							    </span>
+						    </a>
+                {% if request.user.is_superuser %}
+                  {% csrf_token %}
+                  <span class="super_user">
+                    <a href="javascript:viewFormEdit('button-edit-form-fb{{ element_banner.id }}');" id="button-edit-form-fb{{ element_banner.id }}" data-template-name="fb_form.html" data-model-id="{{ element_banner.id }}">
+                      <span class="admin-icon-edit"></span>
+                    </a>
+						      </span>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
+      <section class="container-view-2-sec">
+			  <div class="custom-container">
+				  <div class="row">
 					{% for element_subbanner in lb_elements %}
-					<div class="grid_6 box-form wow fadeInRight admin-relative-block" data-wow-delay=".{{ forloop.counter }}s">
-								<span class="form_lb_1">
-									<div class="box_aside">
-										<div class="icon {{ element_subbanner.lb_icon }}" style="{% if element_subbanner.lb_color %}background: {{element_subbanner.lb_color}}!important;{%endif%}"></div>
-									</div>
-									<div class="box_cnt__no-flow">
-										<h3><a href="{{ element_subbanner.lb_link }}">{{ element_subbanner.lb_title }}</a></h3>
-										<p>{{ element_subbanner.lb_text|safe }}</p>
-									</div>
-								</span>
-
+					  <div class="grid_6 box-form wow fadeInRight admin-relative-block" data-wow-delay=".{{ forloop.counter }}s">
+						  <span class="form_lb_1">
+						    <div class="box_aside">
+								  <div class="icon {{ element_subbanner.lb_icon }}" style="{% if element_subbanner.lb_color %}background: {{element_subbanner.lb_color}}!important;{%endif%}"></div>
+								</div>
+								<div class="box_cnt__no-flow">
+									<h3><a href="{{ element_subbanner.lb_link }}">{{ element_subbanner.lb_title }}</a></h3>
+									<p>{{ element_subbanner.lb_text|safe }}</p>
+								</div>
+							</span>
+              {% if request.user.is_superuser %}
+              {% csrf_token %}
+              <span class="super_user">
+                <a href="javascript:viewFormEdit('button-edit-form-lb{{ element_subbanner.id }}');" id="button-edit-form-lb{{ element_subbanner.id }}" data-template-name="lb_form.html" data-model-id="{{ element_subbanner.id }}">
+                  <span class="admin-icon-edit"></span></a>
+              </span>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+      <section class="well1">
+        <div class="custom-container">
+          <div class="row">
+            <div class="grid_4">
+              <div class="admin-relative-block" id="ac_form">
+                <span>
+                  <h2>{{ ac1.ac_title }}</h2>
+                  <p style="margin-top: 20px;">{{ ac1.ac_text|safe }}</p>
+                </span>
+                <div style="margin-top: 30px;"></div>
+                <a href="/about" class="home-button">Читать больше</a>
+                {% if request.user.is_superuser %}
+                {% csrf_token %}
+                <span class="super_user">
+                  <a href="javascript:viewFormEdit('button-edit-form-ac');" id="button-edit-form-ac" data-template-name="ac_form.html" data-model-id="1">
+                    <span class="admin-icon-edit"></span></a>
+                </span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="grid_4 home-goods-list">
+              <h2>Товары</h2>
+              <p>Список самых покупаемых товаров</p>
+              <ul class="marked-list-buy-orders">
+                {% for i in TO %}
+                <div class="admin-relative-block">
+                  <span class="to_form_{{i.id}}">
+                    <li><a href="/goods/{{i.to_link}}">{{ i.to_title }}</a></li>
+                  </span>
+                  {% if request.user.is_superuser %}
+                  {% csrf_token %}
+                  <span class="super_user">
+                    <a href="javascript:viewFormEdit('button-edit-form-to{{i.id}}');" id="button-edit-form-to{{i.id}}" data-template-name="to_form.html" data-model-id="{{ i.id }}">
+                      <span class="admin-icon-edit"></span></a>
+                  </span>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </ul>
+              <a href="/catalog" class="home-button">Читать больше</a>
+            </div>
+            <div class="grid_4">
+              <div class="info-box">
+                <div class="admin-relative-block">
+                  <span class="sup_form">
+                    <h2 class="fa-comment">{{ sup.sup_title  }}</h2>
+                    <hr>
+                    <h3>{{ sup.sup_slogan }}</h3>
+                    <dl>
+                      <dd>{{ sup.sup_time }}</dd>
+                    </dl>
+                    <p>{{ sup.sup_phone }}</p>
+                  </span>
 								{% if request.user.is_superuser %}
 								{% csrf_token %}
-								<span class="super_user">
-									<a href="javascript:viewFormEdit('button-edit-form-lb{{ element_subbanner.id }}');" id="button-edit-form-lb{{ element_subbanner.id }}" data-template-name="lb_form.html" data-model-id="{{ element_subbanner.id }}">
-										<span class="admin-icon-edit"></span></a>
-								</span>
-								{% endif %}
-					</div>
-					{% endfor %}
-				</div>
-			</div>
-		</section>
-
-
-
-
-		<section class="well1">
-			<div class="custom-container">
-				<div class="row">
-					<div class="grid_4">
-
-
-						<div class="admin-relative-block" id="ac_form">
-							<span>
-								<h2>{{ ac1.ac_title }}</h2>
-								<p style="margin-top: 20px;">{{ ac1.ac_text|safe }}</p>
-							</span>
-
-							<div style="margin-top: 30px;"></div>
-							<a href="/about" class="home-button">Читать больше</a>
-
-
-							{% if request.user.is_superuser %}
-							{% csrf_token %}
-							<span class="super_user">
-								<a href="javascript:viewFormEdit('button-edit-form-ac');" id="button-edit-form-ac" data-template-name="ac_form.html" data-model-id="1">
-									<span class="admin-icon-edit"></span></a>
-							</span>
-							{% endif %}
-
-						</div>
-					</div>
-
-					<div class="grid_4 home-goods-list">
-						<h2>Товары</h2>
-						<p>Список самых покупаемых товаров</p>
-						<ul class="marked-list-buy-orders">
-							{% for i in TO %}
-								<div class="admin-relative-block">
-										<span class="to_form_{{i.id}}">
-											<li><a href="/goods/{{i.to_link}}">{{ i.to_title }}</a></li>
-										</span>
-
-
-										{% if request.user.is_superuser %}
-										{% csrf_token %}
-										<span class="super_user">
-											<a href="javascript:viewFormEdit('button-edit-form-to{{i.id}}');" id="button-edit-form-to{{i.id}}" data-template-name="to_form.html" data-model-id="{{ i.id }}">
-												<span class="admin-icon-edit"></span></a>
-										</span>
-										{% endif %}
-									</div>
-							{% endfor %}
-						</ul>
-						<a href="/catalog" class="home-button">Читать больше</a>
-					</div>
-
-					<div class="grid_4">
-						<div class="info-box">
-							<div class="admin-relative-block">
-								<span class="sup_form">
-									<h2 class="fa-comment">{{ sup.sup_title  }}</h2>
-									<hr>
-									<h3>{{ sup.sup_slogan }}</h3>
-									<dl>
-										<dd>{{ sup.sup_time }}</dd>
-									</dl>
-									<p>{{ sup.sup_phone }}</p>
-								</span>
-
-								{% if request.user.is_superuser %}
-								{% csrf_token %}
-								<span class="super_user">
-									<a href="javascript:viewFormEdit('button-edit-form-sup');" id="button-edit-form-sup" data-template-name="sup_form.html" data-model-id="1">
-										<span class="admin-icon-edit"></span></a>
-								</span>
-								{% endif %}
-							</div>
-						</div>
-						<div class="owl-carousel">
-							{% for p in personal %}
-							<div class="item">
-								<blockquote class="box">
-									<form action="/p_post" id="p_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-										<span class="p_form_{{p.id}}">
-											<div class="box_aside">
-												<img src="{{ p.p_photo.url }}" alt="">
-											</div>
-											<div class="box_cnt__no-flow">
-												<p>
-													<q>{{ p.p_doljnost }}</q>
-												</p>
-												<cite><a href="/about">{{ p.p_name }}</a></cite>
-											</div>
-										</span>
-										{% if request.user.is_superuser %}
-										{% csrf_token %}
-											<span class="super_user">
-												 <input type="hidden" name="edit" value="{{p.id}}">
-												 <button type="submit" class="fast-set">
-													 <span class="admin-icon-edit" aria-hidden="true"></span>
-												 </button>
-											</span>
-										{% endif %}
-									</form>
-								</blockquote>
-							</div>
-							{% endfor %}
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	{% endblock content %}
-	</div>
+                  <span class="super_user">
+                    <a href="javascript:viewFormEdit('button-edit-form-sup');" id="button-edit-form-sup" data-template-name="sup_form.html" data-model-id="1">
+                      <span class="admin-icon-edit"></span></a>
+                  </span>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="owl-carousel">
+                {% for p in personal %}
+                <div class="item">
+                  <blockquote class="box">
+                    <form action="/p_post" id="p_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                      <span class="p_form_{{p.id}}">
+                        <div class="box_aside">
+                          <img src="{{ p.p_photo.url }}" alt="">
+                        </div>
+                        <div class="box_cnt__no-flow">
+                          <p>
+                            <q>{{ p.p_doljnost }}</q>
+                          </p>
+                          <cite><a href="/about">{{ p.p_name }}</a></cite>
+                        </div>
+                      </span>
+                      {% if request.user.is_superuser %}
+                      {% csrf_token %}
+                      <span class="super_user">
+                        <input type="hidden" name="edit" value="{{p.id}}">
+                        <button type="submit" class="fast-set">
+                          <span class="admin-icon-edit" aria-hidden="true"></span>
+                        </button>
+                      </span>
+                      {% endif %}
+                    </form>
+                  </blockquote>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+    {% endblock content %}
+  </div>
 </section>
-
-
-
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
-		//Анимирование елемента при прокрутке.
+		//Анимирование элемента при прокрутке.
 		new WOW().init();
 
 		$('.custom-slider').slick({
@@ -217,50 +195,49 @@
 		});
 	});
 </script>
-{% endblock without_container %}
+{% endblock without_container %} <!-- конец блока, оборачивающего контейнеры -->
 
 
-
-
-
-{% block footer %}
-	<footer>
-		<div class="custom-container home-footer">
-		<div class="row">
-			<div class="grid_4 wow fadeInRight">
-				<div class="icon-container"><i class="fa-map-marker"></i></div>
-				<a class="text-container">{{ orpro_data.address }}</a>
-			</div>
-
-			<div class="grid_4 wow fadeInRight" data-wow-delay=".1s">
-				<div class="icon-container"><i class="fa-skype"></i></div>
-				<a class="text-container">{{ orpro_data.skype }}</a>
-			</div>
-
-			<div class="grid_4 wow fadeInRight" data-wow-delay=".2s">
-				<div class="icon-container"><i class="fa-phone"></i></div>
-				<a class="text-container">{{ orpro_data.mob_phone }}</a>
-			</div>
-
-			<div class="grid_4 wow fadeInRight" data-wow-delay=".3s">
-				<div class="icon-container"><i class="fa-fax"></i></div>
-				<a class="text-container">{{ orpro_data.rob_phone }}</a>
-			</div>
-
-			<div class="grid_4 wow fadeInRight" data-wow-delay=".4s">
-				<div class="icon-container"><i class="fa-facebook"></i></div>
-				<a class="text-container" href="{{ orpro_data.facebook_link }}">Мы в Фейсбуке</a>
-			</div>
-
-			<div class="grid_4 wow fadeInRight" data-wow-delay=".5s">
-				<div class="icon-container"><i class="fa-twitter"></i></div>
-				<a class="text-container" href="{{ orpro_data.twitter_link }}">Мы в Твиттере</a>
-			</div>
-			</div>
-		</div>
-
-		<div class="custom-container">
-			<hr class="hr">
-			<div class="copyright">© {{orpro_data}} 2018г. {{orpro_data.address}} , {{orpro_data.mob_phone}} Время работы: пн-пт 8:00-18:00, сб-вс 9:00-15:00 </div>
-		</div></footer>
+{% block footer %} <!-- блок подвала -->
+  <footer>
+  <div class="custom-container home-footer">
+    <div class="row"> <!-- 6 блоков с контактами -->
+      <div class="grid_4 wow fadeInRight">
+        <div class="icon-container"><i class="fa-map-marker"></i>
+        </div>
+        <a class="text-container">{{ orpro_data.address }}</a>
+      </div>
+      <div class="grid_4 wow fadeInRight" data-wow-delay=".1s">
+        <div class="icon-container"><i class="fa-skype"></i>
+        </div>
+        <a class="text-container">{{ orpro_data.skype }}</a>
+      </div>
+      <div class="grid_4 wow fadeInRight" data-wow-delay=".2s">
+        <div class="icon-container"><i class="fa-phone"></i>
+        </div>
+        <a class="text-container">{{ orpro_data.mob_phone }}</a>
+      </div>
+      <div class="grid_4 wow fadeInRight" data-wow-delay=".3s">
+        <div class="icon-container"><i class="fa-fax"></i>
+        </div>
+        <a class="text-container">{{ orpro_data.rob_phone }}</a>
+      </div>
+      <div class="grid_4 wow fadeInRight" data-wow-delay=".4s">
+        <div class="icon-container"><i class="fa-facebook"></i>
+        </div>
+        <a class="text-container" href="{{ orpro_data.facebook_link }}">Мы в Фейсбуке</a>
+      </div>
+      <div class="grid_4 wow fadeInRight" data-wow-delay=".5s">
+        <div class="icon-container"><i class="fa-twitter"></i>
+        </div>
+        <a class="text-container" href="{{ orpro_data.twitter_link }}">Мы на Ютьюбе</a>
+      </div>
+    </div> <!-- конец 6 блоков с контактами -->
+  </div>
+  <div class="custom-container">
+    <hr class="hr">
+    <div class="copyright">© {{orpro_data}} 2018г. {{orpro_data.address}} , {{orpro_data.mob_phone}} Время работы: пн-пт 8:00-18:00, сб-вс 9:00-15:00 
+    </div>
+  </div>
+  </footer>
 {% endblock footer %}
