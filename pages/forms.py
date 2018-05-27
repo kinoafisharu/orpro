@@ -23,6 +23,14 @@ SUMMERNOTE_ATTRS = {'toolbar': [
     ['misc', ['codeview', 'undo', 'redo']],
 ]}
 
+SUMMERNOTE_SUBTAGS_ATTRS = {'toolbar': [
+    ['style', ['style']],
+    ['font', ['bold', 'italic', 'underline', 'clear']],
+    ['insert', ['link']],
+    ['misc', ['codeview', 'undo', 'redo']],
+]}
+
+
 class CommentAdminForm(forms.ModelForm):
     class Meta:
         model = Reviews
@@ -126,10 +134,8 @@ class OfferForm(forms.ModelForm):
 
     class Meta:
         model = Offers
-        fields = ['offer_title', 'offer_minorder', 'offer_minorder_value',
-                  'offer_availability', 'offer_article', 'offer_subtags',
-                  'offer_price', 'offer_price_from', 'offer_price_to',
-                  'offer_text']
+        fields = ['offer_title', 'offer_availability', 'offer_subtags',
+                  'offer_price', 'offer_text']
 
         widgets = {
             'offer_text': SummernoteWidget(attrs={'rows': 45}),
@@ -152,6 +158,23 @@ class SubtagsForm(forms.ModelForm):
             'delete_stag': forms.CheckboxInput(attrs={'class': 'main-check'})
         }
 
+SUBTAGS_FIELDS_CATALOG = ['tag_url', 'tag_title', 'tag_description', 'tag_image']
+class SubtagsForCatalog(FormAjaxBase):
+    class Meta:
+        model = Subtags
+        fields = SUBTAGS_FIELDS_CATALOG
+        widgets = {
+            'tag_description': SummernoteWidget(attrs=SUMMERNOTE_SUBTAGS_ATTRS),
+            'tag_image': forms.FileInput(attrs={'id': 'id-ajax-save-file'})
+        }
+
+    def __init__(self, model_initial=None, *args, **kwargs):
+        if model_initial is not None:
+            super().__init__(initial={SUBTAGS_FIELDS_CATALOG[0]: model_initial.tag_url,
+                SUBTAGS_FIELDS_CATALOG[1]: model_initial.tag_title, SUBTAGS_FIELDS_CATALOG[2]: model_initial.tag_description,
+                SUBTAGS_FIELDS_CATALOG[3]: model_initial.tag_image }, *args, **kwargs)
+        else:
+            super().__init__(*args, **kwargs)
 
 class SinglePageForm(forms.ModelForm):
     class Meta:

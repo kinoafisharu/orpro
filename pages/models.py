@@ -167,6 +167,8 @@ class Subtags(models.Model):
     tag_priority = models.IntegerField(null=True, blank=True)
     tag_description = models.CharField(max_length=400, blank=True, null=True)
 
+    tag_image = models.ImageField(upload_to="subtag_images/", blank=True, null=True, verbose_name='Изображение тега')
+
     class Meta:
         verbose_name = 'Дополнительные теги'
         verbose_name_plural = 'Дополнительные теги'
@@ -211,31 +213,31 @@ class Company(models.Model):
 
 
 # Модель товара
+# Закомментированный код подлежит удалению до 1 июня 2018г.
 class Offers(models.Model):
     offer_title = models.CharField(max_length=250, verbose_name='Название')
     offer_price = models.FloatField(default=0, verbose_name='Цена')
-    offer_price_discount = models.FloatField(blank=True, default=0, verbose_name='Цена со скидкой', null=True) #ЛИШНЕЕ
-    offer_discount_term = models.DateTimeField(blank=True, null=True, verbose_name='Срок действия скидки') #ЛИШНЕЕ
-    offer_price_from = models.FloatField(blank=True, default=0, verbose_name='Цена от') #ЛИШНЕЕ
-    offer_price_to = models.FloatField(blank=True, default=0, verbose_name='Цена до') #ЛИШНЕЕ
-    offer_valuta = models.CharField(max_length=40, verbose_name='Валюта') #ЛИШНЕЕ
+    # offer_price_discount = models.FloatField(blank=True, default=0, verbose_name='Цена со скидкой', null=True) #ЛИШНЕЕ
+    # offer_discount_term = models.DateTimeField(blank=True, null=True, verbose_name='Срок действия скидки') #ЛИШНЕЕ
+    # offer_price_from = models.FloatField(blank=True, default=0, verbose_name='Цена от') #ЛИШНЕЕ
+    # offer_price_to = models.FloatField(blank=True, default=0, verbose_name='Цена до') #ЛИШНЕЕ
+    # offer_valuta = models.CharField(max_length=40, verbose_name='Валюта') #ЛИШНЕЕ
     offer_value = models.CharField(max_length=50, blank=True, verbose_name='Единица измерения')
-    offer_minorder = models.IntegerField(default=1, verbose_name='Минимальный размер заказа') #ЛИШНЕЕ
-    offer_minorder_value = models.CharField(max_length=50, blank=True, verbose_name='Единица измерения минимального заказа') #ЛИШНЕЕ
-    offer_pre_text = models.TextField(blank=True, null=True, verbose_name='Краткое описание') #ЛИШНЕЕ
+    # offer_minorder = models.IntegerField(default=1, verbose_name='Минимальный размер заказа') #ЛИШНЕЕ
+    # offer_pre_text = models.TextField(blank=True, null=True, verbose_name='Краткое описание') #ЛИШНЕЕ
     offer_text = models.TextField(verbose_name='Полное описание')
-    offer_photo_alt = models.CharField(max_length=250, blank=True, verbose_name='Комментарий к изображению') #ЛИШНЕЕ
-    offer_priority = models.BooleanField(default=False, verbose_name='Приоритетный товар') #ЛИШНЕЕ
-    offer_urt_to_rubric = models.URLField(blank=True, verbose_name='Ссылка на рубрику', null=True) #ЛИШНЕЕ
-    offer_characteristics = models.TextField(blank=True, verbose_name='Характеристики') #ЛИШНЕЕ
+    # offer_photo_alt = models.CharField(max_length=250, blank=True, verbose_name='Комментарий к изображению') #ЛИШНЕЕ
+    # offer_priority = models.BooleanField(default=False, verbose_name='Приоритетный товар') #ЛИШНЕЕ
+    # offer_urt_to_rubric = models.URLField(blank=True, verbose_name='Ссылка на рубрику', null=True) #ЛИШНЕЕ
+    # offer_characteristics = models.TextField(blank=True, verbose_name='Характеристики') #ЛИШНЕЕ
     offer_availability = models.ForeignKey(Availability, verbose_name='Наличие')
-    offer_article = models.CharField(max_length=50, blank=True, verbose_name='Артикул', null=True) #ЛИШНЕЕ
-    offer_id_on_site = models.IntegerField(blank=True, verbose_name='ID товара на сайте www.pulscen.ru', null=True) #ЛИШНЕЕ
-    offer_code = models.CharField(max_length=50, blank=True, verbose_name='Код товара в вашем каталоге', null=True) #ЛИШНЕЕ
-    offer_publish = models.ForeignKey(Publish, verbose_name='Публикуемость') #ЛИШНЕЕ
+    # offer_article = models.CharField(max_length=50, blank=True, verbose_name='Артикул', null=True) #ЛИШНЕЕ
+    # offer_id_on_site = models.IntegerField(blank=True, verbose_name='ID товара на сайте www.pulscen.ru', null=True) #ЛИШНЕЕ
+    # offer_code = models.CharField(max_length=50, blank=True, verbose_name='Код товара в вашем каталоге', null=True) #ЛИШНЕЕ
+    # offer_publish = models.ForeignKey(Publish, verbose_name='Публикуемость') #ЛИШНЕЕ
     offer_url = models.CharField(max_length=250, verbose_name='Ссылка на товар на нашем сайте')
     offer_photo = models.ImageField(blank=True, null=True, verbose_name='Фото на страницу')
-    offer_image_url = models.URLField(null=True, blank=True, verbose_name="Ссылка на картинку") #ЛИШНЕЕ
+    # offer_image_url = models.URLField(null=True, blank=True, verbose_name="Ссылка на картинку") #ЛИШНЕЕ
     offer_tag = models.ForeignKey(Tags, blank=True, verbose_name='Группа 1 уровня')
     offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='pr')
     created = models.DateTimeField(verbose_name='Создан', auto_now_add=True, auto_now=False)

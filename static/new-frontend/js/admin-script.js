@@ -42,12 +42,29 @@ $(function() {
 function sendData() {
   var xhr = new XMLHttpRequest();
   var data = new FormData();
-  var formElement = $('#send-form-ajax');
-  var csrf = $('[name=csrfmiddlewaretoken]').val()
-  var searchParams = new URLSearchParams('csrfmiddlewaretoken='+ csrf +'&'+ formElement.serialize());
 
-  xhr.open('POST', '/edit-ajax-forms/'+ searchParams.get('template-name-edit'), true)
-  xhr.send(searchParams);
+  var formElement = $('#send-form-ajax');
+  var ser_form = formElement.serializeArray();
+  //console.log(ser_form);
+
+  var templateName = '';
+
+  var file_save_input = $('#id-ajax-save-file')[0];
+  if (file_save_input.files[0]){
+    data.append(file_save_input.name, file_save_input.files[0]);
+  }
+
+  for (var elem_ser_form in ser_form){
+    if (ser_form[elem_ser_form].name == 'template-name-edit') templateName = ser_form[elem_ser_form].value;
+    data.append(ser_form[elem_ser_form].name, ser_form[elem_ser_form].value);
+  }
+
+  var csrf = $('[name=csrfmiddlewaretoken]').val()
+  data.append('csrfmiddlewaretoken', csrf);
+  //var searchParams = new URLSearchParams('csrfmiddlewaretoken='+ csrf +'&'+ formElement.serialize());
+
+  xhr.open('POST', '/edit-ajax-forms/'+ templateName, true)
+  xhr.send(data);
 
   xhr.onreadystatechange = function() {
     if (xhr.readyState != 4) return;
