@@ -178,7 +178,7 @@
 
 		<div>{{ offer.offer_availability }}</div>
 		<div style="font-size: 20px; font-weight:bold; padding-top: 10px">
-      Цена: {% if not offer.offer_price %} 0 {% else %}{{ offer.offer_price }}{% endif %} руб.
+      Цена: {% if not offer.offer_price %} 0 {% else %}{{ offer.offer_price|stringformat:"i" }}{% endif %} руб.
 		</div>
 	</div>
 </div>
