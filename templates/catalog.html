@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %} {% load staticfiles %}
-
+{% load path_list %}
 
 {% block additional_head %}
 	<!--<link rel="stylesheet" href="{% static 'css/preloader.css' %}">
@@ -85,12 +85,6 @@
 			{% endfor %}
 		</div>
 
-		{% if not request.user.is_superuser %}
-		<div class="hidden-mobile">
-			{% include 'lists/cloud-tags.html' %}
-		</div>
-		{% endif %}
-
 
 		<!--{# Панель отображения товаров(списком или блочно) и способ сортировки #}-->
 		<div class="custom-viewers-line">
@@ -117,18 +111,16 @@
 
 
 					<div class="catalog-order-text">
-							<h5 class="hidden-in-list title">{{ p.offer_title|truncatechars:55 }}</h5>
-							<a href="/goods/{{ p.offer_url }}/" class="hidden-in-block title"><h5>{{ p.offer_title|truncatechars:40 }}</h5></a>
+							<h5 class="hidden-in-list title">{{ p.offer_title|truncatechars:90 }}</h5>
+							<a href="/goods/{{ p.offer_url }}/" class="hidden-in-block title"><h5>{{ p.offer_title|truncatechars:90 }}</h5></a>
 
 							{% if p.offer_price != 0 %}
 								<b class="order-price">{{ p.offer_price|stringformat:"i" }} руб.</b>
-							{% elif p.offer_price_from != 0 %}
-								<b class="order-price">{{ p.offer_price_from|stringformat:"i" }} - {{ p.offer_price_to|stringformat:"i" }} руб.</b>
 							{% else %}
 								<b class="order-price">Нет в наличии</b>
 							{% endif %}
 
-							<p>{{ p.offer_pre_text|safe|truncatechars:160 }}</p>
+							<p>{{ p.offer_text|offer_pre_text|safe }}</p>
 					</div>
 
 
@@ -140,9 +132,7 @@
 		</div>
 
 			{% if not request.user.is_superuser %}
-			<div class="visible-mobile">
 				{% include 'lists/cloud-tags.html' %}
-			</div>
 			{% endif %}
 
 		{% endblock container_list_offers %}

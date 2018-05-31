@@ -128,6 +128,7 @@ class AdminAjaxEditForm(BaseAjaxView):
         'lb_form.html': LBlocksForm,
         'fb_form.html': FBlocksForm,
         'subtag_form.html': SubtagsForCatalog,
+        'subtag_offer_form.html': SubtagsForm,
     }
 
 

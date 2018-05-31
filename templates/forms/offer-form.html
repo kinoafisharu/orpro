@@ -147,7 +147,7 @@
 					<a href="{{ offer.offer_photo.url }}"><img src="{{ offer.offer_photo.url }}" width="220px"/></a>
 				{% endif %}
 			  </div>
-			
+
 			  <div class='slider-nav'>
 			  	{% if offer.images.first %}
 					{% for img in offer.images.all %}
@@ -175,24 +175,17 @@
 				{{ offer.offer_title }}
 			{% endif %}
 		</h4>
-		
-		<div>Мин. заказ: {{ offer.offer_minorder }} {{ offer.offer_minorder_value}}</div>
+
 		<div>{{ offer.offer_availability }}</div>
-		<div>Арт: {{ offer.offer_article }}</div>
 		<div style="font-size: 20px; font-weight:bold; padding-top: 10px">
-			Цена  &nbsp;: &nbsp;
-			{% if offer.offer_price_from == 0 %}
-			{{ offer.offer_price|stringformat:"i" }}
-			{% else %}
-			{{ offer.offer_price_from|stringformat:"i" }} - {{ offer.offer_price_to|stringformat:"i" }}
-			{% endif%} руб.
+      Цена: {% if not offer.offer_price %} 0 {% else %}{{ offer.offer_price|stringformat:"i" }}{% endif %} руб.
 		</div>
 	</div>
 </div>
 
 <div class="offer-description">
 	<h3>Описание</h3>
-	
+
 	<p>
 	{% if edit %}
 		{{ form.media }}

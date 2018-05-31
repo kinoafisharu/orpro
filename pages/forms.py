@@ -150,15 +150,23 @@ class OfferForm(forms.ModelForm):
 
 
 
-class SubtagsForm(forms.ModelForm):
+SUBTAG_MAIN_FIELDS = ['tag_url', 'tag_title', 'tag_priority']
+class SubtagsForm(FormAjaxBase):
     class Meta:
         model = Subtags
-        fields = ['tag_url', 'tag_title', 'tag_parent_tag', 'delete_stag', 'tag_priority']
-        widgets = {
-            'delete_stag': forms.CheckboxInput(attrs={'class': 'main-check'})
-        }
+        fields = SUBTAG_MAIN_FIELDS
+        #widgets = {
+        #    'delete_stag': forms.CheckboxInput(attrs={'class': 'main-check'})
+        #}
 
-SUBTAGS_FIELDS_CATALOG = ['tag_url', 'tag_title', 'tag_description', 'tag_image']
+    def __init__(self, model_initial=None, *args, **kwargs):
+        if model_initial is not None:
+            super().__init__(initial={SUBTAG_MAIN_FIELDS[0]: model_initial.tag_url,
+                SUBTAG_MAIN_FIELDS[1]: model_initial.tag_title, SUBTAG_MAIN_FIELDS[3]: model_initial.tag_priority}, *args, **kwargs)
+        else:
+            super().__init__(*args, **kwargs)
+
+SUBTAGS_FIELDS_CATALOG = ['tag_url', 'tag_title', 'tag_description', 'tag_image', 'tag_priority']
 class SubtagsForCatalog(FormAjaxBase):
     class Meta:
         model = Subtags
@@ -172,6 +180,7 @@ class SubtagsForCatalog(FormAjaxBase):
         if model_initial is not None:
             super().__init__(initial={SUBTAGS_FIELDS_CATALOG[0]: model_initial.tag_url,
                 SUBTAGS_FIELDS_CATALOG[1]: model_initial.tag_title, SUBTAGS_FIELDS_CATALOG[2]: model_initial.tag_description,
+                SUBTAGS_FIELDS_CATALOG[4]: model_initial.tag_priority,
                 SUBTAGS_FIELDS_CATALOG[3]: model_initial.tag_image }, *args, **kwargs)
         else:
             super().__init__(*args, **kwargs)
