@@ -17,12 +17,12 @@ body {
 	-webkit-focus-ring-color: rgba(255, 255, 255, 0);
 	outline: none;
 
-	-moz-user-select: none;
-	-o-user-select: none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
-	resize: none;
+  /*-moz-user-select: none;
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;*/
+  resize: none;
 
 	-webkit-text-size-adjust: none;
 }
