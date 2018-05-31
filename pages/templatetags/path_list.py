@@ -14,8 +14,7 @@ def return_path_list(value, index='None'):
 @register.filter(name='random_sort')
 def random_sort(tags_list):
     ''' Blends the tag list for the cloud '''
-    return sorted(tags_list[4:], key=lambda x: random.random())
-
+    return sorted(tags_list, key=lambda x: random.random())
 
 @register.filter(name='offer_pre_text')
 def offer_pre_text(value):
