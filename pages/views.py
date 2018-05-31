@@ -400,8 +400,9 @@ class OfferAjaxUpdateView(UpdateView):
             ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-            ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag)\
-                .order_by('tag_priority')[0:100]
+            #ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_subtags)\
+            #    .order_by('tag_priority')[0:100]
+        ctx['subtags'] = self.object.offer_subtags.all()
         ctx['offer'] = self.object
 
         if self.request.user.is_superuser:

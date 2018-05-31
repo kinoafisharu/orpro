@@ -2,7 +2,7 @@
 
 <div class="cloud">
 	{% for tag in subtags|random_sort %}
-	{% if forloop.counter > 4 and forloop.counter <= count or forloop.counter > 4 and forloop.counter <= 20 and not count %}
+	{# if forloop.counter > 4 and forloop.counter <= count or forloop.counter > 4 and forloop.counter <= 20 and not count #}
 		{% if request.user.is_superuser %}
       <li class="admin-relative-block">
         <a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
@@ -22,7 +22,7 @@
 
 				;">{{ tag.tag_title }}</a>
 		{% endif %}
-	{% endif %}
+	{# endif #}
 	{% endfor %}
 </div>
 
