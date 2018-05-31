@@ -158,7 +158,7 @@ class SubtagsForm(forms.ModelForm):
             'delete_stag': forms.CheckboxInput(attrs={'class': 'main-check'})
         }
 
-SUBTAGS_FIELDS_CATALOG = ['tag_url', 'tag_title', 'tag_description', 'tag_image']
+SUBTAGS_FIELDS_CATALOG = ['tag_url', 'tag_title', 'tag_description', 'tag_image', 'tag_priority']
 class SubtagsForCatalog(FormAjaxBase):
     class Meta:
         model = Subtags
@@ -172,7 +172,8 @@ class SubtagsForCatalog(FormAjaxBase):
         if model_initial is not None:
             super().__init__(initial={SUBTAGS_FIELDS_CATALOG[0]: model_initial.tag_url,
                 SUBTAGS_FIELDS_CATALOG[1]: model_initial.tag_title, SUBTAGS_FIELDS_CATALOG[2]: model_initial.tag_description,
-                SUBTAGS_FIELDS_CATALOG[3]: model_initial.tag_image }, *args, **kwargs)
+                SUBTAGS_FIELDS_CATALOG[3]: model_initial.tag_priority,
+                SUBTAGS_FIELDS_CATALOG[4]: model_initial.tag_image }, *args, **kwargs)
         else:
             super().__init__(*args, **kwargs)
 
