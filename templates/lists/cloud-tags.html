@@ -4,22 +4,10 @@
 	{% for tag in subtags|random_sort %}
 	{% if forloop.counter > 4 and forloop.counter <= count or forloop.counter > 4 and forloop.counter <= 20 and not count %}
 		{% if request.user.is_superuser %}
-			<form action="/stag_post" class="admin-relative-block" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-				<span class="stag_form_{{ tag.id }} stag_form_stl">
-					<li>
-						<a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
-					</li>
-				</span>
-
-
-				{% csrf_token %}
-				<span class="super_user_left_list">
-					<input type="hidden" name="edit" value="{{tag.id}}">
-					<button type="submit" class="fast-set">
-						<span class="admin-icon-edit-list" aria-hidden="true"></span>
-					</button>
-				</span>
-			</form>
+      <li class="admin-relative-block">
+        <a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
+        {% include 'forms/admin-button-edit.html' with abe_title=tag.tag_url abe_template="subtag_offer_form.html" abe_model=tag %}
+      </li>
 		{% else %}
 			<a href="{%  url 'catalog' cat_url=tag.tag_url %}" style="
 				color: {% if tag.tag_priority > 50 %} #006200;
@@ -43,7 +31,7 @@
 		.cloud li > a{margin-top: 2px;}
 		.cloud li{
 			list-style: none;
-			padding-left: 30px;
+      padding: 5px 30px;
 		}
 	{% else %}
 		.cloud{

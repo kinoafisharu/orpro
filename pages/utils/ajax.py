@@ -24,6 +24,12 @@ class FormAjaxBase(forms.ModelForm):
                     field_sv = field_sv_file if field_sv_file else request.POST[field_model]
                 except MultiValueDictKeyError:
                     continue
+
+                if field_model == 'tag_priority':
+                    if field_sv == '' or field_sv == None:
+                        exist_model.__dict__[field_model] = None
+                        continue
+
                 exist_model.__dict__[field_model] = field_sv
             exist_model.save()
         else:
