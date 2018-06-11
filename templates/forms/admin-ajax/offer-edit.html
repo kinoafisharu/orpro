@@ -1,0 +1,16 @@
+<div class="admin-form-group">
+    <input type="hidden" name="template-name-edit" value="{{ template_send }}">
+
+
+    <div><input type="hidden" name="model-id" value="{{ model_id }}"></div>
+    <div>Название: <p style="color: black">{{ form.offer_title }}</p></div>
+    <div>Цена: <p style="color: black"> {{ form.offer_price }}</p></div>
+    <div>Единица измерения: <p style="color: black"> {{ form.offer_value }}</p></div>
+    <div>Описание: <p style="color: black"> {{ form.offer_text }}</p></div>
+    <div>Url: <p style="color: black"> {{ form.offer_url }}</p></div>
+    <div>Статус: <p style="color: black"> {{ form.offer_availability }}</p></div>
+
+    <div>Теги: <p style="color: black">{{ form.offer_subtags }}</p></div>
+
+    <div><button class="home-button" type="submit">Сохранить</button></div>
+</div>

@@ -63,13 +63,14 @@ class AdminAjaxEditForm(BaseAjaxView):
       id="custom-name-{{ model.id }}"
       data-template-name="fb_form.html"
       data-model-id="{{ model.id }}">
+
+    <!-- Или воспользоваться шаблоном -->
+    {% include 'forms/admin-button-edit.html' with abe_title=tag.tag_url abe_template="subtag_form.html" abe_model=tag %}
   {% endfor %}
-```Каталог
+```
 В конечном итоге, после нажатия на кнопку, появляется `pop-up` форма. Отправка данных выполняется посредством **AJAX**. Если данные успешно сохранены, страница перезагружается.
 
-<!--![Скриншот формы](//media/1_0.png "Можно задать title")-->
-
-
+![Скриншот формы](git-readme-image.png "Пример формы быстрого редактирования")
 
 
 # Lists

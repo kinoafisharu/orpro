@@ -129,6 +129,7 @@ class AdminAjaxEditForm(BaseAjaxView):
         'fb_form.html': FBlocksForm,
         'subtag_form.html': SubtagsForCatalog,
         'subtag_offer_form.html': SubtagsForm,
+        'offer-edit.html': OfferForm,
     }
 
 
@@ -353,7 +354,7 @@ class OfferAjaxUpdateView(UpdateView):
     slug_field = "offer_url"
     slug_url_kwarg = "off_url"
     template_name = "offer.html"
-    ajax_template_name = "forms/offer-form.html"
+    #ajax_template_name = "forms/offer-form.html"
 
     def post(self, request, *args, **kwargs):
         if request.user.is_superuser:
@@ -390,8 +391,8 @@ class OfferAjaxUpdateView(UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_template_names(self):
-        if self.request.is_ajax():
-            return self.ajax_template_name
+    #    if self.request.is_ajax():
+    #        return self.ajax_template_name
         return self.template_name
 
     def get_context_data(self, **kwargs):

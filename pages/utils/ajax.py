@@ -49,7 +49,10 @@ class FormAjaxBase(forms.ModelForm):
             form_initial = self.__model_class.objects.get(id=model_initial_id)
 
             for field_name in self.__list_fields:
-                initial_dict[field_name] = form_initial.__dict__[field_name]
+                try:
+                    initial_dict[field_name] = form_initial.__dict__[field_name]
+                except KeyError:
+                    continue
 
             super().__init__(initial=initial_dict, *args, **kwargs)
         #else:
