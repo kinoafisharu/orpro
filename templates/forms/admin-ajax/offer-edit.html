@@ -10,7 +10,126 @@
     <div>Url: <p style="color: black"> {{ form.offer_url }}</p></div>
     <div>Статус: <p style="color: black"> {{ form.offer_availability }}</p></div>
 
-    <div>Теги: <p style="color: black">{{ form.offer_subtags }}</p></div>
+    <div>Теги: <!--<p style="color: black">{{ form.offer_subtags }}</p>--></div>
+    <div class="select-tags-container">
+      <ul class="result-tags" id="container-result-tags"></ul>
+      <select multiple id="id_offer_subtags" name="offer_subtags" size="10"></select>
+    </div>
+
+
+
+    <style>
+      .select-tags-container{width: 100%;}
+      .select-tags-container > input{display: block;margin-top: 20px;}
+      .select-tags-container > .result-tags{
+        display: block;
+        min-height: 10px;
+        padding: 15px;
+        background: #fff;
+        border: 1px solid #e2e2e2;
+        border-radius: 3px;
+      }
+      .select-tags-container > select{width: 100%;margin-top: 10px;}
+      .select-tags-container > select option:checked{
+        background-color: #fff !important;
+      }
+
+      .select-tags-container > .result-tags > li{
+        background: #0c623b;
+        color: #fff;
+        padding: 0 10px;
+        border-radius: 5px;
+        border: 1px solid #e2e2e2;
+        display: inline-block;
+        cursor: pointer;
+      }
+    </style>
+
+    <script>
+      var subtag_viewer = new subtagViewer();
+      {% for other_sub in offer_all_subtags %}
+        subtag_viewer.set_all_subtag_element({{ other_sub.id }}, '{{ other_sub.tag_title }}');
+      {% endfor %}
+
+      {% for subtag in offer_subtags %}
+        subtag_viewer.set_subtag_element({{ subtag.id }}, '{{ subtag.tag_title }}');
+      {% endfor %}
+
+
+      function subtagViewer(){
+        this.result_list = [];
+        this._container_result = document.getElementById('container-result-tags');
+        this._multiple_element = document.getElementById('id_offer_subtags');
+
+        this.set_subtag_element = function(id, name) {
+          this._push_to_result(id, name);
+          this._selected_list();
+        };
+
+        this.set_all_subtag_element = function(id, name){
+          var _pre_element = document.createElement('option');
+          _pre_element.value = id;
+          _pre_element.innerHTML = name;
+          this._multiple_element.appendChild(_pre_element);
+
+          var _this = this;
+          _pre_element.onclick = function(e){
+            _this._push_to_result(id, name);
+            _this._selected_list();
+          }
+        };
+
+        this._selected_list = function(){
+          for (var index in this._multiple_element.options){
+            this._multiple_element.options[index].selected = false;
+          }
+
+          for (var elain in this.result_list){
+            for (var index in this._multiple_element.options){
+              if (this._multiple_element.options[index].value == this.result_list[elain][0])
+                this._multiple_element.options[index].selected = true;
+            }
+          }
+        };
+
+        //Выводит тег в форму(html)
+        this._inner_to_html = function(array_element){
+          //<li>{{ subtag.tag_title }}</li>
+          var _pre_element = document.createElement('li');
+          _pre_element.id = array_element[0];
+          _pre_element.innerHTML = array_element[1];
+
+          var _this = this;
+          _pre_element.onclick = function(e){
+            _this._remove_from_result(e.currentTarget.id);
+            e.currentTarget.remove();
+            _this._selected_list();
+          }
+
+          this._container_result.appendChild(_pre_element);
+        };
+
+        this._remove_from_result = function(id){
+          for (var el in this.result_list){
+            if (this.result_list[el][0] == id) delete this.result_list[el];
+          }
+          this._selected_list();
+        };
+
+        this._push_to_result = function(id, name){
+          var is_exist = false;
+          for (var el in this.result_list){
+            if (this.result_list[el][0] == id) is_exist = true;
+          }
+          if (!is_exist) {
+            this.result_list.push([id, name]);
+            this._inner_to_html([id, name]);
+          }
+        }
+      }
+    </script>
+
+
 
     <div><button class="home-button" type="submit">Сохранить</button></div>
 </div>
