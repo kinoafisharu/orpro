@@ -130,24 +130,28 @@ class HeaderPhotoForm(FormAjaxBase):
             super().__init__(*args, **kwargs)
 
 
-class OfferForm(forms.ModelForm):
-
+OFFER_FORM = ['offer_title', 'offer_price', 'offer_value', 'offer_text', 'offer_url', 'offer_availability', 'offer_subtags']
+class OfferForm(FormAjaxBase):
     class Meta:
         model = Offers
-        fields = ['offer_title', 'offer_availability', 'offer_subtags',
-                  'offer_price', 'offer_text']
+        fields = OFFER_FORM
 
         widgets = {
-            'offer_text': SummernoteWidget(attrs={'rows': 45}),
-            'offer_subtags': forms.CheckboxSelectMultiple,
+            'offer_text': SummernoteWidget(attrs=SUMMERNOTE_ATTRS),
         }
 
-    def __init__(self, *args, **kwargs):
-        super(OfferForm, self).__init__(*args, **kwargs)
-        if self.instance:
-            self.fields['offer_subtags'].queryset = Subtags.objects.filter(
-                tag_parent_tag=self.instance.offer_tag)
-
+    def __init__(self, model_initial=None, *args, **kwargs):
+        #super().__init__(*args, **kwargs)
+        if model_initial is not None:
+            super().__init__(initial={OFFER_FORM[0]: model_initial.offer_title,OFFER_FORM[1]: model_initial.offer_price,
+                OFFER_FORM[2]: model_initial.offer_value, OFFER_FORM[3]: model_initial.offer_text,
+                OFFER_FORM[4]: model_initial.offer_url, OFFER_FORM[5]: model_initial.offer_availability}, *args, **kwargs)
+            if self.instance:
+                self.fields['offer_subtags'] = forms.ModelChoiceField(queryset=Subtags.objects.filter(
+                    tag_parent_tag=self.instance.offer_tag), to_field_name="tag_title")
+                #self.fields['offer_availability'] = forms.ModelChoiceField(queryset=Availability.objects.all())
+        else:
+            super().__init__(*args, **kwargs)
 
 
 SUBTAG_MAIN_FIELDS = ['tag_url', 'tag_title', 'tag_priority']
