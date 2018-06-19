@@ -8,7 +8,11 @@
     <div>Единица измерения: <p style="color: black"> {{ form.offer_value }}</p></div>
     <div>Описание: <p style="color: black"> {{ form.offer_text }}</p></div>
     <div>Url: <p style="color: black"> {{ form.offer_url }}</p></div>
-    <div>Статус: <p style="color: black"> {{ form.offer_availability }}</p></div>
+    <div>Статус: <select name="offer_availability">
+      {% for opt in offer_availability_all %}
+        <option value="{{ opt.id }}" {%if offer_availability.id == opt.id%}selected{%endif%}>{{ opt.availability_title }}</option>
+      {% endfor %}
+    </select></div>
 
     <div>Теги: <!--<p style="color: black">{{ form.offer_subtags }}</p>--></div>
     <div class="select-tags-container">

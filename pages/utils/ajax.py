@@ -3,7 +3,7 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseForbidden
 from django.utils.datastructures import MultiValueDictKeyError
 
-from pages.models import Offers, Subtags
+from pages.models import Offers, Subtags, Availability
 
 __all__ = ('FormAjaxBase', 'BaseAjaxView', )
 
@@ -31,6 +31,9 @@ class FormAjaxBase(forms.ModelForm):
                             except Subtags.DoesNotExist:
                                 continue
                             exist_model.offer_subtags.add(obj_sub)
+                    elif field_model == 'offer_availability':
+                        field_sv = int(request.POST[field_model])
+                        field_model += '_id'
                     else:
                         field_sv = field_sv_file if field_sv_file else request.POST[field_model]
                 except MultiValueDictKeyError:
@@ -40,8 +43,8 @@ class FormAjaxBase(forms.ModelForm):
                     if field_sv == '' or field_sv == None:
                         exist_model.__dict__[field_model] = None
                         continue
-
                 exist_model.__dict__[field_model] = field_sv
+                #print('\n\n{}\n\n {} \n\n'.format(field_model, exist_model.__dict__))
             exist_model.save()
         else:
             raise AttributeError('Field "model-id" not found.')
@@ -90,9 +93,11 @@ class BaseAjaxView(views.View):
                     model_object = Offers.objects.get(id=model_id)
                     result_list_tags = model_object.offer_subtags.all()
                     self.context_data['offer_all_subtags'] = Subtags.objects.filter(tag_parent_tag=model_object.offer_tag)
+                    self.context_data['offer_availability'] = model_object.offer_availability
                 except Offers.DoesNotExist:
                     pass
                 self.context_data['offer_subtags'] = result_list_tags
+                self.context_data['offer_availability_all'] = Availability.objects.all()
 
             template = loader.get_template(self.URL_TO_TEMPLATES + file_name_template)
             return HttpResponse(template.render(self.context_data, request))
