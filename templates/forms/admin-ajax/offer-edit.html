@@ -13,6 +13,8 @@
     <div>Теги: <!--<p style="color: black">{{ form.offer_subtags }}</p>--></div>
     <div class="select-tags-container">
       <ul class="result-tags" id="container-result-tags"></ul>
+      <input type="text" placeholder="Введите название тега ..." id="input-value-tag-select" autocomplete="off">
+      <select multiple id="search-result-tags"></select>
       <select multiple id="id_offer_subtags" name="offer_subtags" size="10"></select>
     </div>
 
@@ -20,7 +22,7 @@
 
     <style>
       .select-tags-container{width: 100%;}
-      .select-tags-container > input{display: block;margin-top: 20px;}
+      .select-tags-container > input{}
       .select-tags-container > .result-tags{
         display: block;
         min-height: 10px;
@@ -29,7 +31,7 @@
         border: 1px solid #e2e2e2;
         border-radius: 3px;
       }
-      .select-tags-container > select{width: 100%;margin-top: 10px;}
+      .select-tags-container > select{width: 100%;display: none;}
       .select-tags-container > select option:checked{
         background-color: #fff !important;
       }
@@ -43,6 +45,7 @@
         display: inline-block;
         cursor: pointer;
       }
+      .home-button{margin-top: 40px;}
     </style>
 
     <script>
@@ -58,8 +61,20 @@
 
       function subtagViewer(){
         this.result_list = [];
+        this.all_tags = [];
         this._container_result = document.getElementById('container-result-tags');
         this._multiple_element = document.getElementById('id_offer_subtags');
+
+        this._input_element = document.getElementById('input-value-tag-select');
+        this._datalist_result = document.getElementById('search-result-tags');
+
+        var _this = this;
+        this._input_element.onkeyup = function(e){
+          var _value_input = e.currentTarget.value;
+          if (_value_input.length >= 2){
+            _this._search_tag_in_list(_value_input);
+          }
+        };
 
         this.set_subtag_element = function(id, name) {
           this._push_to_result(id, name);
@@ -67,6 +82,8 @@
         };
 
         this.set_all_subtag_element = function(id, name){
+          this.all_tags.push([id, name]);
+
           var _pre_element = document.createElement('option');
           _pre_element.value = id;
           _pre_element.innerHTML = name;
@@ -79,6 +96,24 @@
           }
         };
 
+        this._append_option_to_datalist = function(id, name){
+          var _pre_element = document.createElement('option');
+          _pre_element.value = id;
+          _pre_element.innerHTML = name;
+
+          var _this = this;
+          _pre_element.onclick = function(e){
+            //console.log('Clicking to datalist');
+            _this._push_to_result(id, name);
+            _this._selected_list();
+            _this._datalist_result.style.display = 'none';
+            _this._datalist_result.innerHTML = '';
+            _this._input_element.value = '';
+          };
+
+          this._datalist_result.appendChild(_pre_element);
+        };
+
         this._selected_list = function(){
           for (var index in this._multiple_element.options){
             this._multiple_element.options[index].selected = false;
@@ -88,6 +123,20 @@
             for (var index in this._multiple_element.options){
               if (this._multiple_element.options[index].value == this.result_list[elain][0])
                 this._multiple_element.options[index].selected = true;
+            }
+          }
+        };
+
+        this._search_tag_in_list = function(search_value){
+          this._datalist_result.style.display = 'none';
+          this._datalist_result.innerHTML = '';
+          for (var index in this.all_tags){
+            var main_value = this.all_tags[index][1].toLowerCase();
+            if (main_value.includes(search_value.toLowerCase())){
+              //console.log(this.all_tags[index]);
+              this._append_option_to_datalist(this.all_tags[index][0], this.all_tags[index][1]);
+              this._datalist_result.style.display = 'block';
+
             }
           }
         };
