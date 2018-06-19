@@ -1,77 +1,39 @@
 {% extends "base/base.html" %}
 {% load static %} {% load staticfiles %}
+{% load path_list %}
 
 
-{% block additional_head %}
-	<!--<link rel="stylesheet" href="{% static 'css/preloader.css' %}">
-	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">-->
-{% endblock %}
+{% block additional_head %}{% endblock %}
 
 
 {% block content %}
-	<div class="grid_3">
 
-		<div class="hidden-mobile">
-			{% include 'lists/catalog-menu.html' with tags_menu=tags %}
-		</div>
-	</div>
-
-
-
+  <!-- Боковое меню -->
+  <div class="grid_3">
+    <div class="hidden-mobile">
+      {% include 'lists/catalog-menu.html' with tags_menu=tags %}
+    </div>
+  </div>
 
 
-	<div class="grid_8">
-		{% if request.user.is_superuser %}
-			<a href="/api-import">
-				<i class="fas fa-upload"></i>
-			</a>
-		{% endif %}
+  <!-- Основной блок в котором выводится список товаров и отдельный товар -->
+  <div class="grid_8">
+    {% if request.user.is_superuser %}
+      <a href="/api-import">
+        <i class="fas fa-upload"></i>
+      </a>
+    {% endif %}
 
 
+  {% block container_list_offers %}
 
-		{#<h2 style="font-size: 13px;color: #999;">Каталог / {{ cat_title.tag_title }}</h2>#}
-
-		<!--{#<div class="row">
-			{% for tag in subtags %}
-				{% if forloop.counter <= 4 %}
-					<div class="col-2">
-						<form action="/stag_post" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-							<span class="stag_form_{{ tag.id }} stag_form_stl">
-								<li>
-									<a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
-								</li>
-							</span>
-							{% if request.user.is_superuser %} {% csrf_token %}
-								<span class="super_user">
-									<input type="hidden" name="edit" value="{{tag.id}}">
-									<button type="submit" class="fast-set">
-										<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-									</button>
-								</span>
-							{% endif %}
-						</form>
-					</div>
-				{% endif %}
-			{% endfor %}
-		</div>
-		<style type="text/css">
-			#stag_form{
-				display: flex;
-				flex-direction: row;
-	justify-content: center;
-	align-items: stretch;
-	flex-wrap: wrap;
-	align-content: flex-start;
-			}
-		</style>#}-->
-		{% block container_list_offers %}
-
-		<div class="catalog-subtags">
-			<ul class="catalog-subtags-ul">
-			{% for tag in subtags %}
-				{% if forloop.counter <= 4 %}
-					<li class="admin-relative-block">
-						<a href="{%  url 'catalog' cat_url=tag.tag_url %}">
+    <!-- Первых 4 субтега, которые выводятся в каталоге -->
+    <div class="catalog-subtags">
+      <ul class="catalog-subtags-ul">
+      {% for tag in subtags %}
+        {% if forloop.counter <= 4 %}
+          <li class="admin-relative-block">
+            <a href="{%  url 'catalog' cat_url=tag.tag_url %}">
               {% if tag.tag_image %}<img src="{{tag.tag_image.url }}" alt="Изображение тега">{% else %}
               <img src="{% static 'images/nophoto.jpg' %}" width="50" alt="Изображение тега">{% endif %}</a>
             <div class="tag_text">
@@ -80,55 +42,46 @@
             </div>
 
             {% include 'forms/admin-button-edit.html' with abe_title=tag.tag_url abe_template="subtag_form.html" abe_model=tag %}
-					</li>
-				{% endif %}
-			{% endfor %}
-		</div>
-
-		{% if not request.user.is_superuser %}
-		<div class="hidden-mobile">
-			{% include 'lists/cloud-tags.html' %}
-		</div>
-		{% endif %}
+          </li>
+        {% endif %}
+      {% endfor %}
+    </div>
 
 
-		<!--{# Панель отображения товаров(списком или блочно) и способ сортировки #}-->
-		<div class="custom-viewers-line">
-			<div class="block-settings-type-sorted"></div>
-			<div class="block-settings-type-view">
-				<!--<p id="text-settings-list-or-block"></p>-->
-				<a class="return-to-category">{{ cat_title.tag_title }}</a>
+    <!-- Панель отображения товаров(списком или блочно) и название категории -->
+    <div class="custom-viewers-line">
+      <div class="block-settings-type-sorted"></div>
+      <div class="block-settings-type-view">
+        <!--<p id="text-settings-list-or-block"></p>-->
+        <a class="return-to-category">{{ cat_title.tag_title }}</a>
 
-				<a id="offer-show-list" class="active"><i class="fa fa-th-list"></i></a>
-				<a id="offer-show-block"><i class="fa fa-th-large"></i></a>
-			</div>
-		</div>
+        <a id="offer-show-list" class="active"><i class="fa fa-th-list"></i></a>
+        <a id="offer-show-block"><i class="fa fa-th-large"></i></a>
+      </div>
+    </div>
 
 
 
-		<div class="custom-orders-list" {% if offer|length <= 2 %}style="justify-content: flex-start;"{% endif %}>
-			{% for p in offer %}
-				<div class="catalog-order order-show-list" {% if offer|length <= 2 %}style="margin-right: 20px;"{% endif %}>
+    <div class="custom-orders-list" {% if offer|length <= 2 %}style="justify-content: flex-start;"{% endif %}>
+      {% for p in offer %}
+        <div class="catalog-order order-show-list" {% if offer|length <= 2 %}style="margin-right: 20px;"{% endif %}>
+
+          <div class="catalog-order-image">
+            <a href="/goods/{{ p.offer_url }}/"><img src="{{ p.get_main_image }}"  alt=" "></a>
+          </div>
 
 
-					<div class="catalog-order-image">
-						<a href="/goods/{{ p.offer_url }}/"><img src="{{ p.get_main_image }}"  alt=" "></a>
-					</div>
+          <div class="catalog-order-text">
+            <h5 class="hidden-in-list title">{{ p.offer_title|truncatechars:90 }}</h5>
+            <a href="/goods/{{ p.offer_url }}/" class="hidden-in-block title"><h5>{{ p.offer_title|truncatechars:90 }}</h5></a>
 
-
-					<div class="catalog-order-text">
-							<h5 class="hidden-in-list title">{{ p.offer_title|truncatechars:55 }}</h5>
-							<a href="/goods/{{ p.offer_url }}/" class="hidden-in-block title"><h5>{{ p.offer_title|truncatechars:40 }}</h5></a>
-
-							{% if p.offer_price != 0 %}
-								<b class="order-price">{{ p.offer_price|stringformat:"i" }} руб.</b>
-							{% elif p.offer_price_from != 0 %}
-								<b class="order-price">{{ p.offer_price_from|stringformat:"i" }} - {{ p.offer_price_to|stringformat:"i" }} руб.</b>
-							{% else %}
+            {% if p.offer_price != 0 %}
+              <b class="order-price">{{ p.offer_price|stringformat:"i" }} руб.</b>
+            {% else %}
 								<b class="order-price">Нет в наличии</b>
 							{% endif %}
 
-							<p>{{ p.offer_pre_text|safe|truncatechars:160 }}</p>
+							<p>{{ p.offer_text|offer_pre_text|safe }}</p>
 					</div>
 
 
@@ -139,14 +92,11 @@
 			{% endfor %}
 		</div>
 
-			{% if not request.user.is_superuser %}
-			<div class="visible-mobile">
-				{% include 'lists/cloud-tags.html' %}
-			</div>
-			{% endif %}
 
-		{% endblock container_list_offers %}
-	</div>
+    {% include 'lists/cloud-tags.html' %}
+
+  {% endblock container_list_offers %}
+</div>
 
 {% endblock %}
 

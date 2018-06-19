@@ -128,83 +128,11 @@ class AdminAjaxEditForm(BaseAjaxView):
         'lb_form.html': LBlocksForm,
         'fb_form.html': FBlocksForm,
         'subtag_form.html': SubtagsForCatalog,
+        'subtag_offer_form.html': SubtagsForm,
+        'offer-edit.html': OfferForm,
     }
 
 
-def tag_post(request):
-    if request.user.is_superuser:
-        if request.method == 'POST':
-            response_data = {}
-            post_text = request.POST
-            if request.POST.get('delete_tag', False):
-                f = Tags.objects.get(id=post_text.get("edit")).id
-                Tags.objects.get(id=f).delete()
-                response_data['id'] = f
-                response_data['del'] = True
-                return JsonResponse(response_data)
-            else:
-                f = Tags.objects.get(id=post_text.get("edit")).id
-                Tags.objects.filter(id=f).update(tag_url=post_text["tag_url"],
-                                                 tag_title=post_text["tag_title"],
-                                                 tag_priority=post_text["tag_priority"])
-                response_data['tag_url'] = Tags.objects.get(id=f).tag_url
-                response_data['tag_title'] = Tags.objects.get(id=f).tag_title
-                response_data['tag_publish'] = Tags.objects.get(id=f).tag_publish
-                response_data['tag_priority'] = Tags.objects.get(id=f).tag_priority
-                response_data['id'] = f
-                print(response_data)
-                return JsonResponse(response_data)
-        else:
-            args = {}
-            if 'edit' in request.GET:
-                print(request.GET["edit"])
-                args['edit'] = True
-                id_edit = request.GET["edit"]
-            tag_initial = Tags.objects.get(id=id_edit)
-            form = TagsForm(initial={'tag_url': tag_initial.tag_url,
-                                     'tag_title': tag_initial.tag_title,
-                                     'tag_priority': tag_initial.tag_priority})
-            return render(request, 'tag_form.html', locals())
-    return HttpResponseForbidden()
-
-
-def stag_post(request):
-    if request.user.is_superuser:
-        if request.method == 'POST':
-            response_data = {}
-            post_text = request.POST
-            if request.POST.get('delete_stag', False):
-                f = Subtags.objects.get(id=post_text.get("edit")).id
-                Subtags.objects.get(id=f).delete()
-                response_data['id'] = f
-                response_data['del'] = True
-                return JsonResponse(response_data)
-            else:
-                f = Subtags.objects.get(id=post_text.get("edit")).id
-                Subtags.objects.filter(id=f).update(tag_title=post_text["tag_title"],
-                                                    tag_url=post_text["tag_url"],
-                                                    tag_parent_tag=post_text["tag_parent_tag"],
-                                                    tag_priority=post_text["tag_priority"])
-                response_data['tag_title'] = Subtags.objects.get(id=f).tag_title
-                response_data['tag_url'] = Subtags.objects.get(id=f).tag_url
-                response_data['tag_priority'] = Subtags.objects.get(id=f).tag_priority
-                response_data['id'] = f
-                print(response_data)
-                return JsonResponse(response_data)
-        else:
-            args = {}
-            if 'edit' in request.GET:
-                print(request.GET["edit"])
-                id_edit = request.GET["edit"]
-            stag_initial = Subtags.objects.get(id=id_edit)
-            form = SubtagsForm(
-                initial={'tag_title': stag_initial.tag_title,
-                         'tag_url': stag_initial.tag_url,
-                         'tag_parent_tag': stag_initial.tag_parent_tag,
-                         'tag_priority': stag_initial.tag_priority,
-                         })
-            return render(request, 'stag_form.html', locals())
-    return HttpResponseForbidden()
 
 
 def comment_delete(request):
@@ -241,35 +169,6 @@ def comment_admin(request):
             return render(request, 'comment_admin_form.html', locals())
     return HttpResponseForbidden()
 
-
-def hp_post(request):
-    if request.user.is_superuser:
-        if request.method == 'POST':
-            response_data = {}
-            post_text = request.POST
-            post_file = request.FILES
-            print(post_text)
-            f = HeaderPhoto.objects.get(id=post_text.get("edit")).id
-            if request.FILES:
-                HeaderPhoto.objects.filter(id=f).update(hp_name=post_text["hp_name"], hp_photo=post_file["hp_photo"])
-            else:
-                HeaderPhoto.objects.filter(id=f).update(hp_name=post_text["hp_name"])
-            response_data['hp_name'] = HeaderPhoto.objects.get(id=f).hp_name
-            response_data['hp_photo'] = HeaderPhoto.objects.get(id=f).hp_photo.url
-            response_data['id'] = f
-            print(response_data)
-            return JsonResponse(response_data)
-        else:
-            args = {}
-            if 'edit' in request.GET:
-                print(request.GET["edit"])
-                args['edit'] = True
-                id_edit = request.GET["edit"]
-            hp_initial = HeaderPhoto.objects.get(id=id_edit)
-            hp_photo_url = hp_initial.hp_photo.url
-            form = HeaderPhotoForm(initial={'hp_name': hp_initial.hp_name, 'hp_photo': hp_initial.hp_photo})
-            return render(request, 'hp_form.html', locals())
-    return HttpResponseForbidden()
 
 
 
@@ -455,7 +354,7 @@ class OfferAjaxUpdateView(UpdateView):
     slug_field = "offer_url"
     slug_url_kwarg = "off_url"
     template_name = "offer.html"
-    ajax_template_name = "forms/offer-form.html"
+    #ajax_template_name = "forms/offer-form.html"
 
     def post(self, request, *args, **kwargs):
         if request.user.is_superuser:
@@ -492,8 +391,8 @@ class OfferAjaxUpdateView(UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_template_names(self):
-        if self.request.is_ajax():
-            return self.ajax_template_name
+    #    if self.request.is_ajax():
+    #        return self.ajax_template_name
         return self.template_name
 
     def get_context_data(self, **kwargs):
@@ -502,8 +401,9 @@ class OfferAjaxUpdateView(UpdateView):
             ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-            ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag)\
-                .order_by('tag_priority')[0:100]
+            #ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_subtags)\
+            #    .order_by('tag_priority')[0:100]
+        ctx['subtags'] = self.object.offer_subtags.all()
         ctx['offer'] = self.object
 
         if self.request.user.is_superuser:

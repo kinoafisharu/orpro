@@ -14,10 +14,7 @@ url(r'^edit-ajax-forms/.*\.html$', AdminAjaxEditForm.as_view(), name='admin-edit
 #url(r'^ac_post$', ac_post, name='ac_post'),
 #url(r'^to_post$', to_post, name='to_post'),
 #url(r'^sup_post$', sup_post, name='sup_post'),
-#url(r'^hp_post$', hp_post, name='hp_post'),
 #url(r'^p_post$', p_post, name='p_post'),
-#url(r'^stag_post$', stag_post, name='stag_post'),
-#url(r'^tag_post$', tag_post, name='tag_post'),
 #url(r'^company_post$', company_post, name='company_post'),
 
 url(r'^comment_admin$', comment_admin, name='comment_admin'),

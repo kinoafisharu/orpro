@@ -50,8 +50,10 @@ function sendData() {
   var templateName = '';
 
   var file_save_input = $('#id-ajax-save-file')[0];
-  if (file_save_input.files[0]){
-    data.append(file_save_input.name, file_save_input.files[0]);
+  if (file_save_input){
+    if (file_save_input.files[0]){
+      data.append(file_save_input.name, file_save_input.files[0]);
+    }
   }
 
   for (var elem_ser_form in ser_form){

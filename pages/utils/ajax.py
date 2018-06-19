@@ -3,7 +3,9 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseForbidden
 from django.utils.datastructures import MultiValueDictKeyError
 
-__all__ = ('FormAjaxBase', )
+from pages.models import Offers, Subtags
+
+__all__ = ('FormAjaxBase', 'BaseAjaxView', )
 
 
 class FormAjaxBase(forms.ModelForm):
@@ -21,9 +23,24 @@ class FormAjaxBase(forms.ModelForm):
             for field_model in self.__list_fields:
                 field_sv_file = request.FILES.get(field_model, None)
                 try:
-                    field_sv = field_sv_file if field_sv_file else request.POST[field_model]
+                    if field_model == 'offer_subtags':
+                        exist_model.offer_subtags.clear()
+                        for option_id in request.POST.getlist(field_model):
+                            try:
+                                obj_sub = Subtags.objects.get(id=option_id)
+                            except Subtags.DoesNotExist:
+                                continue
+                            exist_model.offer_subtags.add(obj_sub)
+                    else:
+                        field_sv = field_sv_file if field_sv_file else request.POST[field_model]
                 except MultiValueDictKeyError:
                     continue
+
+                if field_model == 'tag_priority':
+                    if field_sv == '' or field_sv == None:
+                        exist_model.__dict__[field_model] = None
+                        continue
+
                 exist_model.__dict__[field_model] = field_sv
             exist_model.save()
         else:
@@ -43,7 +60,10 @@ class FormAjaxBase(forms.ModelForm):
             form_initial = self.__model_class.objects.get(id=model_initial_id)
 
             for field_name in self.__list_fields:
-                initial_dict[field_name] = form_initial.__dict__[field_name]
+                try:
+                    initial_dict[field_name] = form_initial.__dict__[field_name]
+                except KeyError:
+                    continue
 
             super().__init__(initial=initial_dict, *args, **kwargs)
         #else:
@@ -63,6 +83,16 @@ class BaseAjaxView(views.View):
             self.context_data['form'] = class_form(model_initial_id=model_id)
             self.context_data['template_send'] = file_name_template
             self.context_data['model_id'] = model_id
+
+            if file_name_template == 'offer-edit.html' and model_id is not None:
+                result_list_tags = None
+                try:
+                    model_object = Offers.objects.get(id=model_id)
+                    result_list_tags = model_object.offer_subtags.all()
+                    self.context_data['offer_all_subtags'] = Subtags.objects.filter(tag_parent_tag=model_object.offer_tag)
+                except Offers.DoesNotExist:
+                    pass
+                self.context_data['offer_subtags'] = result_list_tags
 
             template = loader.get_template(self.URL_TO_TEMPLATES + file_name_template)
             return HttpResponse(template.render(self.context_data, request))
