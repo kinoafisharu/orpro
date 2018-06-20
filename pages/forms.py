@@ -130,7 +130,8 @@ class HeaderPhotoForm(FormAjaxBase):
             super().__init__(*args, **kwargs)
 
 
-OFFER_FORM = ['offer_title', 'offer_price', 'offer_value', 'offer_text', 'offer_url', 'offer_availability', 'offer_subtags']
+OFFER_FORM = ['offer_title', 'offer_price', 'offer_value', 'offer_text',
+    'offer_url', 'offer_availability', 'offer_subtags', 'offer_photo']
 class OfferForm(FormAjaxBase):
     class Meta:
         model = Offers
@@ -138,6 +139,7 @@ class OfferForm(FormAjaxBase):
 
         widgets = {
             'offer_text': SummernoteWidget(attrs=SUMMERNOTE_ATTRS),
+            'offer_photo': forms.FileInput(attrs={'id': 'id-ajax-save-file'}),
         }
 
     def __init__(self, model_initial=None, *args, **kwargs):
@@ -145,11 +147,8 @@ class OfferForm(FormAjaxBase):
         if model_initial is not None:
             super().__init__(initial={OFFER_FORM[0]: model_initial.offer_title,OFFER_FORM[1]: model_initial.offer_price,
                 OFFER_FORM[2]: model_initial.offer_value, OFFER_FORM[3]: model_initial.offer_text,
-                OFFER_FORM[4]: model_initial.offer_url, OFFER_FORM[5]: model_initial.offer_availability}, *args, **kwargs)
-            if self.instance:
-                self.fields['offer_subtags'] = forms.ModelChoiceField(queryset=Subtags.objects.filter(
-                    tag_parent_tag=self.instance.offer_tag), to_field_name="tag_title")
-                #self.fields['offer_availability'] = forms.ModelChoiceField(queryset=Availability.objects.all())
+                OFFER_FORM[4]: model_initial.offer_url, OFFER_FORM[5]: model_initial.offer_availability,
+                OFFER_FORM[7]: model_initial.offer_photo}, *args, **kwargs)
         else:
             super().__init__(*args, **kwargs)
 
