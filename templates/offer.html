@@ -11,7 +11,7 @@
 
 {% block container_list_offers %}
 <div class="container-offer admin-relative-block">
-  {% include 'forms/admin-button-edit.html' with abe_title=offer.offer_url abe_template="offer-edit.html" abe_model=offer %}
+      {% include 'forms/admin-button-edit.html' with abe_title=offer.offer_url abe_template="offer-edit.html" abe_model=offer %}
 
   <div class="offer-grid-images">
     {% if offer.offer_photo or offer.images.all %}
@@ -43,6 +43,10 @@
     {% else %}
       <img src="{% static 'images/nophoto.jpg' %}" width="200px" height="200px" alt="">
     {% endif %}
+  {% if request.user.is_superuser %}
+    <a href="javascript:viewFormEdit2('{{ offer.id }}');" id="button-edit-form-{{ abe_title }}" data-model-id="{{ abe_model.id }}">
+    <span class="admin-icon-edit"></span></a>
+  {% endif %}
   </div>
 
 
@@ -51,9 +55,24 @@
     <h4 class="offer-title">{{ offer.offer_title }}</h4>
 
     <div>{{ offer.offer_availability }}</div>
-    <div style="font-size: 20px; font-weight:bold; padding-top: 10px">
-      Цена: {% if not offer.offer_price %} 0 {% else %}{{ offer.offer_price|stringformat:"i" }}{% endif %} руб.
-    </div>
+
+    {% if offer.prices.all|length > 0 %}
+        {% for price in offer.prices.all %}
+            {% if request.user.is_superuser %}
+                <a href="javascript:viewFormEdit('{{ price.id }}');" id="button-edit-form-{{ abe_title }}" data-model-id="{{ price.id }}">
+                    <span class="admin-icon-edit"></span>
+                </a>
+            {% endif %}
+            <div style="font-size: 20px; font-weight:bold; padding-top: 10px">
+                {{ price.price_type.name }}: {{ price.value|stringformat:"i" }}руб.
+            </div>
+        {% endfor %}
+    {% else %}
+        <div style="font-size: 20px; font-weight:bold; padding-top: 10px">
+            Цена: {% if not offer.offer_price %} 0 {% else %}{{ offer.offer_price|stringformat:"i" }}{% endif %} руб.
+        </div>
+    {% endif %}
+
   </div>
 </div>
 
@@ -112,6 +131,36 @@ function viewImage(image_url, is_view){
     $('.view-pop-up-image').html('');
     $('html').css({'overflow-y': ''});
   }
+}
+
+
+{#вот это тут неуместно. сделал по быстрому. по уму разделить енвайронменты на несколько, чтоб не пришлось фигачить дев файлы с амазона#}
+function viewFormEdit2(obj_id) {
+    $('#alert-pop-up').html('');
+    $('#alert-pop-up').css({'background': 'none'});
+    $('#alert-pop-up').parent().css({'width': '70%', 'margin-left': '10%'});
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/images_form/' + obj_id, true);
+    xhr.send();
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState != 4) return;
+
+      if (xhr.status != 200) {
+        viewPopUpAlert(false, xhr.statusText, xhr.status);
+      } else {
+        response = xhr.responseText;
+
+
+        $('#send-form-ajax').html(response);
+      }
+    }
+
+    // Во время ожидания ответа от сервера, отображается спинер загрузки.
+    $('.admin-panel-pop-up').css({'display': 'block'});
+    $('body').css({'overflow': 'hidden'});
+    $('#send-form-ajax').html('<p class="load-span"><i class="fa fa-spinner fa-spin fa-2x"></i></p>');
 }
 </script>
 {% endblock %}
