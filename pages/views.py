@@ -130,9 +130,8 @@ class AdminAjaxEditForm(BaseAjaxView):
         'subtag_form.html': SubtagsForCatalog,
         'subtag_offer_form.html': SubtagsForm,
         'offer-edit.html': OfferForm,
+        'price-edit.html': PriceForm
     }
-
-
 
 
 def comment_delete(request):
@@ -425,8 +424,8 @@ class OfferImagesAjaxUpdateView(FormView):
         return HttpResponseForbidden()
 
     def dispatch(self, request, *args, **kwargs):
-        slug = kwargs.get(self.slug_field)
-        self.object = get_object_or_404(Offers, offer_url=slug)
+        slug = kwargs.get('obj_id')
+        self.object = get_object_or_404(Offers, id=slug)
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):

@@ -6,6 +6,7 @@ from .views import *
 urlpatterns = [
 url(r'^goods/(?P<off_url>[A-Za-z0-9_-]+)/$', OfferAjaxUpdateView.as_view(), name='offer'),
 url(r'^goods/(?P<off_url>[A-Za-z0-9_-]+)/images/$', OfferImagesAjaxUpdateView.as_view(), name='offer_images'),
+url(r'^images_form/(?P<obj_id>[0-9]+)$', OfferImagesAjaxUpdateView.as_view(), name='offer_images_by_id'),
 #   url(r'^fb_post$', fb_post, name='fb_post'),
 #   url(r'^lb_post$', lb_post, name='lb_post'),
 

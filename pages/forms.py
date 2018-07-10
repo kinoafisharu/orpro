@@ -5,10 +5,9 @@ from django.forms import formset_factory
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-
 from django.core.files.storage import default_storage as storage
 
-#from tinymce.widgets import TinyMCE
+# from tinymce.widgets import TinyMCE
 from django_summernote.widgets import SummernoteWidget
 
 from pages.utils.ajax import FormAjaxBase
@@ -41,7 +40,6 @@ class CommentAdminForm(forms.ModelForm):
 
 
 class ReviewsForm(forms.Form):
-
     class Meta:
         model = Reviews
 
@@ -81,7 +79,6 @@ class AboutCompanyForm(FormAjaxBase):
         }
 
 
-
 class TopOffersForm(FormAjaxBase):
     class Meta:
         model = TopOffers
@@ -117,6 +114,8 @@ class CompanyForm(forms.ModelForm):
 
 
 HEADER_PHOTO_FORM = ['hp_name', 'hp_photo']
+
+
 class HeaderPhotoForm(FormAjaxBase):
     class Meta:
         model = HeaderPhoto
@@ -125,14 +124,17 @@ class HeaderPhotoForm(FormAjaxBase):
     def __init__(self, model_initial=None, *args, **kwargs):
         if model_initial is not None:
             super().__init__(initial={HEADER_PHOTO_FORM[0]: model_initial.hp_name,
-                HEADER_PHOTO_FORM[1]: model_initial.hp_photo}, *args, **kwargs)
+                                      HEADER_PHOTO_FORM[1]: model_initial.hp_photo}, *args, **kwargs)
         else:
             super().__init__(*args, **kwargs)
 
 
 OFFER_FORM = ['offer_title', 'offer_price', 'offer_value', 'offer_text',
-    'offer_url', 'offer_availability', 'offer_subtags', 'offer_photo']
+              'offer_url', 'offer_availability', 'offer_subtags', 'offer_photo']
+
+
 class OfferForm(FormAjaxBase):
+
     class Meta:
         model = Offers
         fields = OFFER_FORM
@@ -143,33 +145,41 @@ class OfferForm(FormAjaxBase):
         }
 
     def __init__(self, model_initial=None, *args, **kwargs):
-        #super().__init__(*args, **kwargs)
+        # super().__init__(*args, **kwargs)
+
         if model_initial is not None:
-            super().__init__(initial={OFFER_FORM[0]: model_initial.offer_title,OFFER_FORM[1]: model_initial.offer_price,
-                OFFER_FORM[2]: model_initial.offer_value, OFFER_FORM[3]: model_initial.offer_text,
-                OFFER_FORM[4]: model_initial.offer_url, OFFER_FORM[5]: model_initial.offer_availability,
-                OFFER_FORM[7]: model_initial.offer_photo}, *args, **kwargs)
+            super().__init__(
+                initial={OFFER_FORM[0]: model_initial.offer_title, OFFER_FORM[1]: model_initial.offer_price,
+                         OFFER_FORM[2]: model_initial.offer_value, OFFER_FORM[3]: model_initial.offer_text,
+                         OFFER_FORM[4]: model_initial.offer_url, OFFER_FORM[5]: model_initial.offer_availability,
+                         OFFER_FORM[7]: model_initial.offer_photo}, *args, **kwargs)
         else:
             super().__init__(*args, **kwargs)
 
 
 SUBTAG_MAIN_FIELDS = ['tag_url', 'tag_title', 'tag_priority']
+
+
 class SubtagsForm(FormAjaxBase):
     class Meta:
         model = Subtags
         fields = SUBTAG_MAIN_FIELDS
-        #widgets = {
+        # widgets = {
         #    'delete_stag': forms.CheckboxInput(attrs={'class': 'main-check'})
-        #}
+        # }
 
     def __init__(self, model_initial=None, *args, **kwargs):
         if model_initial is not None:
             super().__init__(initial={SUBTAG_MAIN_FIELDS[0]: model_initial.tag_url,
-                SUBTAG_MAIN_FIELDS[1]: model_initial.tag_title, SUBTAG_MAIN_FIELDS[3]: model_initial.tag_priority}, *args, **kwargs)
+                                      SUBTAG_MAIN_FIELDS[1]: model_initial.tag_title,
+                                      SUBTAG_MAIN_FIELDS[3]: model_initial.tag_priority}, *args, **kwargs)
         else:
             super().__init__(*args, **kwargs)
 
+
 SUBTAGS_FIELDS_CATALOG = ['tag_url', 'tag_title', 'tag_description', 'tag_image', 'tag_priority']
+
+
 class SubtagsForCatalog(FormAjaxBase):
     class Meta:
         model = Subtags
@@ -182,11 +192,13 @@ class SubtagsForCatalog(FormAjaxBase):
     def __init__(self, model_initial=None, *args, **kwargs):
         if model_initial is not None:
             super().__init__(initial={SUBTAGS_FIELDS_CATALOG[0]: model_initial.tag_url,
-                SUBTAGS_FIELDS_CATALOG[1]: model_initial.tag_title, SUBTAGS_FIELDS_CATALOG[2]: model_initial.tag_description,
-                SUBTAGS_FIELDS_CATALOG[4]: model_initial.tag_priority,
-                SUBTAGS_FIELDS_CATALOG[3]: model_initial.tag_image }, *args, **kwargs)
+                                      SUBTAGS_FIELDS_CATALOG[1]: model_initial.tag_title,
+                                      SUBTAGS_FIELDS_CATALOG[2]: model_initial.tag_description,
+                                      SUBTAGS_FIELDS_CATALOG[4]: model_initial.tag_priority,
+                                      SUBTAGS_FIELDS_CATALOG[3]: model_initial.tag_image}, *args, **kwargs)
         else:
             super().__init__(*args, **kwargs)
+
 
 class SinglePageForm(forms.ModelForm):
     class Meta:
@@ -198,7 +210,6 @@ class SinglePageForm(forms.ModelForm):
 
 
 class TagsForm(forms.ModelForm):
-
     class Meta:
         model = Tags
         fields = ['tag_title', 'tag_url', 'tag_priority', 'delete_tag']
@@ -206,18 +217,18 @@ class TagsForm(forms.ModelForm):
             'delete_tag': forms.CheckboxInput(attrs={'class': 'main-check'})
         }
 
-class ImageForm(forms.ModelForm):
 
+class ImageForm(forms.ModelForm):
     max_width = forms.IntegerField(
         label='Ширина',
-        widget=forms.NumberInput(attrs={'style': 'width:100px', 'data-toggle':'tooltip', 'data-placement':'top'}),
+        widget=forms.NumberInput(attrs={'style': 'width:100px', 'data-toggle': 'tooltip', 'data-placement': 'top'}),
         required=False,
         min_value=1,
         help_text='измените один из размеров'
     )
     max_height = forms.IntegerField(
         label='Высота',
-        widget=forms.NumberInput(attrs={'style': 'width:100px', 'data-toggle':'tooltip', 'data-placement':'top'}),
+        widget=forms.NumberInput(attrs={'style': 'width:100px', 'data-toggle': 'tooltip', 'data-placement': 'top'}),
         required=False,
         min_value=1,
         help_text='измените один из размеров'
@@ -242,7 +253,7 @@ class ImageForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
-        #r = kwargs.get('request')
+        # r = kwargs.get('request')
         if self.instance:
             try:
                 # Было (os.path.isfile(self.instance.images_file.path))
@@ -251,7 +262,10 @@ class ImageForm(forms.ModelForm):
                 # - отлавдивается ошибка OSerror, если файл отсутсвует;
                 # - если файл открываеться, применяются настройки к картинке ниже.
                 if self.instance.images_file and storage.open(self.instance.images_file.name):
-                    base_attrs = {'min': 1, 'max': '', 'style': 'width:100px', 'data-toggle':'tooltip', 'data-placement':'top', 'title': 'измените один из размеров'}
+                    base_attrs = {
+                        'min': 1, 'max': '', 'style': 'width:100px', 'data-toggle': 'tooltip',
+                        'data-placement': 'top', 'title': 'измените один из размеров'
+                    }
 
                     base_attrs['max'] = self.instance.images_file.width
                     self.fields['max_width'].widget = forms.NumberInput(attrs=base_attrs)
@@ -262,7 +276,8 @@ class ImageForm(forms.ModelForm):
                     self.fields['max_height'].initial = self.instance.images_file.height
 
                 if self.instance.images_file and not self.instance.images_url:
-                    self.fields['images_url'].widget = forms.TextInput(attrs={'placeholder': self.instance.images_file.url})
+                    self.fields['images_url'].widget = forms.TextInput(
+                        attrs={'placeholder': self.instance.images_file.url})
             except OSError as err:
                 raise forms.ValidationError('File missing')
 
@@ -305,3 +320,10 @@ class ImageForm(forms.ModelForm):
 
 
 ImageFormSet = forms.inlineformset_factory(Offers, Images, ImageForm)
+
+
+class PriceForm(forms.ModelForm):
+
+    class Meta:
+        model = Price
+        fields = ('price_type', 'value',)

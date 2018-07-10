@@ -49,8 +49,6 @@ class FormAjaxBase(forms.ModelForm):
         else:
             raise AttributeError('Field "model-id" not found.')
 
-
-
     def __init__(self, model_initial_id=None, *args, **kwargs):
         try:
             self.__list_fields = self.Meta.fields
@@ -73,8 +71,8 @@ class FormAjaxBase(forms.ModelForm):
         #    raise ValueError('The variable "model_initial_id" has an empty value')
 
 
-
 class BaseAjaxView(views.View):
+
     def get(self, request):
         file_name_template = request.path.split('/')[-1]
 
@@ -103,7 +101,6 @@ class BaseAjaxView(views.View):
             return HttpResponse(template.render(self.context_data, request))
         return HttpResponseForbidden()
 
-
     def post(self, request):
         file_name_template = request.path.split('/')[-1]
         if file_name_template in self.ADMIN_EDIT_FORM:
@@ -111,7 +108,6 @@ class BaseAjaxView(views.View):
             form().save_to_database(request)
             return HttpResponse('Данные успешно сохранены')
         return HttpResponseForbidden()
-
 
     def __init__(self, *args, **kwargs):
         self.context_data = {}

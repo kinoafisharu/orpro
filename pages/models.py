@@ -216,7 +216,7 @@ class Company(models.Model):
 # Закомментированный код подлежит удалению до 1 июня 2018г.
 class Offers(models.Model):
     offer_title = models.CharField(max_length=250, verbose_name='Название')
-    offer_price = models.FloatField(default=0, verbose_name='Цена')
+    offer_price = models.FloatField(default=0, verbose_name='Цена', null=True, blank=True)
     # offer_price_discount = models.FloatField(blank=True, default=0, verbose_name='Цена со скидкой', null=True) #ЛИШНЕЕ
     # offer_discount_term = models.DateTimeField(blank=True, null=True, verbose_name='Срок действия скидки') #ЛИШНЕЕ
     # offer_price_from = models.FloatField(blank=True, default=0, verbose_name='Цена от') #ЛИШНЕЕ
@@ -405,3 +405,18 @@ class Reviews(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class PriceType(models.Model):
+    name = models.CharField(max_length=20)
+
+    class Meta:
+        verbose_name = 'Тип цены'
+        verbose_name_plural = 'Типы цен'
+
+
+class Price(models.Model):
+
+    price_type = models.ForeignKey(PriceType)
+    value = models.FloatField(default=0, verbose_name='Цена')
+    offer = models.ForeignKey(Offers, related_name='prices')
