@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'pages',
     'import_export',
     'storages',
-    'rest_framework',
 ]
 
 MIDDLEWARE = [
