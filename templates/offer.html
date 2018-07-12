@@ -43,9 +43,11 @@
     {% else %}
       <img src="{% static 'images/nophoto.jpg' %}" width="200px" height="200px" alt="">
     {% endif %}
-    <div>
-        <a class="home-button" href="{% url 'offer_images' off_url=offer.offer_url %}">Редактировать изображения</a>
-    </div>
+    {% if request.user.is_superuser %}
+        <div>
+            <a class="home-button" href="{% url 'offer_images' off_url=offer.offer_url %}">Редактировать изображения</a>
+        </div>
+    {% endif %}
 
   </div>
 
@@ -66,13 +68,15 @@
                 {{ price.price_type.name }}: {{ price.value|stringformat:"i" }} руб.
             </div>
         {% endfor %}
-        <div style="font-size: 15px; font-weight:bold; padding-top: 15px">
-            <span>
-                <button class="home-button" onclick="javascript:viewFormEdit('button-edit-form-price-new');" id="button-edit-form-price-new" data-template-name="price-edit.html">
-                    Добавить цену
-                </button>
-            </span>
-        </div>
+        {% if request.user.is_superuser %}
+            <div style="font-size: 15px; font-weight:bold; padding-top: 15px">
+                <span>
+                    <button class="home-button" onclick="javascript:viewFormEdit('button-edit-form-price-new');" id="button-edit-form-price-new" data-template-name="price-edit.html">
+                        Добавить цену
+                    </button>
+                </span>
+            </div>
+        {% endif %}
     {% endif %}
 
   </div>
