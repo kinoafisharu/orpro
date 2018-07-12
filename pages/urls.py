@@ -1,6 +1,5 @@
 from django.conf.urls import url
 from .views import *
-from pages.api import PriceViewSet
 
 urlpatterns = [
     url(r'^goods/(?P<off_url>[A-Za-z0-9_-]+)/$', OfferAjaxUpdateView.as_view(), name='offer'),
@@ -27,16 +26,4 @@ urlpatterns = [
     url(r'^api-import$', api_import, name='api_import'),
     url(r'^(?P<post_seourl>[A-Za-z0-9_-]+)$', SinglePageAjaxUpdateView.as_view(), name='post'),
     url(r'^$', Home.as_view(), name='home'),
-
-    # API URL для создания цены
-    url(r'^api/price/', PriceViewSet.as_view({
-        'get': 'list',
-        'post': 'create'
-    }), name='api_price'),
-
-    # API URL для удаления или обновления цен
-    url(r'^api/price/(?P<obj_id>[0-9]+)/$', PriceViewSet.as_view({
-        'put': 'update',
-        'delete': 'destroy'
-    }), name='api_price_by_id'),
 ]

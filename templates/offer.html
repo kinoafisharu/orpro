@@ -127,32 +127,5 @@ function viewImage(image_url, is_view){
   }
 }
 
-{#вот это тут неуместно. сделал по быстрому. по уму разделить енвайронменты на несколько, чтоб не пришлось фигачить дев файлы с амазона#}
-function viewFormEdit2(obj_id) {
-    $('#alert-pop-up').html('');
-    $('#alert-pop-up').css({'background': 'none'});
-    $('#alert-pop-up').parent().css({'width': '70%', 'margin-left': '10%'});
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/images_form/' + obj_id, true);
-    xhr.send();
-
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState != 4) return;
-
-      if (xhr.status != 200) {
-        viewPopUpAlert(false, xhr.statusText, xhr.status);
-      } else {
-        response = xhr.responseText;
-
-        $('#send-form-ajax').html(response);
-      }
-    }
-
-    // Во время ожидания ответа от сервера, отображается спинер загрузки.
-    $('.admin-panel-pop-up').css({'display': 'block'});
-    $('body').css({'overflow': 'hidden'});
-    $('#send-form-ajax').html('<p class="load-span"><i class="fa fa-spinner fa-spin fa-2x"></i></p>');
-}
 </script>
 {% endblock %}
