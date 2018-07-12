@@ -8,7 +8,11 @@
         <option value="{{ price_type.id }}" {% if price_type.id == form.price_type %}selected{% endif %}>{{ price_type.name }}</option>
       {% endfor %}
     </select></div>
-    <div>Цена: <p style="color: black"> <input id="id_value" name="value" step="any" type="number" value="{{ form.fields.value.initial }}" required=""></p></div>
+    <div>Цена:
+        <p style="color: black">
+            <input id="id_value" name="value" step="any" type="number" value="{{ form.initial.value }}" required="">
+        </p>
+    </div>
 
     <div>
         <input type="checkbox" name="delete" style="width: 30%"/> <p>Удалить</p>
