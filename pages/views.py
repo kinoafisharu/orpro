@@ -130,9 +130,8 @@ class AdminAjaxEditForm(BaseAjaxView):
         'subtag_form.html': SubtagsForCatalog,
         'subtag_offer_form.html': SubtagsForm,
         'offer-edit.html': OfferForm,
+        'price-edit.html': PriceForm
     }
-
-
 
 
 def comment_delete(request):

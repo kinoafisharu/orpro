@@ -11,11 +11,11 @@
 
 {% block container_list_offers %}
 <div class="container-offer admin-relative-block">
-  {% include 'forms/admin-button-edit.html' with abe_title=offer.offer_url abe_template="offer-edit.html" abe_model=offer %}
+      {% include 'forms/admin-button-edit.html' with abe_title=offer.offer_url abe_template="offer-edit.html" abe_model=offer %}
 
   <div class="offer-grid-images">
     {% if offer.offer_photo or offer.images.all %}
-      <div class='slider-container'>
+      <div class='slider-container' style="margin-bottom: 20px;">
         <div class='slider-for'>
         {% if offer.images.first %}
           {% for img in offer.images.all %}
@@ -43,17 +43,42 @@
     {% else %}
       <img src="{% static 'images/nophoto.jpg' %}" width="200px" height="200px" alt="">
     {% endif %}
+    {% if request.user.is_superuser %}
+        <div>
+            <a class="home-button" href="{% url 'offer_images' off_url=offer.offer_url %}">Редактировать изображения</a>
+        </div>
+    {% endif %}
+
   </div>
-
-
 
   <div class="offer-grid-titles">
     <h4 class="offer-title">{{ offer.offer_title }}</h4>
 
     <div>{{ offer.offer_availability }}</div>
-    <div style="font-size: 20px; font-weight:bold; padding-top: 10px">
-      Цена: {% if not offer.offer_price %} 0 {% else %}{{ offer.offer_price|stringformat:"i" }}{% endif %} руб.
-    </div>
+
+    {% if offer.prices.all|length > 0 %}
+        {% for price in offer.prices.all %}
+
+            <div style="font-size: 20px; font-weight:bold; padding-top: 10px">
+{#                {% include 'forms/admin-button-edit.html' with abe_title=price.value abe_template="price-edit.html" abe_model=price %}#}
+                <span>
+                    <a href="javascript:viewFormEdit('button-edit-form-price-{{ price.price_type.id }}-{{ price.value }}');" id="button-edit-form-price-{{ price.price_type.id }}-{{ price.value }}" data-template-name="price-edit.html" data-model-id="{{ price.id }}">
+                    <span class="admin-icon-edit"></span></a>
+                </span>
+                {{ price.price_type.name }}: {{ price.value|stringformat:"i" }} руб.
+            </div>
+        {% endfor %}
+        {% if request.user.is_superuser %}
+            <div style="font-size: 15px; font-weight:bold; padding-top: 15px">
+                <span>
+                    <button class="home-button" onclick="javascript:viewFormEdit('button-edit-form-price-new');" id="button-edit-form-price-new" data-template-name="price-edit.html">
+                        Добавить цену
+                    </button>
+                </span>
+            </div>
+        {% endif %}
+    {% endif %}
+
   </div>
 </div>
 
@@ -113,5 +138,6 @@ function viewImage(image_url, is_view){
     $('html').css({'overflow-y': ''});
   }
 }
+
 </script>
 {% endblock %}

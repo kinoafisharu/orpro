@@ -15,6 +15,10 @@
       {% endfor %}
     </select></div>
 
+    {% for img in form.images.all %}
+        <div><img src="{{ img }}" alt=""></div>
+    {% endfor %}
+
     <div>Теги: <!--<p style="color: black">{{ form.offer_subtags }}</p>--></div>
     <div class="select-tags-container">
       <ul class="result-tags" id="container-result-tags"></ul>
