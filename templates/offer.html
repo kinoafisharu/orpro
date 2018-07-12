@@ -59,7 +59,7 @@
     {% if offer.prices.all|length > 0 %}
         {% for price in offer.prices.all %}
             {% if request.user.is_superuser %}
-                <a href="javascript:viewFormEdit('{{ price.id }}');" id="button-edit-form-{{ abe_title }}" data-model-id="{{ price.id }}">
+                <a href="javascript:restHandler(this);" data-url="{% url 'api_price_by_id' obj_id=price.id %}">
                     <span class="admin-icon-edit"></span>
                 </a>
             {% endif %}
@@ -72,6 +72,9 @@
             Цена: {% if not offer.offer_price %} 0 {% else %}{{ offer.offer_price|stringformat:"i" }}{% endif %} руб.
         </div>
     {% endif %}
+    <a href="javascript:restHandler(this);" data-method="post" data-url="{% url 'api_price' %}">
+        <span class="admin-icon-edit"></span>
+    </a>
 
   </div>
 </div>
@@ -162,5 +165,7 @@ function viewFormEdit2(obj_id) {
     $('body').css({'overflow': 'hidden'});
     $('#send-form-ajax').html('<p class="load-span"><i class="fa fa-spinner fa-spin fa-2x"></i></p>');
 }
+
+
 </script>
 {% endblock %}
