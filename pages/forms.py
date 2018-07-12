@@ -322,8 +322,15 @@ class ImageForm(forms.ModelForm):
 ImageFormSet = forms.inlineformset_factory(Offers, Images, ImageForm)
 
 
-class PriceForm(forms.ModelForm):
+class PriceForm(FormAjaxBase):
 
     class Meta:
         model = Price
         fields = ('price_type', 'value',)
+
+    def get_context(self):
+
+        return {
+            'price_types': PriceType.objects.all()
+        }
+

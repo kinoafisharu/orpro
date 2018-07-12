@@ -216,6 +216,9 @@ class Company(models.Model):
 # Закомментированный код подлежит удалению до 1 июня 2018г.
 class Offers(models.Model):
     offer_title = models.CharField(max_length=250, verbose_name='Название')
+
+    # Это поле уже не нужно, оставил для legacy, чтоб ничего не сломалось
+    # TODO: Удалить поле после того, как будет понимание что все части кода исправлены на модель Price
     offer_price = models.FloatField(default=0, verbose_name='Цена', null=True, blank=True)
     # offer_price_discount = models.FloatField(blank=True, default=0, verbose_name='Цена со скидкой', null=True) #ЛИШНЕЕ
     # offer_discount_term = models.DateTimeField(blank=True, null=True, verbose_name='Срок действия скидки') #ЛИШНЕЕ

@@ -20,6 +20,11 @@ class FormAjaxBase(forms.ModelForm):
             except self.__model_class.DoesNotExist:
                 raise IndexError('Model not found')
 
+            delete = True if request.POST.get('delete', False) == 'on' else False
+            if delete:
+                exist_model.delete()
+                return
+
             for field_model in self.__list_fields:
                 field_sv_file = request.FILES.get(field_model, None)
                 try:
@@ -84,6 +89,11 @@ class BaseAjaxView(views.View):
             self.context_data['form'] = class_form(model_initial_id=model_id)
             self.context_data['template_send'] = file_name_template
             self.context_data['model_id'] = model_id
+
+            get_context = getattr(self.context_data['form'], 'get_context', None)
+            if get_context is not None:
+                if callable(get_context):
+                    self.context_data.update({'extra_data': get_context()})
 
             if file_name_template == 'offer-edit.html' and model_id is not None:
                 result_list_tags = None

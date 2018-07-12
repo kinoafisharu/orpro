@@ -43,10 +43,7 @@
     {% else %}
       <img src="{% static 'images/nophoto.jpg' %}" width="200px" height="200px" alt="">
     {% endif %}
-  {% if request.user.is_superuser %}
-    <a href="javascript:viewFormEdit2('{{ offer.id }}');" id="button-edit-form-{{ abe_title }}" data-model-id="{{ abe_model.id }}">
-    <span class="admin-icon-edit"></span></a>
-  {% endif %}
+
   </div>
 
 
@@ -58,23 +55,17 @@
 
     {% if offer.prices.all|length > 0 %}
         {% for price in offer.prices.all %}
-            {% if request.user.is_superuser %}
-                <a href="javascript:restHandler(this);" data-url="{% url 'api_price_by_id' obj_id=price.id %}">
-                    <span class="admin-icon-edit"></span>
-                </a>
-            {% endif %}
+
             <div style="font-size: 20px; font-weight:bold; padding-top: 10px">
-                {{ price.price_type.name }}: {{ price.value|stringformat:"i" }}руб.
+{#                {% include 'forms/admin-button-edit.html' with abe_title=price.value abe_template="price-edit.html" abe_model=price %}#}
+                <span>
+                    <a href="javascript:viewFormEdit('button-edit-form-price-{{ price.price_type.id }}-{{ price.value }}');" id="button-edit-form-price-{{ price.price_type.id }}-{{ price.value }}" data-template-name="price-edit.html" data-model-id="{{ price.id }}">
+                    <span class="admin-icon-edit"></span></a>
+                </span>
+                {{ price.price_type.name }}: {{ price.value|stringformat:"i" }} руб.
             </div>
         {% endfor %}
-    {% else %}
-        <div style="font-size: 20px; font-weight:bold; padding-top: 10px">
-            Цена: {% if not offer.offer_price %} 0 {% else %}{{ offer.offer_price|stringformat:"i" }}{% endif %} руб.
-        </div>
     {% endif %}
-    <a href="javascript:restHandler(this);" data-method="post" data-url="{% url 'api_price' %}">
-        <span class="admin-icon-edit"></span>
-    </a>
 
   </div>
 </div>
@@ -136,7 +127,6 @@ function viewImage(image_url, is_view){
   }
 }
 
-
 {#вот это тут неуместно. сделал по быстрому. по уму разделить енвайронменты на несколько, чтоб не пришлось фигачить дев файлы с амазона#}
 function viewFormEdit2(obj_id) {
     $('#alert-pop-up').html('');
@@ -155,7 +145,6 @@ function viewFormEdit2(obj_id) {
       } else {
         response = xhr.responseText;
 
-
         $('#send-form-ajax').html(response);
       }
     }
@@ -165,7 +154,5 @@ function viewFormEdit2(obj_id) {
     $('body').css({'overflow': 'hidden'});
     $('#send-form-ajax').html('<p class="load-span"><i class="fa fa-spinner fa-spin fa-2x"></i></p>');
 }
-
-
 </script>
 {% endblock %}

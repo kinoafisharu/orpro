@@ -3,8 +3,18 @@
 
 
     <div><input type="hidden" name="model-id" value="{{ model_id }}"></div>
-    <div>Тип цены: <p style="color: black"> {{ form.offer_price }}</p></div>
-    <div>Цена: <p style="color: black"> {{ form.offer_value }}</p></div>
+    <div>Тип цены: <select name="price_type">
+      {% for price_type in extra_data.price_types %}
+        <option value="{{ price_type.id }}" {% if price_type.id == form.price_type %}selected{% endif %}>{{ price_type.name }}</option>
+      {% endfor %}
+    </select></div>
+    <div>Цена: <p style="color: black"> {{ form.value }}</p></div>
 
-    <div><button class="home-button" type="submit">Сохранить</button></div>
+    <div>
+        <input type="checkbox" name="delete" style="width: 30%"/> <p>Удалить</p>
+    </div>
+
+    <div>
+        <button class="home-button" type="submit">Сохранить</button>
+    </div>
 </div>
