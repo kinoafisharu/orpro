@@ -424,8 +424,8 @@ class OfferImagesAjaxUpdateView(FormView):
         return HttpResponseForbidden()
 
     def dispatch(self, request, *args, **kwargs):
-        slug = kwargs.get('obj_id')
-        self.object = get_object_or_404(Offers, id=slug)
+        slug = kwargs.get(self.slug_field)
+        self.object = get_object_or_404(Offers, offer_url=slug)
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):

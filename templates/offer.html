@@ -15,7 +15,7 @@
 
   <div class="offer-grid-images">
     {% if offer.offer_photo or offer.images.all %}
-      <div class='slider-container'>
+      <div class='slider-container' style="margin-bottom: 20px;">
         <div class='slider-for'>
         {% if offer.images.first %}
           {% for img in offer.images.all %}
@@ -43,10 +43,11 @@
     {% else %}
       <img src="{% static 'images/nophoto.jpg' %}" width="200px" height="200px" alt="">
     {% endif %}
+    <div>
+        <a class="home-button" href="{% url 'offer_images' off_url=offer.offer_url %}">Редактировать изображения</a>
+    </div>
 
   </div>
-
-
 
   <div class="offer-grid-titles">
     <h4 class="offer-title">{{ offer.offer_title }}</h4>
@@ -65,6 +66,13 @@
                 {{ price.price_type.name }}: {{ price.value|stringformat:"i" }} руб.
             </div>
         {% endfor %}
+        <div style="font-size: 15px; font-weight:bold; padding-top: 15px">
+            <span>
+                <button class="home-button" onclick="javascript:viewFormEdit('button-edit-form-price-new');" id="button-edit-form-price-new" data-template-name="price-edit.html">
+                    Добавить цену
+                </button>
+            </span>
+        </div>
     {% endif %}
 
   </div>

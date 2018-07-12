@@ -14,45 +14,52 @@ class FormAjaxBase(forms.ModelForm):
 
     def save_to_database(self, request):
         model_id = request.POST.get('model-id', None)
-        if model_id is not None:
+
+        try:
+            int(model_id)
+        except Exception:
+            model_id = None
+
+        #if True:
+        try:
+            exist_model = self.__model_class.objects.get(id=model_id)
+        except self.__model_class.DoesNotExist:
+            exist_model = self.__model_class()
+            #raise IndexError('Model not found')
+
+        delete = True if request.POST.get('delete', False) == 'on' else False
+        if delete:
+            exist_model.delete()
+            return
+
+        for field_model in self.__list_fields:
+            field_sv_file = request.FILES.get(field_model, None)
             try:
-                exist_model = self.__model_class.objects.get(id=model_id)
-            except self.__model_class.DoesNotExist:
-                raise IndexError('Model not found')
+                if field_model == 'offer_subtags':
+                    exist_model.offer_subtags.clear()
+                    for option_id in request.POST.getlist(field_model):
+                        try:
+                            obj_sub = Subtags.objects.get(id=option_id)
+                        except Subtags.DoesNotExist:
+                            continue
+                        exist_model.offer_subtags.add(obj_sub)
+                elif field_model == 'offer_availability':
+                    field_sv = int(request.POST[field_model])
+                    field_model += '_id'
+                else:
+                    field_sv = field_sv_file if field_sv_file else request.POST[field_model]
+            except MultiValueDictKeyError:
+                continue
 
-            delete = True if request.POST.get('delete', False) == 'on' else False
-            if delete:
-                exist_model.delete()
-                return
-
-            for field_model in self.__list_fields:
-                field_sv_file = request.FILES.get(field_model, None)
-                try:
-                    if field_model == 'offer_subtags':
-                        exist_model.offer_subtags.clear()
-                        for option_id in request.POST.getlist(field_model):
-                            try:
-                                obj_sub = Subtags.objects.get(id=option_id)
-                            except Subtags.DoesNotExist:
-                                continue
-                            exist_model.offer_subtags.add(obj_sub)
-                    elif field_model == 'offer_availability':
-                        field_sv = int(request.POST[field_model])
-                        field_model += '_id'
-                    else:
-                        field_sv = field_sv_file if field_sv_file else request.POST[field_model]
-                except MultiValueDictKeyError:
+            if field_model == 'tag_priority':
+                if field_sv == '' or field_sv == None:
+                    exist_model.__dict__[field_model] = None
                     continue
-
-                if field_model == 'tag_priority':
-                    if field_sv == '' or field_sv == None:
-                        exist_model.__dict__[field_model] = None
-                        continue
-                exist_model.__dict__[field_model] = field_sv
-                #print('\n\n{}\n\n {} \n\n'.format(field_model, exist_model.__dict__))
-            exist_model.save()
-        else:
-            raise AttributeError('Field "model-id" not found.')
+            exist_model.__dict__[field_model] = field_sv
+            #print('\n\n{}\n\n {} \n\n'.format(field_model, exist_model.__dict__))
+        exist_model.save()
+        #else:
+        #    raise AttributeError('Field "model-id" not found.')
 
     def __init__(self, model_initial_id=None, *args, **kwargs):
         try:
@@ -85,6 +92,11 @@ class BaseAjaxView(views.View):
 
             class_form = self.ADMIN_EDIT_FORM[file_name_template]
             model_id = request.GET.get('model-id', None)
+
+            try:
+                int(model_id)
+            except Exception:
+                model_id = None
 
             self.context_data['form'] = class_form(model_initial_id=model_id)
             self.context_data['template_send'] = file_name_template
