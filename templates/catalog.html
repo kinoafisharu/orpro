@@ -72,37 +72,32 @@
 
                     <a id="offer-show-list" class="active"><i class="fa fa-th-list"></i></a>
                     <a id="offer-show-block"><i class="fa fa-th-large"></i></a>
-                    <select name="sort" style="float: right; height: 30px; margin-top: 5px;">
-                        <option data-sort-by="name"  data-sort-direction="asc"
-                            {% if sort == 'name_asc' %}selected{% endif %}>В алфавитном порядке &uarr;</option>
-                        <option data-sort-by="name" data-sort-direction="desc"
-                            {% if sort == 'name_desc' %}selected{% endif %}>В алфавитном порядке &darr;</option>
-                        <option data-sort-by="priority" data-sort-direction="asc"
-                            {% if sort == 'priority_asc' %}selected{% endif %}>По приоритету &uarr;</option>
-                        <option data-sort-by="priority" data-sort-direction="desc"
-                            {% if sort == 'priority_desc' %}selected{% endif %}>По приоритету &darr;</option>
-                        <option data-sort-by="price" data-sort-direction="asc"
-                            {% if sort == 'price_asc' %}selected{% endif %}>По цене &uarr;</option>
-                        <option data-sort-by="price" data-sort-direction="desc"
-                            {% if sort == 'price_desc' %}selected{% endif %}>По цене &darr;</option>
+                    <select name="sort" style="float: right; height: 20px; margin-top: 10px;">
+                        <option data-sort-by="priority" {% if sort == 'priority' %}selected{% endif %}>По приоритету</option>
+                        <option data-sort-by="name" {% if sort == 'name' %}selected{% endif %}>По названию</option>
+                        <option data-sort-by="price" {% if sort == 'price' %}selected{% endif %}>По цене</option>
                     </select>
                 </div>
             </div>
 
             <div id="catalog_filters">
-                <form action="">
-                    <input type="text" value="{{ search_title }}" name="search_title" placeholder="Название">
-                    <input type="text" value="{{ search_price_from }}" name="search_price_from" placeholder="Цена от"> -
-                    <input type="text" value="{{ search_price_to }}" name="search_price_to" placeholder="Цена до">
+                <form action="" id="filter_form">
+                    <input type="text" value="{{ search_title }}" name="search_title" placeholder="Название (от 2 симв)"/>
+                    <input type="text" value="{{ search_price_from }}" name="search_price_from" placeholder="Цена от"/> -
+                    <input type="text" value="{{ search_price_to }}" name="search_price_to" placeholder="Цена до"/>
+                    <input type="hidden" value="{{ sort }}" name="sort_by"/>
                     <button type="submit" class="home-button">Показать</button>
-                    <button onclick="window.location = '{{ request.path }}'" type="button" class="home-button">Сбросить</button>
+                    <button onclick="javascript:clearFilter()" type="button" class="home-button">Сбросить</button>
                 </form>
             </div>
-            <div>
 
-            </div>
 
             <div class="custom-orders-list" {% if offer|length <= 2 %}style="justify-content: flex-start;"{% endif %}>
+                {% if offer|length == 0 %}
+                    <div style="width: 100%; font-weight: bold; font-size: 20px; padding: 15px; text-align: center;">
+                        Не найдено по заданному параметру
+                    </div>
+                {% endif %}
                 {% for p in offer %}
                     <div class="catalog-order order-show-list"
                          {% if offer|length <= 2 %}style="margin-right: 20px;"{% endif %}>
@@ -163,10 +158,15 @@
         $('select[name=sort]').change(function(e){
             var option = $('select[name=sort] option:selected')[0];
             var sort_by = option.dataset.sortBy;
-            var sort_direction = option.dataset.sortDirection;
-            window.location = '{{ request.path }}?sort_by=' + sort_by + '&sort_direction=' + sort_direction;
+            $('#filter_form input[name=sort_by]').val(sort_by);
+            $('#filter_form').submit();
         });
 
+        function clearFilter() {
+            var option = $('select[name=sort] option:selected')[0];
+            var sort_by = option.dataset.sortBy;
+            window.location = '{{ request.path }}?sort_by='+sort_by
+        }
     </script>
 
 
