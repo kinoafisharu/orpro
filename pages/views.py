@@ -450,13 +450,10 @@ class OfferImagesAjaxUpdateView(FormView):
 
 
 def catalog(request, cat_url='nothing'):
-    sort_by = request.GET.get('sort_by', None)
-
-    sort_direction = request.GET.get('sort_direction', 'asc')
-    sort_direction = sort_direction if sort_direction in ['asc', 'desc'] else 'asc'
+    sort_by = request.GET.get('sort_by', 'priority')
 
     search_title = request.GET.get('search_title', '')
-    if len(search_title) <= 3:
+    if len(search_title) < 2:
         search_title = None
 
     search_price_from = request.GET.get('search_price_from', None)
@@ -503,15 +500,12 @@ def catalog(request, cat_url='nothing'):
             prices__value__lte=search_price_to)
 
     if sort_by == 'name':
-        offers = offers.extra(select={
-            'utf8_title': "convert_to('offer_title', 'UTF8')"
-        }).order_by('{}utf8_title'.format('' if sort_direction == 'asc' else '-'))
+        offers = sorted(offers, key=lambda x: x.offer_title)
 
     elif sort_by == 'priority':
         offers = offers\
             .annotate(priority=models.Sum(F('offer_tag__tag_priority'))+F('offer_tag__tag_priority')/models.Count('offer_subtags')+1)\
-            .order_by('{}priority'.format('' if sort_direction == 'asc' else '-'))
-        d = 1
+            .order_by('-priority')
 
     elif sort_by == 'price':
         offers = offers.extra(select={
@@ -522,14 +516,14 @@ def catalog(request, cat_url='nothing'):
                 WHERE pt.is_default = TRUE 
                 AND p.offer_id = pages_offers.id
             """
-        }).order_by('{}default_price'.format('-' if sort_direction == 'desc' else ''))
+        }).order_by('default_price')
 
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['offer'] = offers
     args['cat_title'] = mt
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
     args['company'] = Company.objects.get(id=1)
-    args['sort'] = '{}_{}'.format(sort_by, sort_direction)
+    args['sort'] = sort_by
     args['category_page'] = True
     args['search_title'] = search_title if search_title is not None else ''
     args['search_price_from'] = search_price_from if search_price_from is not None else ''
