@@ -3,7 +3,20 @@
 {% load path_list %}
 
 
-{% block additional_head %}{% endblock %}
+{% block additional_head %}
+    <style>
+        #catalog_filters > form > input,
+        #catalog_filters > form > select {
+            height: 25px;
+        }
+
+        #catalog_filters > form > .home-button {
+            height: 28px;
+            margin-top: 2px;
+            padding: 4px 14px;
+        }
+    </style>
+{% endblock %}
 
 
 {% block content %}
@@ -53,23 +66,40 @@
             <div class="custom-viewers-line">
                 <div class="block-settings-type-sorted"></div>
                 <div class="block-settings-type-view">
+
                     <!--<p id="text-settings-list-or-block"></p>-->
                     <a class="return-to-category">{{ cat_title.tag_title }}</a>
 
                     <a id="offer-show-list" class="active"><i class="fa fa-th-list"></i></a>
                     <a id="offer-show-block"><i class="fa fa-th-large"></i></a>
+                    <select name="sort" style="float: right; height: 30px; margin-top: 5px;">
+                        <option data-sort-by="name"  data-sort-direction="asc"
+                            {% if sort == 'name_asc' %}selected{% endif %}>В алфавитном порядке &uarr;</option>
+                        <option data-sort-by="name" data-sort-direction="desc"
+                            {% if sort == 'name_desc' %}selected{% endif %}>В алфавитном порядке &darr;</option>
+                        <option data-sort-by="priority" data-sort-direction="asc"
+                            {% if sort == 'priority_asc' %}selected{% endif %}>По приоритету &uarr;</option>
+                        <option data-sort-by="priority" data-sort-direction="desc"
+                            {% if sort == 'priority_desc' %}selected{% endif %}>По приоритету &darr;</option>
+                        <option data-sort-by="price" data-sort-direction="asc"
+                            {% if sort == 'price_asc' %}selected{% endif %}>По цене &uarr;</option>
+                        <option data-sort-by="price" data-sort-direction="desc"
+                            {% if sort == 'price_desc' %}selected{% endif %}>По цене &darr;</option>
+                    </select>
                 </div>
             </div>
 
+            <div id="catalog_filters">
+                <form action="">
+                    <input type="text" value="{{ search_title }}" name="search_title" placeholder="Название">
+                    <input type="text" value="{{ search_price_from }}" name="search_price_from" placeholder="Цена от"> -
+                    <input type="text" value="{{ search_price_to }}" name="search_price_to" placeholder="Цена до">
+                    <button type="submit" class="home-button">Показать</button>
+                    <button onclick="window.location = '{{ request.path }}'" type="button" class="home-button">Сбросить</button>
+                </form>
+            </div>
             <div>
-                <select name="sort">
-                    <option data-sort-by="name"  data-sort-direction="asc">В алфавитном порядке &uarr;</option>
-                    <option data-sort-by="name" data-sort-direction="desc">В алфавитном порядке &darr;</option>
-                    <option data-sort-by="date" data-sort-direction="asc">По дате добавления &uarr;</option>
-                    <option data-sort-by="date" data-sort-direction="desc">По дате добавления &darr;</option>
-                    <option data-sort-by="price" data-sort-direction="asc">По цене &uarr;</option>
-                    <option data-sort-by="price" data-sort-direction="desc">По цене &darr;</option>
-                </select>
+
             </div>
 
             <div class="custom-orders-list" {% if offer|length <= 2 %}style="justify-content: flex-start;"{% endif %}>
@@ -138,4 +168,6 @@
         });
 
     </script>
+
+
 {% endblock %}

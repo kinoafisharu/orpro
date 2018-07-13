@@ -10,7 +10,7 @@ from django.views.generic import UpdateView, FormView
 from django.conf import settings
 from django.contrib import messages
 from django.forms import formset_factory, modelformset_factory
-from django.db.models import Q
+from django.db.models import Q, F
 from django.core.urlresolvers import reverse
 from .models import Reviews, Post, Tags, Category, Offers, Subtags, MainBaner, FBlocks, LBlocks, AboutCompany, \
     TopOffers, Support, Personal, Company, HeaderPhoto, Images
@@ -455,6 +455,22 @@ def catalog(request, cat_url='nothing'):
     sort_direction = request.GET.get('sort_direction', 'asc')
     sort_direction = sort_direction if sort_direction in ['asc', 'desc'] else 'asc'
 
+    search_title = request.GET.get('search_title', '')
+    if len(search_title) <= 3:
+        search_title = None
+
+    search_price_from = request.GET.get('search_price_from', None)
+    try:
+        int(search_price_from)
+    except Exception:
+        search_price_from = None
+
+    search_price_to = request.GET.get('search_price_to', None)
+    try:
+        int(search_price_to)
+    except Exception:
+        search_price_to = None
+
     if cat_url == 'nothing':
         cat_url = Tags.objects.filter(tag_publish=True).order_by('tag_priority')[0].tag_url
     args = {}
@@ -473,13 +489,30 @@ def catalog(request, cat_url='nothing'):
 
     args['hf'] = HeaderPhoto.objects.get(id=1)
 
-    if sort_by in ['name', 'date']:
-        sort_fields = {
-            'name': 'offer_title',
-            'date': 'created'
-        }
-        offers = offers.order_by(
-            '{}{}'.format('' if sort_direction == 'asc' else '-', sort_fields[sort_by]))
+    if search_title is not None:
+        offers = offers.filter(offer_title__icontains=search_title)
+
+    if search_price_from is not None:
+        offers = offers.filter(
+            prices__price_type__is_default=True,
+            prices__value__gte=search_price_from)
+
+    if search_price_to is not None:
+        offers = offers.filter(
+            prices__price_type__is_default=True,
+            prices__value__lte=search_price_to)
+
+    if sort_by == 'name':
+        offers = offers.extra(select={
+            'utf8_title': "convert_to('offer_title', 'UTF8')"
+        }).order_by('{}utf8_title'.format('' if sort_direction == 'asc' else '-'))
+
+    elif sort_by == 'priority':
+        offers = offers\
+            .annotate(priority=models.Sum(F('offer_tag__tag_priority'))+F('offer_tag__tag_priority')/models.Count('offer_subtags')+1)\
+            .order_by('{}priority'.format('' if sort_direction == 'asc' else '-'))
+        d = 1
+
     elif sort_by == 'price':
         offers = offers.extra(select={
             'default_price': """
@@ -496,7 +529,10 @@ def catalog(request, cat_url='nothing'):
     args['cat_title'] = mt
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
     args['company'] = Company.objects.get(id=1)
-
+    args['sort'] = '{}_{}'.format(sort_by, sort_direction)
     args['category_page'] = True
+    args['search_title'] = search_title if search_title is not None else ''
+    args['search_price_from'] = search_price_from if search_price_from is not None else ''
+    args['search_price_to'] = search_price_to if search_price_to is not None else ''
 
     return render(request, 'catalog.html', args)
