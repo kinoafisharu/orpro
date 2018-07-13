@@ -8,123 +8,134 @@
 
 {% block content %}
 
-  <!-- Боковое меню -->
-  <div class="grid_3">
-    <div class="hidden-mobile">
-      {% include 'lists/catalog-menu.html' with tags_menu=tags %}
+    <!-- Боковое меню -->
+    <div class="grid_3">
+        <div class="hidden-mobile">
+            {% include 'lists/catalog-menu.html' with tags_menu=tags %}
+        </div>
     </div>
-  </div>
 
 
-  <!-- Основной блок в котором выводится список товаров и отдельный товар -->
-  <div class="grid_8">
-    {% if request.user.is_superuser %}
-      <a href="/api-import">
-        <i class="fas fa-upload"></i>
-      </a>
-    {% endif %}
+    <!-- Основной блок в котором выводится список товаров и отдельный товар -->
+    <div class="grid_8">
+        {% if request.user.is_superuser %}
+            <a href="/api-import">
+                <i class="fas fa-upload"></i>
+            </a>
+        {% endif %}
 
 
-  {% block container_list_offers %}
+        {% block container_list_offers %}
 
-    <!-- Первых 4 субтега, которые выводятся в каталоге -->
-    <div class="catalog-subtags">
-      <ul class="catalog-subtags-ul">
-      {% for tag in subtags %}
-        {% if forloop.counter <= 4 %}
-          <li class="admin-relative-block">
-            <a href="{%  url 'catalog' cat_url=tag.tag_url %}">
-              {% if tag.tag_image %}<img src="{{tag.tag_image.url }}" alt="Изображение тега">{% else %}
-              <img src="{% static 'images/nophoto.jpg' %}" width="50" alt="Изображение тега">{% endif %}</a>
-            <div class="tag_text">
-              <a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
-              <p>{{ tag.tag_description|safe }}</p>
+            <!-- Первых 4 субтега, которые выводятся в каталоге -->
+            <div class="catalog-subtags">
+                <ul class="catalog-subtags-ul">
+                    {% for tag in subtags %}
+                        {% if forloop.counter <= 4 %}
+                            <li class="admin-relative-block">
+                                <a href="{% url 'catalog' cat_url=tag.tag_url %}">
+                                    {% if tag.tag_image %}
+                                        <img src="{{ tag.tag_image.url }}" alt="Изображение тега">{% else %}
+                                        <img src="{% static 'images/nophoto.jpg' %}" width="50"
+                                             alt="Изображение тега">{% endif %}</a>
+                                <div class="tag_text">
+                                    <a href="{% url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
+                                    <p>{{ tag.tag_description|safe }}</p>
+                                </div>
+
+                                {% include 'forms/admin-button-edit.html' with abe_title=tag.tag_url abe_template="subtag_form.html" abe_model=tag %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
             </div>
 
-            {% include 'forms/admin-button-edit.html' with abe_title=tag.tag_url abe_template="subtag_form.html" abe_model=tag %}
-          </li>
-        {% endif %}
-      {% endfor %}
+            <!-- Панель отображения товаров(списком или блочно) и название категории -->
+            <div class="custom-viewers-line">
+                <div class="block-settings-type-sorted"></div>
+                <div class="block-settings-type-view">
+                    <!--<p id="text-settings-list-or-block"></p>-->
+                    <a class="return-to-category">{{ cat_title.tag_title }}</a>
+
+                    <a id="offer-show-list" class="active"><i class="fa fa-th-list"></i></a>
+                    <a id="offer-show-block"><i class="fa fa-th-large"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <select name="sort">
+                    <option data-sort-by="name"  data-sort-direction="asc">В алфавитном порядке &uarr;</option>
+                    <option data-sort-by="name" data-sort-direction="desc">В алфавитном порядке &darr;</option>
+                    <option data-sort-by="date" data-sort-direction="asc">По дате добавления &uarr;</option>
+                    <option data-sort-by="date" data-sort-direction="desc">По дате добавления &darr;</option>
+                    <option data-sort-by="price" data-sort-direction="asc">По цене &uarr;</option>
+                    <option data-sort-by="price" data-sort-direction="desc">По цене &darr;</option>
+                </select>
+            </div>
+
+            <div class="custom-orders-list" {% if offer|length <= 2 %}style="justify-content: flex-start;"{% endif %}>
+                {% for p in offer %}
+                    <div class="catalog-order order-show-list"
+                         {% if offer|length <= 2 %}style="margin-right: 20px;"{% endif %}>
+
+                        <div class="catalog-order-image">
+                            <a href="/goods/{{ p.offer_url }}/"><img src="{{ p.get_main_image }}" alt=" "></a>
+                        </div>
+
+
+                        <div class="catalog-order-text">
+                            <h5 class="hidden-in-list title">{{ p.offer_title|truncatechars:90 }}</h5>
+                            <a href="/goods/{{ p.offer_url }}/" class="hidden-in-block title">
+                                <h5>{{ p.offer_title|truncatechars:90 }}</h5>
+                            </a>
+
+                            {% if p.default_price_value != 0 %}
+                                <b class="order-price">{{ p.default_price_value|stringformat:"i" }} руб.</b>
+                            {% else %}
+                                <b class="order-price">Нет в наличии</b>
+                            {% endif %}
+
+                            <p>{{ p.offer_text|offer_pre_text|safe }}</p>
+                        </div>
+
+
+                        <div class="catalog-order-button hidden-in-list">
+                            <a href="/goods/{{ p.offer_url }}/">Просмотреть</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            {% include 'lists/cloud-tags.html' %}
+
+        {% endblock container_list_offers %}
     </div>
-
-
-    <!-- Панель отображения товаров(списком или блочно) и название категории -->
-    <div class="custom-viewers-line">
-      <div class="block-settings-type-sorted"></div>
-      <div class="block-settings-type-view">
-        <!--<p id="text-settings-list-or-block"></p>-->
-        <a class="return-to-category">{{ cat_title.tag_title }}</a>
-
-        <a id="offer-show-list" class="active"><i class="fa fa-th-list"></i></a>
-        <a id="offer-show-block"><i class="fa fa-th-large"></i></a>
-      </div>
-    </div>
-
-
-
-    <div class="custom-orders-list" {% if offer|length <= 2 %}style="justify-content: flex-start;"{% endif %}>
-      {% for p in offer %}
-        <div class="catalog-order order-show-list" {% if offer|length <= 2 %}style="margin-right: 20px;"{% endif %}>
-
-          <div class="catalog-order-image">
-            <a href="/goods/{{ p.offer_url }}/"><img src="{{ p.get_main_image }}"  alt=" "></a>
-          </div>
-
-
-          <div class="catalog-order-text">
-            <h5 class="hidden-in-list title">{{ p.offer_title|truncatechars:90 }}</h5>
-            <a href="/goods/{{ p.offer_url }}/" class="hidden-in-block title"><h5>{{ p.offer_title|truncatechars:90 }}</h5></a>
-
-            {% if p.offer_price != 0 %}
-              <b class="order-price">{{ p.offer_price|stringformat:"i" }} руб.</b>
-            {% else %}
-								<b class="order-price">Нет в наличии</b>
-							{% endif %}
-
-							<p>{{ p.offer_text|offer_pre_text|safe }}</p>
-					</div>
-
-
-					<div class="catalog-order-button hidden-in-list">
-						<a href="/goods/{{ p.offer_url }}/">Просмотреть</a>
-					</div>
-				</div>
-			{% endfor %}
-		</div>
-
-
-    {% include 'lists/cloud-tags.html' %}
-
-  {% endblock container_list_offers %}
-</div>
 
 {% endblock %}
 
 
-
-
-
-
-
-
-
-
-
-
 {% block additional_scripts %}
-	<script type="text/javascript">
-		$('#offer-show-block').on('click', function() {
-			if ($('.custom-orders-list > .catalog-order').hasClass('order-show-list')){
-				$('.custom-orders-list > .catalog-order').toggleClass('order-show-list order-show-block');
-				$('.block-settings-type-view > a:not(.return-to-category)').toggleClass('active');
-			}
-		});
+    <script type="text/javascript">
+        $('#offer-show-block').on('click', function () {
+            if ($('.custom-orders-list > .catalog-order').hasClass('order-show-list')) {
+                $('.custom-orders-list > .catalog-order').toggleClass('order-show-list order-show-block');
+                $('.block-settings-type-view > a:not(.return-to-category)').toggleClass('active');
+            }
+        });
 
-		$('#offer-show-list').on('click', function() {
-			if ($('.custom-orders-list > .catalog-order').hasClass('order-show-block')){
-				$('.custom-orders-list > .catalog-order').toggleClass('order-show-list order-show-block');
-				$('.block-settings-type-view > a:not(.return-to-category)').toggleClass('active');
-			}
-		});
-	</script>
+        $('#offer-show-list').on('click', function () {
+            if ($('.custom-orders-list > .catalog-order').hasClass('order-show-block')) {
+                $('.custom-orders-list > .catalog-order').toggleClass('order-show-list order-show-block');
+                $('.block-settings-type-view > a:not(.return-to-category)').toggleClass('active');
+            }
+        });
+
+        $('select[name=sort]').change(function(e){
+            var option = $('select[name=sort] option:selected')[0];
+            var sort_by = option.dataset.sortBy;
+            var sort_direction = option.dataset.sortDirection;
+            window.location = '{{ request.path }}?sort_by=' + sort_by + '&sort_direction=' + sort_direction;
+        });
+
+    </script>
 {% endblock %}

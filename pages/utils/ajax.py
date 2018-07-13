@@ -2,10 +2,11 @@ from django import forms, views
 from django.template import loader
 from django.http import HttpResponse, HttpResponseForbidden
 from django.utils.datastructures import MultiValueDictKeyError
-
+from urllib.parse import urlparse
+from django.urls import resolve
 from pages.models import Offers, Subtags, Availability
 
-__all__ = ('FormAjaxBase', 'BaseAjaxView', )
+__all__ = ('FormAjaxBase', 'BaseAjaxView',)
 
 
 class FormAjaxBase(forms.ModelForm):
@@ -14,18 +15,22 @@ class FormAjaxBase(forms.ModelForm):
 
     def save_to_database(self, request):
         model_id = request.POST.get('model-id', None)
+        offer_id = request.POST.get('offer-id', None)
 
         try:
             int(model_id)
         except Exception:
             model_id = None
 
-        #if True:
+        # if True:
         try:
             exist_model = self.__model_class.objects.get(id=model_id)
         except self.__model_class.DoesNotExist:
             exist_model = self.__model_class()
-            #raise IndexError('Model not found')
+
+            if exist_model._meta.model_name == 'price':
+                exist_model.offer_id = offer_id
+            # raise IndexError('Model not found')
 
         delete = True if request.POST.get('delete', False) == 'on' else False
         if delete:
@@ -56,9 +61,10 @@ class FormAjaxBase(forms.ModelForm):
                     exist_model.__dict__[field_model] = None
                     continue
             exist_model.__dict__[field_model] = field_sv
-            #print('\n\n{}\n\n {} \n\n'.format(field_model, exist_model.__dict__))
+
+            # print('\n\n{}\n\n {} \n\n'.format(field_model, exist_model.__dict__))
         exist_model.save()
-        #else:
+        # else:
         #    raise AttributeError('Field "model-id" not found.')
 
     def __init__(self, model_initial_id=None, *args, **kwargs):
@@ -76,16 +82,19 @@ class FormAjaxBase(forms.ModelForm):
                 try:
                     initial_dict[field_name] = form_initial.__dict__[field_name]
                 except KeyError:
-                    continue
+                    try:
+                        initial_dict[field_name] = form_initial.__dict__['{}_id'.format(field_name)]
+                    except KeyError:
+                        continue
 
             super().__init__(initial=initial_dict, *args, **kwargs)
-        #else:
+        # else:
         #    raise ValueError('The variable "model_initial_id" has an empty value')
 
 
 class BaseAjaxView(views.View):
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         file_name_template = request.path.split('/')[-1]
 
         if file_name_template in self.ADMIN_EDIT_FORM:
@@ -97,6 +106,11 @@ class BaseAjaxView(views.View):
                 int(model_id)
             except Exception:
                 model_id = None
+
+            referer = request.META.get('HTTP_REFERER', None) or '/'
+            resolver = resolve(urlparse(referer)[2])
+            if resolver.url_name == 'offer':
+                self.context_data['offer'] = Offers.objects.filter(offer_url=resolver.kwargs['off_url']).first()
 
             self.context_data['form'] = class_form(model_initial_id=model_id)
             self.context_data['template_send'] = file_name_template
@@ -112,7 +126,8 @@ class BaseAjaxView(views.View):
                 try:
                     model_object = Offers.objects.get(id=model_id)
                     result_list_tags = model_object.offer_subtags.all()
-                    self.context_data['offer_all_subtags'] = Subtags.objects.filter(tag_parent_tag=model_object.offer_tag)
+                    self.context_data['offer_all_subtags'] = Subtags.objects.filter(
+                        tag_parent_tag=model_object.offer_tag)
                     self.context_data['offer_availability'] = model_object.offer_availability
                 except Offers.DoesNotExist:
                     pass

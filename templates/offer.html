@@ -2,142 +2,204 @@
 {% load static %}
 
 {% block additional_head %}
-  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
-  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
 {% endblock %}
 
-
-
-
 {% block container_list_offers %}
-<div class="container-offer admin-relative-block">
-      {% include 'forms/admin-button-edit.html' with abe_title=offer.offer_url abe_template="offer-edit.html" abe_model=offer %}
+    <div class="container-offer admin-relative-block">
+        {% include 'forms/admin-button-edit.html' with abe_title=offer.offer_url abe_template="offer-edit.html" abe_model=offer %}
 
-  <div class="offer-grid-images">
-    {% if offer.offer_photo or offer.images.all %}
-      <div class='slider-container' style="margin-bottom: 20px;">
-        <div class='slider-for'>
-        {% if offer.images.first %}
-          {% for img in offer.images.all %}
-            {% if img.images_file %}
-              <a onclick="viewImage('{{ img.images_file.url }}', true);"><img src="{{ img.images_file.url }}" width="220px"/></a>
+        <div class="offer-grid-images">
+            {% if offer.offer_photo or offer.images.all %}
+                <div class='slider-container' style="margin-bottom: 20px;">
+                    <div class='slider-for'>
+                        {% if offer.images.first %}
+                            {% for img in offer.images.all %}
+                                {% if img.images_file %}
+                                    <a onclick="viewImage('{{ img.images_file.url }}', true);"><img
+                                            src="{{ img.images_file.url }}" width="220px"/></a>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <a href="{{ offer.offer_photo.url }}"><img src="{{ offer.offer_photo.url }}" width="220px"/></a>
+                        {% endif %}
+                    </div>
+
+                    <div class='slider-nav'>
+                        {% if offer.images.first %}
+                            {% for img in offer.images.all %}
+                                {% if img.images_file %}
+                                    <img src="{{ img.images_file.url }}" width="220px"/>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <img src="{{ offer.offer_photo.url }}" width="220px"/>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <img src="{% static 'images/nophoto.jpg' %}" width="200px" height="200px" alt="">
             {% endif %}
-          {% endfor %}
-        {% else %}
-          <a href="{{ offer.offer_photo.url }}"><img src="{{ offer.offer_photo.url }}" width="220px"/></a>
-        {% endif %}
-        </div>
-
-        <div class='slider-nav'>
-          {% if offer.images.first %}
-          {% for img in offer.images.all %}
-            {% if img.images_file %}
-              <img src="{{ img.images_file.url }}" width="220px"/>
+            {% if request.user.is_superuser %}
+                <div>
+                    <a class="home-button" href="javascript:viewFormEdit2('{{ offer.offer_url }}')">Редактировать
+                        изображения</a>
+                </div>
             {% endif %}
-          {% endfor %}
-        {% else %}
-          <img src="{{ offer.offer_photo.url }}" width="220px"/>
-        {% endif %}
+
         </div>
-      </div>
-    {% else %}
-      <img src="{% static 'images/nophoto.jpg' %}" width="200px" height="200px" alt="">
-    {% endif %}
-    {% if request.user.is_superuser %}
-        <div>
-            <a class="home-button" href="{% url 'offer_images' off_url=offer.offer_url %}">Редактировать изображения</a>
-        </div>
-    {% endif %}
 
-  </div>
+        <div class="offer-grid-titles">
+            <h4 class="offer-title">{{ offer.offer_title }}</h4>
 
-  <div class="offer-grid-titles">
-    <h4 class="offer-title">{{ offer.offer_title }}</h4>
+            <div>{{ offer.offer_availability }}</div>
 
-    <div>{{ offer.offer_availability }}</div>
+            {% if offer.prices.all|length > 0 %}
+                {% for price in offer.prices.all %}
 
-    {% if offer.prices.all|length > 0 %}
-        {% for price in offer.prices.all %}
-
-            <div style="font-size: 20px; font-weight:bold; padding-top: 10px">
-{#                {% include 'forms/admin-button-edit.html' with abe_title=price.value abe_template="price-edit.html" abe_model=price %}#}
-                <span>
-                    <a href="javascript:viewFormEdit('button-edit-form-price-{{ price.price_type.id }}-{{ price.value }}');" id="button-edit-form-price-{{ price.price_type.id }}-{{ price.value }}" data-template-name="price-edit.html" data-model-id="{{ price.id }}">
+                    <div style="font-size: 20px; font-weight:bold; padding-top: 10px">
+                        {#                {% include 'forms/admin-button-edit.html' with abe_title=price.value abe_template="price-edit.html" abe_model=price %}#}
+                        <span>
+                    <a href="javascript:viewFormEdit('button-edit-form-price-{{ price.price_type.id }}-{{ price.value }}');"
+                       id="button-edit-form-price-{{ price.price_type.id }}-{{ price.value }}"
+                       data-template-name="price-edit.html" data-model-id="{{ price.id }}">
                     <span class="admin-icon-edit"></span></a>
                 </span>
-                {{ price.price_type.name }}: {{ price.value|stringformat:"i" }} руб.
-            </div>
-        {% endfor %}
-        {% if request.user.is_superuser %}
-            <div style="font-size: 15px; font-weight:bold; padding-top: 15px">
+                        {{ price.price_type.name }}: {{ price.value|stringformat:"i" }} руб.
+                    </div>
+                {% endfor %}
+                {% if request.user.is_superuser %}
+                    <div style="font-size: 15px; font-weight:bold; padding-top: 15px">
                 <span>
-                    <button class="home-button" onclick="javascript:viewFormEdit('button-edit-form-price-new');" id="button-edit-form-price-new" data-template-name="price-edit.html">
+                    <button class="home-button" onclick="javascript:viewFormEdit('button-edit-form-price-new');"
+                            id="button-edit-form-price-new" data-template-name="price-edit.html">
                         Добавить цену
                     </button>
                 </span>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div class="offer-description">
+        <h3>Описание</h3>
+        <p>{{ offer.offer_text|safe }}</p>
+    </div>
+
+
+
+    <div class="view-pop-up-image" onclick="viewImage(0, false);"></div>
+
+
+    <div class="custom-wide-line">
+        <a href="/catalog/{{ offer.offer_tag.tag_url }}">Вернуться в каталог "{{ offer.offer_tag.tag_title }}"</a>
+    </div>
+
+
+    {% include 'lists/cloud-tags.html' %}
+
+    <div class="admin-panel-pop-up" id="admin-panel-pop-up2" style="display: none;">
+        <div class="custom-pop-up-blur">
+        </div>
+        <div class="custom-container container-pop" style="width: 80%; margin-left: 10%">
+            <div class="alert-pop-up" id="alert-pop-up2">
             </div>
-        {% endif %}
-    {% endif %}
+            {% csrf_token %}
+            <form action="/goods/{{ offer.offer_url }}/images/" class="admin-relative-block" id="send-form-ajax2" method="POST"
+                  novalidate enctype="multipart/form-data">
+            </form>
+        </div>
+    </div>
 
-  </div>
-</div>
-
-<div class="offer-description">
-  <h3>Описание</h3>
-  <p>{{ offer.offer_text|safe }}</p>
-</div>
-
-
-
-<div class="view-pop-up-image" onclick="viewImage(0, false);"></div>
-
-
-<div class="custom-wide-line">
-  <a href="/catalog/{{ offer.offer_tag.tag_url }}">Вернуться в каталог "{{ offer.offer_tag.tag_title }}"</a>
-</div>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script type="text/javascript">
+        $('.slider-for').slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: false,
+            fade: true,
+            asNavFor: '.slider-nav',
+        });
 
 
-{% include 'lists/cloud-tags.html' %}
+        $('.slider-nav').slick({
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            asNavFor: '.slider-for',
+            dots: false,
+            centerMode: true,
+            focusOnSelect: true,
+            arrows: false,
+        });
+
+        $('.slick-arrow').css({
+            color: '#666',
+        });
 
 
+        function viewImage(image_url, is_view) {
+            if (is_view) {
+                $('.view-pop-up-image').css({display: 'block'});
+                $('.view-pop-up-image').html('<p>Чтобы закрыть, щелкните в любом месте</p><img class="opened-image-in-pop-up" src="' + image_url + '" alt="Image offer" />');
+                $('html').css({'overflow-y': 'hidden'});
+            } else {
+                $('.view-pop-up-image').css({display: 'none'});
+                $('.view-pop-up-image').html('');
+                $('html').css({'overflow-y': ''});
+            }
+        }
 
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-<script type="text/javascript">
- $('.slider-for').slick({
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  arrows: false,
-  fade: true,
-  asNavFor: '.slider-nav',
-});
-
-
-$('.slider-nav').slick({
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  asNavFor: '.slider-for',
-  dots: false,
-  centerMode: true,
-  focusOnSelect: true,
-  arrows: false,
-});
-
-$('.slick-arrow').css({
-  color: '#666',
-});
+        function viewPopUpAlert2(is_good, response_text = null, status = null) {
+            $('#send-form-ajax').html('');
 
 
-function viewImage(image_url, is_view){
-  if (is_view){
-    $('.view-pop-up-image').css({display: 'block'});
-    $('.view-pop-up-image').html('<p>Чтобы закрыть, щелкните в любом месте</p><img class="opened-image-in-pop-up" src="'+ image_url +'" alt="Image offer" />');
-    $('html').css({'overflow-y': 'hidden'});
-  } else {
-    $('.view-pop-up-image').css({display: 'none'});
-    $('.view-pop-up-image').html('');
-    $('html').css({'overflow-y': ''});
-  }
-}
+            if (is_good) {
+                //$('#alert-pop-up').html('<p style="color: #157eb3;">'+ response_text +'</p>');
+                $('#alert-pop-up2').css({'display': 'block'});
+                $('#admin-panel-pop-up2').css({'display': 'none'});
+                $('body').css({'overflow': ''});
+                $('#alert-pop-up2').css({'display': 'none'});
+                location.reload();
+            } else {
+                $('#alert-pop-up2').css({'background': '#d22e2e'});
+                $('#alert-pop-up2').html('<p>Status code: ' + status + '</p>\
+          <p>Error text: ' + response_text + '</p>');
+                $('#alert-pop-up2').css({'display': 'block'});
+                return;
+            }
+        }
 
-</script>
+        function viewFormEdit2(obj_id) {
+            $('#alert-pop-up2').html('');
+            $('#custom-container').css({});
+
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/goods/' + obj_id + '/images', true);
+            xhr.send();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState != 4) return;
+
+                if (xhr.status != 200) {
+                    viewPopUpAlert2(false, xhr.statusText, xhr.status);
+                } else {
+                    response = xhr.responseText;
+
+
+                    $('#send-form-ajax2').html(response);
+                }
+            }
+
+            // Во время ожидания ответа от сервера, отображается спинер загрузки.
+            $('#admin-panel-pop-up2').css({'display': 'block'});
+            $('body').css({'overflow': 'hidden'});
+            $('#send-form-ajax2').html('<p class="load-span"><i class="fa fa-spinner fa-spin fa-2x"></i></p>');
+        }
+
+    </script>
 {% endblock %}
