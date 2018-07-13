@@ -134,7 +134,6 @@ OFFER_FORM = ['offer_title', 'offer_price', 'offer_value', 'offer_text',
 
 
 class OfferForm(FormAjaxBase):
-
     class Meta:
         model = Offers
         fields = OFFER_FORM
@@ -310,7 +309,7 @@ class ImageForm(forms.ModelForm):
         if commit:
             # If committing, save the instance and the m2m data immediately.
             self._save_m2m()
-            raise commit
+            #raise commit
         else:
             # If not committing, add a method to the form to allow deferred
             # saving of m2m data.
@@ -323,7 +322,6 @@ ImageFormSet = forms.inlineformset_factory(Offers, Images, ImageForm)
 
 
 class PriceForm(FormAjaxBase):
-
     class Meta:
         model = Price
         fields = ('price_type', 'value',)
@@ -334,3 +332,28 @@ class PriceForm(FormAjaxBase):
             'price_types': PriceType.objects.all()
         }
 
+    def save_to_database(self, request):
+        model_id = request.POST.get('model-id', None)
+        offer_id = request.POST.get('offer-id', None)
+
+        try:
+            int(model_id)
+        except Exception:
+            model_id = None
+
+        if model_id is not None:
+            exist_model = self.Meta.model.objects.get(id=model_id)
+        else:
+            exist_model = self.Meta.model()
+            exist_model.offer_id = offer_id
+
+        delete = True if request.POST.get('delete', False) == 'on' else False
+        if delete:
+            exist_model.delete()
+            return
+
+        exist_model.value = request.POST.get('value', None)
+        exist_model.price_type_id = request.POST.get('price_type_id', None)
+        exist_model.offer_id = offer_id
+
+        exist_model.save()
