@@ -478,8 +478,12 @@ def catalog(request, cat_url='nothing'):
             'name': 'offer_title',
             'date': 'created'
         }
-        offers = offers.order_by(
-            '{}{}'.format('' if sort_direction == 'asc' else '-', sort_fields[sort_by]))
+        offers = offers.extra(select={
+            'utf8_title': """
+                convert_to({}, 'UTF8')
+            """.format(sort_fields[sort_by])
+        }).order_by(
+            '{}utf8_title'.format('' if sort_direction == 'asc' else '-'))
     elif sort_by == 'price':
         offers = offers.extra(select={
             'default_price': """
@@ -496,7 +500,7 @@ def catalog(request, cat_url='nothing'):
     args['cat_title'] = mt
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
     args['company'] = Company.objects.get(id=1)
-
+    args['sort'] = '{}_{}'.format(sort_by, sort_direction)
     args['category_page'] = True
 
     return render(request, 'catalog.html', args)

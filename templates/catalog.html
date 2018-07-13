@@ -63,12 +63,18 @@
 
             <div>
                 <select name="sort">
-                    <option data-sort-by="name"  data-sort-direction="asc">В алфавитном порядке &uarr;</option>
-                    <option data-sort-by="name" data-sort-direction="desc">В алфавитном порядке &darr;</option>
-                    <option data-sort-by="date" data-sort-direction="asc">По дате добавления &uarr;</option>
-                    <option data-sort-by="date" data-sort-direction="desc">По дате добавления &darr;</option>
-                    <option data-sort-by="price" data-sort-direction="asc">По цене &uarr;</option>
-                    <option data-sort-by="price" data-sort-direction="desc">По цене &darr;</option>
+                    <option data-sort-by="name"  data-sort-direction="asc"
+                        {% if sort == 'name_asc' %}selected{% endif %}>В алфавитном порядке &uarr;</option>
+                    <option data-sort-by="name" data-sort-direction="desc"
+                        {% if sort == 'name_desc' %}selected{% endif %}>В алфавитном порядке &darr;</option>
+                    <option data-sort-by="date" data-sort-direction="asc"
+                        {% if sort == 'date_asc' %}selected{% endif %}>По дате добавления &uarr;</option>
+                    <option data-sort-by="date" data-sort-direction="desc"
+                        {% if sort == 'date_desc' %}selected{% endif %}>По дате добавления &darr;</option>
+                    <option data-sort-by="price" data-sort-direction="asc"
+                        {% if sort == 'price_asc' %}selected{% endif %}>По цене &uarr;</option>
+                    <option data-sort-by="price" data-sort-direction="desc"
+                        {% if sort == 'price_desc' %}selected{% endif %}>По цене &darr;</option>
                 </select>
             </div>
 
