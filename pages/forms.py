@@ -327,7 +327,6 @@ class PriceForm(FormAjaxBase):
         fields = ('price_type', 'value',)
 
     def get_context(self):
-
         return {
             'price_types': PriceType.objects.all()
         }
@@ -357,3 +356,22 @@ class PriceForm(FormAjaxBase):
         exist_model.offer_id = offer_id
 
         exist_model.save()
+
+
+class CategoryFooterTextForm(FormAjaxBase):
+
+    class Meta:
+        model = Tags
+        fields = ('footer_text',)
+
+        widgets = {
+            'footer_text': SummernoteWidget(attrs=SUMMERNOTE_ATTRS)
+        }
+
+    def __init__(self, model_initial_id=None, *args, **kwargs):
+        obj = self.Meta.model.objects.filter(id=model_initial_id).first()
+
+        if obj is not None:
+            super().__init__(*args, model_initial_id=model_initial_id, **kwargs)
+        else:
+            super().__init__(*args, **kwargs)

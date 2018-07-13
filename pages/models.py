@@ -150,6 +150,7 @@ class Tags(models.Model):
     tag_publish = models.BooleanField(blank=True)
     tag_priority = models.IntegerField(blank=True)
     delete_tag = models.BooleanField(blank=True, default=False)
+    footer_text = models.TextField(blank=True, default='')
 
     class Meta:
         verbose_name = 'Основные теги'

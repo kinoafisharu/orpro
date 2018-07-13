@@ -130,7 +130,8 @@ class AdminAjaxEditForm(BaseAjaxView):
         'subtag_form.html': SubtagsForCatalog,
         'subtag_offer_form.html': SubtagsForm,
         'offer-edit.html': OfferForm,
-        'price-edit.html': PriceForm
+        'price-edit.html': PriceForm,
+        'footer-text-block.html': CategoryFooterTextForm
     }
 
 
