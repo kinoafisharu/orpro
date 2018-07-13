@@ -27,6 +27,7 @@ function viewFormEdit(elem_id) {
     $('#send-form-ajax').html('<p class="load-span"><i class="fa fa-spinner fa-spin fa-2x"></i></p>');
 }
 
+
 $(function() {
   // При нажатии на фон формы редактирования, окно закрывается.
   $('.custom-pop-up-blur').click(function() {

@@ -29,7 +29,9 @@ SECRET_KEY = config('SECRET_KEY')
 # DEBUG = True
 DEBUG = config('DJANGO_DEBUG', cast=bool)
 
+
 ALLOWED_HOSTS = ['*']
+
 
 # Application definition
 
@@ -42,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_summernote',
-    # 'tinymce',
+    #'tinymce',
 
     'django_extensions',
     'sorl.thumbnail',
@@ -76,8 +78,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # Custom processors
-                'pages.utils.context_processors.orpro_data',
+                #Custom processors
+				'pages.utils.context_processors.orpro_data',
             ],
         },
     },
@@ -93,16 +95,16 @@ DATABASES = {'default': {}}
 try:
     DATABASES = {
         'default': {
-            'ENGINE': config('DB_ENGINE'),
-            'NAME': config('DB_NAME'),
-            'USER': config('DB_USER'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('DB_HOST'),
-            'PORT': '5432',
-            # 'OPTIONS': {
+                    'ENGINE': config('DB_ENGINE'),
+                    'NAME': config('DB_NAME'),
+                    'USER': config('DB_USER'),
+                    'PASSWORD': config('DB_PASSWORD'),
+                    'HOST': config('DB_HOST'),
+                    'PORT': '5432',
+            #'OPTIONS': {
             #    'init_command': 'SET innodb_strict_mode=1',
             #    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            # },
+            #},
         }
     }
 except UndefinedValueError:
@@ -126,6 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -167,14 +170,9 @@ AWS_S3_OBJECT_PARAMETERS = {
 REGION_NAME = config('REGION_NAME')
 AWS_LOCATION = 'static'
 AWS_MEDIA = 'media'
-
 # Через boto3 настраиваем сохранение статических файлов (css, js)
-if not DEBUG:
-    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
-    STATIC_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-else:
-    STATIC_URL = '/static/'
-
+STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+STATIC_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 AWS_PUBLIC_MEDIA_LOCATION = 'media'
 # Через boto3 настраиваем сохранение медиа файлов (img, mov)
 # MEDIA_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA)
@@ -183,11 +181,14 @@ DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
 RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
 
-# django-summernote
+
+
+
+#django-summernote
 SUMMERNOTE_CONFIG = {
     'width': '100%',
-    'default_css': (
+	'default_css': (
         'new-frontend/css/summernote.css',
-        'summernote/django_summernote.css',
+		'summernote/django_summernote.css',
     ),
 }

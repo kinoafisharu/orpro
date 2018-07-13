@@ -10,7 +10,7 @@ from django.views.generic import UpdateView, FormView
 from django.conf import settings
 from django.contrib import messages
 from django.forms import formset_factory, modelformset_factory
-from django.db.models import Q, F
+from django.db.models import Q
 from django.core.urlresolvers import reverse
 from .models import Reviews, Post, Tags, Category, Offers, Subtags, MainBaner, FBlocks, LBlocks, AboutCompany, \
     TopOffers, Support, Personal, Company, HeaderPhoto, Images
@@ -130,9 +130,9 @@ class AdminAjaxEditForm(BaseAjaxView):
         'subtag_form.html': SubtagsForCatalog,
         'subtag_offer_form.html': SubtagsForm,
         'offer-edit.html': OfferForm,
-        'price-edit.html': PriceForm,
-        'footer-text-block.html': CategoryFooterTextForm
     }
+
+
 
 
 def comment_delete(request):
@@ -168,6 +168,9 @@ def comment_admin(request):
             form = CommentAdminForm(initial={'comment': comment_initial.comment})
             return render(request, 'comment_admin_form.html', locals())
     return HttpResponseForbidden()
+
+
+
 
 
 def p_post(request):
@@ -238,7 +241,9 @@ def company_post(request):
     return HttpResponseForbidden()
 
 
+
 class Home(View):
+
     template_name = 'home.html'
 
     def get(self, request):
@@ -256,8 +261,9 @@ class Home(View):
         self.context_data['p'] = Personal.objects.all()
         self.context_data['ac1'] = AboutCompany.objects.get(id=1)
         self.context_data['hf'] = HeaderPhoto.objects.get(id=1)
-        # self.context_data['company'] = Company.objects.get(id=1)
+        #self.context_data['company'] = Company.objects.get(id=1)
         self.context_data['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
+
 
     def __init__(self, *args, **kwargs):
         ''' Each time the class is initialized, it is required to clear the context variable '''
@@ -265,10 +271,11 @@ class Home(View):
         self.get_static_context
 
 
+
+
 def get_signature(request):
     company = get_object_or_404(Company, id=1)
     return render(request, 'signature.html', company)
-
 
 # def singlepage(request, post_seourl):
 #     args = {}
@@ -289,7 +296,7 @@ class SinglePageAjaxUpdateView(UpdateView):
     template_name = "singlpage.html"
     ajax_template_name = "forms/edit-single-page.html"
 
-    # When you save changes to the form, a page with changes is displayed, and "edit" = 0
+    #When you save changes to the form, a page with changes is displayed, and "edit" = 0
     is_already_save = False
 
     def post(self, request, *args, **kwargs):
@@ -317,7 +324,7 @@ class SinglePageAjaxUpdateView(UpdateView):
 
     def form_valid(self, form):
         form.save()
-        self.is_already_save = True
+        self.is_already_save=True
         return self.render_to_response(self.get_context_data(form=self.form_class(instance=self.object)))
 
     def get_template_names(self):
@@ -347,8 +354,7 @@ class OfferAjaxUpdateView(UpdateView):
     slug_field = "offer_url"
     slug_url_kwarg = "off_url"
     template_name = "offer.html"
-
-    # ajax_template_name = "forms/offer-form.html"
+    #ajax_template_name = "forms/offer-form.html"
 
     def post(self, request, *args, **kwargs):
         if request.user.is_superuser:
@@ -385,8 +391,8 @@ class OfferAjaxUpdateView(UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_template_names(self):
-        #    if self.request.is_ajax():
-        #        return self.ajax_template_name
+    #    if self.request.is_ajax():
+    #        return self.ajax_template_name
         return self.template_name
 
     def get_context_data(self, **kwargs):
@@ -395,7 +401,7 @@ class OfferAjaxUpdateView(UpdateView):
             ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-            # ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_subtags)\
+            #ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_subtags)\
             #    .order_by('tag_priority')[0:100]
         ctx['subtags'] = self.object.offer_subtags.all()
         ctx['offer'] = self.object
@@ -415,8 +421,7 @@ class OfferImagesAjaxUpdateView(FormView):
 
     def post(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            super().post(request, *args, **kwargs)
-            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+            return super().post(request, *args, **kwargs)
         return HttpResponseForbidden()
 
     def dispatch(self, request, *args, **kwargs):
@@ -451,24 +456,6 @@ class OfferImagesAjaxUpdateView(FormView):
 
 
 def catalog(request, cat_url='nothing'):
-    sort_by = request.GET.get('sort_by', 'priority')
-
-    search_title = request.GET.get('search_title', '')
-    if len(search_title) < 2:
-        search_title = None
-
-    search_price_from = request.GET.get('search_price_from', None)
-    try:
-        int(search_price_from)
-    except Exception:
-        search_price_from = None
-
-    search_price_to = request.GET.get('search_price_to', None)
-    try:
-        int(search_price_to)
-    except Exception:
-        search_price_to = None
-
     if cat_url == 'nothing':
         cat_url = Tags.objects.filter(tag_publish=True).order_by('tag_priority')[0].tag_url
     args = {}
@@ -487,47 +474,12 @@ def catalog(request, cat_url='nothing'):
 
     args['hf'] = HeaderPhoto.objects.get(id=1)
 
-    if search_title is not None:
-        offers = offers.filter(offer_title__icontains=search_title)
-
-    if search_price_from is not None:
-        offers = offers.filter(
-            prices__price_type__is_default=True,
-            prices__value__gte=search_price_from)
-
-    if search_price_to is not None:
-        offers = offers.filter(
-            prices__price_type__is_default=True,
-            prices__value__lte=search_price_to)
-
-    if sort_by == 'name':
-        offers = sorted(offers, key=lambda x: x.offer_title)
-
-    elif sort_by == 'priority':
-        offers = offers\
-            .annotate(priority=models.Sum((F('offer_tag__tag_priority'))+F('offer_tag__tag_priority'))/(models.Count('offer_subtags')+1))\
-            .order_by('-priority')
-
-    elif sort_by == 'price':
-        offers = offers.extra(select={
-            'default_price': """
-                SELECT p.value
-                FROM pages_price AS p
-                LEFT JOIN pages_pricetype AS pt on p.price_type_id = pt.id
-                WHERE pt.is_default = TRUE 
-                AND p.offer_id = pages_offers.id
-            """
-        }).order_by('default_price')
-
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['offer'] = offers
     args['cat_title'] = mt
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
     args['company'] = Company.objects.get(id=1)
-    args['sort'] = sort_by
+
     args['category_page'] = True
-    args['search_title'] = search_title if search_title is not None else ''
-    args['search_price_from'] = search_price_from if search_price_from is not None else ''
-    args['search_price_to'] = search_price_to if search_price_to is not None else ''
 
     return render(request, 'catalog.html', args)

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 # Делаем импорт настроек для импорта-экспорта.
@@ -12,8 +11,6 @@ import ast
 import json
 
 from import_export.formats.base_formats import JSON as _JSON
-
-
 class JSON(_JSON):
     def export_data(self, dataset, **kwargs):
         data = []
@@ -37,21 +34,10 @@ class TinyMCEAdmin(admin.ModelAdmin):
         js = ('/static/js/tiny_mce/tiny_mce.js', '/static/js/tiny_mce/textareas.js',)
 
 
-class OfferImages(admin.StackedInline):
-    model = Images
-    extra = 0
-
-
-class OfferPrices(admin.StackedInline):
-    model = Price
-    extra = 0
-
-
 class OfferAdmin(TinyMCEAdmin, ImportExportModelAdmin):
     search_fields = ('offer_title', )
     list_display = ('offer_title', 'get_main_image')
     resource_class = OfferResource
-    inlines = (OfferPrices, OfferImages,)
 
     def get_export_formats(self):
         return [CSV, XLS, XLSX, TSV, JSON, HTML]
@@ -77,5 +63,3 @@ admin.site.register(Availability)
 admin.site.register(Images)
 admin.site.register(Publish)
 admin.site.register(Reviews)
-admin.site.register(Price)
-admin.site.register(PriceType)

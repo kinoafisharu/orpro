@@ -124,14 +124,13 @@ class Category(models.Model):
 
 # Модель страницы
 class Post(models.Model):
-    post_title = models.CharField(max_length=250)  # <h1></h1>
-    post_seourl = models.CharField(max_length=250)  # Ссылка на страницу ( мойсайт.ру/(эта ссылка) )
-    post_photo = models.ImageField(blank=True)  # Фото на страницу
-    post_text = models.TextField()  # Текст страници
+    post_title = models.CharField(max_length=250)            # <h1></h1>
+    post_seourl = models.CharField(max_length=250)           # Ссылка на страницу ( мойсайт.ру/(эта ссылка) )
+    post_photo = models.ImageField(blank=True)               # Фото на страницу
+    post_text = models.TextField()                           # Текст страници
     post_category = models.ForeignKey(Category, blank=True, null=True)
     post_cat_level = models.IntegerField(default=0)
     post_priority = models.IntegerField(default=1)
-
     # post_submenu = models.BooleanField(default=False)
     # post_mainmenu = models.BooleanField(default=False)
 
@@ -145,12 +144,11 @@ class Post(models.Model):
 
 # Модель групп товара
 class Tags(models.Model):
-    tag_url = models.CharField(max_length=250, unique=True)  # Ссылка на категорию
-    tag_title = models.CharField(max_length=250)  # Название категории
+    tag_url = models.CharField(max_length=250, unique=True)     # Ссылка на категорию
+    tag_title = models.CharField(max_length=250)                # Название категории
     tag_publish = models.BooleanField(blank=True)
     tag_priority = models.IntegerField(blank=True)
     delete_tag = models.BooleanField(blank=True, default=False)
-    footer_text = models.TextField(blank=True, default='')
 
     class Meta:
         verbose_name = 'Основные теги'
@@ -162,9 +160,9 @@ class Tags(models.Model):
 
 # Модель ключевых слов товара
 class Subtags(models.Model):
-    tag_url = models.CharField(max_length=250, unique=True)  # Ссылка на категорию
-    tag_title = models.CharField(max_length=250)  # Название категории
-    tag_parent_tag = models.ForeignKey(Tags, blank=True)  # Parents category
+    tag_url = models.CharField(max_length=250, unique=True)       # Ссылка на категорию
+    tag_title = models.CharField(max_length=250)                  # Название категории
+    tag_parent_tag = models.ForeignKey(Tags, blank=True)          # Parents category
     delete_stag = models.BooleanField(blank=True, default=False)
     tag_priority = models.IntegerField(null=True, blank=True)
     tag_description = models.CharField(max_length=400, blank=True, null=True)
@@ -189,8 +187,8 @@ class Subtags(models.Model):
 # модель Организации
 class Company(models.Model):
     name = models.CharField(null=True, max_length=150)
-    email = models.CharField(blank=True, null=True, max_length=100)
-    address = models.CharField(blank=True, max_length=150)
+    email = models.CharField(blank=True,null=True, max_length=100)
+    address = models.CharField(blank=True,max_length=150)
     skype = models.CharField(blank=True, max_length=80)
     mob_phone = models.CharField(blank=True, max_length=80)
     rob_phone = models.CharField(blank=True, max_length=80)
@@ -218,10 +216,7 @@ class Company(models.Model):
 # Закомментированный код подлежит удалению до 1 июня 2018г.
 class Offers(models.Model):
     offer_title = models.CharField(max_length=250, verbose_name='Название')
-
-    # Это поле уже не нужно, оставил для legacy, чтоб ничего не сломалось
-    # TODO: Удалить поле после того, как будет понимание что все части кода исправлены на модель Price
-    offer_price = models.FloatField(default=0, verbose_name='Цена', null=True, blank=True)
+    offer_price = models.FloatField(default=0, verbose_name='Цена')
     # offer_price_discount = models.FloatField(blank=True, default=0, verbose_name='Цена со скидкой', null=True) #ЛИШНЕЕ
     # offer_discount_term = models.DateTimeField(blank=True, null=True, verbose_name='Срок действия скидки') #ЛИШНЕЕ
     # offer_price_from = models.FloatField(blank=True, default=0, verbose_name='Цена от') #ЛИШНЕЕ
@@ -268,7 +263,7 @@ class Offers(models.Model):
             img = img.url
         return img
 
-    # fix offer img_main
+    #fix offer img_main
     def get_main_image_url(self):
         name = str(self.get_main_image)
         print(name)
@@ -286,20 +281,13 @@ class Offers(models.Model):
 
     @models.permalink
     def get_admin_url(self):
-        return "admin:%s_%s_change" % (self._meta.app_label, self._meta.model_name), (self.id,)
-
-    @property
-    def default_price_value(self):
-        default_price_obj = self.prices.filter(price_type__is_default=True).first()
-        if default_price_obj is not None:
-            return default_price_obj.value
-        return 0
+        return "admin:%s_%s_change" % (self._meta.app_label, self._meta.model_name), (self.id, )
 
 
 # Банер на главной
 class MainBaner(models.Model):
-    baner_text = models.CharField(max_length=80)  # Текст на банере
-    baner_img = models.ImageField(blank=True)  # Картинка банера
+    baner_text = models.CharField(max_length=80)   # Текст на банере
+    baner_img = models.ImageField(blank=True)      # Картинка банера
     baner_url = models.CharField(max_length=250)
 
     class Meta:
@@ -312,7 +300,7 @@ class MainBaner(models.Model):
 
 class FBlocks(models.Model):
     fb_title = models.CharField(max_length=80)  # Текст на банере
-    fb_text = models.TextField()  # Текст на банере
+    fb_text = models.TextField()                # Текст на банере
     fb_icon = models.CharField(max_length=50, blank=True, null=True)
     fb_url = models.CharField(max_length=250)
     fb_color = models.CharField(max_length=30, blank=True, null=True)
@@ -327,7 +315,7 @@ class FBlocks(models.Model):
 
 class LBlocks(models.Model):
     lb_title = models.CharField(max_length=80)  # Текст на банере
-    lb_text = models.TextField()  # Текст на банере
+    lb_text = models.TextField()                # Текст на банере
     lb_icon = models.CharField(max_length=80)
     lb_link = models.CharField(max_length=250, blank=True)
     lb_color = models.CharField(max_length=30, blank=True, null=True)
@@ -417,25 +405,3 @@ class Reviews(models.Model):
 
     def __str__(self):
         return self.text
-
-
-class PriceType(models.Model):
-    name = models.CharField(max_length=20)
-    is_default = models.BooleanField(default=False)
-
-    class Meta:
-        verbose_name = 'Тип цены'
-        verbose_name_plural = 'Типы цен'
-
-    def __str__(self):
-        return '{}{}'.format(self.name, ' (основная)' if self.is_default else '')
-
-
-class Price(models.Model):
-    price_type = models.ForeignKey(PriceType)
-    value = models.FloatField(default=0, verbose_name='Цена')
-    offer = models.ForeignKey(Offers, related_name='prices')
-
-    class Meta:
-        verbose_name = 'Цена'
-        verbose_name_plural = 'Цены'
