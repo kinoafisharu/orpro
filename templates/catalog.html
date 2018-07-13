@@ -130,6 +130,18 @@
                 {% endfor %}
             </div>
 
+            <div class="admin-relative-block" style=" margin: 20px 0; background-color: #E7EBE6; padding: 10px;">
+                {% if cat_title.footer_text == '' %}
+                    {% if request.user.is_superuser %}
+                        Текстовый блок
+                    {% endif %}
+                {% else %}
+                    {% autoescape off %}
+                    {{ cat_title.footer_text }}
+                    {% endautoescape %}
+                {% endif %}
+                {% include 'forms/admin-button-edit.html' with abe_title=cat_title.tag_url abe_template="footer-text-block.html" abe_model=cat_title %}
+            </div>
 
             {% include 'lists/cloud-tags.html' %}
 
