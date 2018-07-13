@@ -309,7 +309,7 @@ class ImageForm(forms.ModelForm):
         if commit:
             # If committing, save the instance and the m2m data immediately.
             self._save_m2m()
-            raise commit
+            #raise commit
         else:
             # If not committing, add a method to the form to allow deferred
             # saving of m2m data.

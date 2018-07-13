@@ -414,7 +414,8 @@ class OfferImagesAjaxUpdateView(FormView):
 
     def post(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            return super().post(request, *args, **kwargs)
+            super().post(request, *args, **kwargs)
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
         return HttpResponseForbidden()
 
     def dispatch(self, request, *args, **kwargs):
