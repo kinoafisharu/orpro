@@ -505,8 +505,9 @@ def catalog(request, cat_url='nothing'):
 
     elif sort_by == 'priority':
         offers = offers\
-            .annotate(priority=models.Sum((F('offer_tag__tag_priority'))+F('offer_tag__tag_priority'))/(models.Count('offer_subtags')+1))\
-            .order_by('-priority')
+            .annotate(priority=models.Sum('offer_subtags__tag_priority')
+                               /(models.Count('offer_subtags') or 0))\
+            .order_by('priority')
 
     elif sort_by == 'price':
         offers = offers.extra(select={
