@@ -125,9 +125,9 @@ class Category(models.Model):
 # Модель страницы
 class Post(models.Model):
     post_title = models.CharField(max_length=250)  # <h1></h1>
-    post_seourl = models.CharField(max_length=250)  # Ссылка на страницу ( мойсайт.ру/(эта ссылка) )
+    post_seourl = models.CharField(max_length=250)  # урл страницы
     post_photo = models.ImageField(blank=True)  # Фото на страницу
-    post_text = models.TextField()  # Текст страници
+    post_text = models.TextField()  # Текст страницы
     post_category = models.ForeignKey(Category, blank=True, null=True)
     post_cat_level = models.IntegerField(default=0)
     post_priority = models.IntegerField(default=1)
@@ -137,7 +137,7 @@ class Post(models.Model):
 
     class Meta:
         verbose_name = 'Страница'
-        verbose_name_plural = 'Страници'
+        verbose_name_plural = 'Страницы'
 
     def __str__(self):
         return self.post_title
@@ -215,36 +215,16 @@ class Company(models.Model):
 
 
 # Модель товара
-# Закомментированный код подлежит удалению до 1 июня 2018г.
 class Offers(models.Model):
     offer_title = models.CharField(max_length=250, verbose_name='Название')
-
-    # Это поле уже не нужно, оставил для legacy, чтоб ничего не сломалось
-    # TODO: Удалить поле после того, как будет понимание что все части кода исправлены на модель Price
     offer_price = models.FloatField(default=0, verbose_name='Цена', null=True, blank=True)
-    # offer_price_discount = models.FloatField(blank=True, default=0, verbose_name='Цена со скидкой', null=True) #ЛИШНЕЕ
-    # offer_discount_term = models.DateTimeField(blank=True, null=True, verbose_name='Срок действия скидки') #ЛИШНЕЕ
-    # offer_price_from = models.FloatField(blank=True, default=0, verbose_name='Цена от') #ЛИШНЕЕ
-    # offer_price_to = models.FloatField(blank=True, default=0, verbose_name='Цена до') #ЛИШНЕЕ
-    # offer_valuta = models.CharField(max_length=40, verbose_name='Валюта') #ЛИШНЕЕ
     offer_value = models.CharField(max_length=50, blank=True, verbose_name='Единица измерения')
-    # offer_minorder = models.IntegerField(default=1, verbose_name='Минимальный размер заказа') #ЛИШНЕЕ
-    # offer_pre_text = models.TextField(blank=True, null=True, verbose_name='Краткое описание') #ЛИШНЕЕ
     offer_text = models.TextField(verbose_name='Полное описание')
-    # offer_photo_alt = models.CharField(max_length=250, blank=True, verbose_name='Комментарий к изображению') #ЛИШНЕЕ
-    # offer_priority = models.BooleanField(default=False, verbose_name='Приоритетный товар') #ЛИШНЕЕ
-    # offer_urt_to_rubric = models.URLField(blank=True, verbose_name='Ссылка на рубрику', null=True) #ЛИШНЕЕ
-    # offer_characteristics = models.TextField(blank=True, verbose_name='Характеристики') #ЛИШНЕЕ
     offer_availability = models.ForeignKey(Availability, verbose_name='Наличие')
-    # offer_article = models.CharField(max_length=50, blank=True, verbose_name='Артикул', null=True) #ЛИШНЕЕ
-    # offer_id_on_site = models.IntegerField(blank=True, verbose_name='ID товара на сайте www.pulscen.ru', null=True) #ЛИШНЕЕ
-    # offer_code = models.CharField(max_length=50, blank=True, verbose_name='Код товара в вашем каталоге', null=True) #ЛИШНЕЕ
-    # offer_publish = models.ForeignKey(Publish, verbose_name='Публикуемость') #ЛИШНЕЕ
-    offer_url = models.CharField(max_length=250, verbose_name='Ссылка на товар на нашем сайте')
+    offer_url = models.CharField(max_length=250, verbose_name='урл страницы')
     offer_photo = models.ImageField(blank=True, null=True, verbose_name='Фото на страницу')
-    # offer_image_url = models.URLField(null=True, blank=True, verbose_name="Ссылка на картинку") #ЛИШНЕЕ
     offer_tag = models.ForeignKey(Tags, blank=True, verbose_name='Группа 1 уровня')
-    offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='pr')
+    offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='Метки')
     created = models.DateTimeField(verbose_name='Создан', auto_now_add=True, auto_now=False)
 
     class Meta:
