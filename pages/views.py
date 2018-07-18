@@ -506,7 +506,9 @@ def catalog(request, cat_url='nothing'):
     elif sort_by == 'priority':
 #        offers = offers.annotate(priority=models.Sum('offer_subtags__tag_priority')(models.Count('offer_subtags') or 0)).order_by('priority')
 # Изменение Иванова Михаила
-        offers = sorted(offers, key=Subtags.objects.aggregate(Avg('tag_priority')))
+        def by_priority_key(offers):
+            return Subtags.objects.aggregate(Avg('tag_priority'))
+        offers = sorted(offers, key = by_priority_key) 
 
     elif sort_by == 'price':
         offers = offers.extra(select={
