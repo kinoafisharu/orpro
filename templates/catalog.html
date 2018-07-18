@@ -116,7 +116,7 @@
                             {% if p.default_price_value != 0 %}
                                 <b class="order-price">{{ p.default_price_value|stringformat:"i" }} руб.</b>
                             {% else %}
-                                <b class="order-price">Нет в наличии</b>
+                                <b class="order-price">Под заказ</b>
                             {% endif %}
                             <p>{{ p.offer_text|offer_pre_text|safe }}</p>
                         </div>
