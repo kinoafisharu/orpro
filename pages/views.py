@@ -10,7 +10,7 @@ from django.views.generic import UpdateView, FormView
 from django.conf import settings
 from django.contrib import messages
 from django.forms import formset_factory, modelformset_factory
-from django.db.models import Q, F
+from django.db.models import Q, F, Avg
 from django.core.urlresolvers import reverse
 from .models import Reviews, Post, Tags, Category, Offers, Subtags, MainBaner, FBlocks, LBlocks, AboutCompany, \
     TopOffers, Support, Personal, Company, HeaderPhoto, Images
