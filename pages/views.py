@@ -504,7 +504,10 @@ def catalog(request, cat_url='nothing'):
         offers = sorted(offers, key=lambda x: x.offer_title)
 
     elif sort_by == 'priority':
-        offers = offers.annotate(priority=models.Sum('offer_subtags__tag_priority')(models.Count('offer_subtags') or 0)).order_by('priority')
+        offers = offers\
+            .annotate(priority=models.Sum('offer_subtags__tag_priority')
+                               /(models.Count('offer_subtags') or 0))\
+            .order_by('priority')
 # Изменение Иванова Михаила (не работает, увы)
 #        def by_priority_key(offers):
 #            return Subtags.objects.aggregate(Avg('tag_priority'))
