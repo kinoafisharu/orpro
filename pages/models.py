@@ -225,7 +225,7 @@ class Offers(models.Model):
     offer_photo = models.ImageField(blank=True, null=True, verbose_name='Фото на страницу')
     offer_tag = models.ForeignKey(Tags, blank=True, verbose_name='Группа 1 уровня')
     offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='Метки')
-    offer_priority = models.FloatField(default=50, verbose_name='Приоритет в выборке', null=False, blank=False)
+#    offer_priority = models.FloatField(default=50, verbose_name='Приоритет в выборке', null=False, blank=False)
     created = models.DateTimeField(verbose_name='Создан', auto_now_add=True, auto_now=False)
 
     class Meta:
