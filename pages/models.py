@@ -217,7 +217,7 @@ class Company(models.Model):
 # Модель товара
 class Offers(models.Model):
     offer_title = models.CharField(max_length=250, verbose_name='Название')
-    offer_price = models.FloatField(default=0, verbose_name='Цена', null=True, blank=True)
+    offer_price = models.FloatField(default=0, verbose_name='Цена', null=True, blank=True) #удалять
     offer_value = models.CharField(max_length=50, blank=True, verbose_name='Единица измерения')
     offer_text = models.TextField(verbose_name='Полное описание')
     offer_availability = models.ForeignKey(Availability, verbose_name='Наличие')
