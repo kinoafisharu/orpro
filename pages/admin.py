@@ -6,8 +6,8 @@ from import_export.admin import ImportExportModelAdmin
 from .resource import *
 from import_export.formats.base_formats import *
 # Делаем наследование от ImportExportModelAdmin, вместо обычного admin.AdminModels.
-# Для подключение батарейке к моделе необходимо указывать наследование от ImportExportModelAdmin
-# Он отвечает за импорт-экспорт в моделе.
+# Для подключения батарейки к модели необходимо указывать наследование от ImportExportModelAdmin
+# Он отвечает за импорт-экспорт в модели.
 import ast
 import json
 
