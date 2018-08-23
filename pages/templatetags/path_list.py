@@ -20,4 +20,4 @@ def random_sort(tags_list):
 @register.filter(name='offer_pre_text')
 def offer_pre_text(value):
     comments = get_html_comments(value, comment_search_expr)
-    return comments if comments else value[:max(600, len(value) - 1)] + '<span>...</span>'
+    return comments if comments else value[:max(160, len(value) - 1)]
