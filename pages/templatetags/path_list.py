@@ -1,6 +1,6 @@
 import random
-import re
 from django import template
+from .get_html_comments import get_html_comments, comment_search_expr
 
 register = template.Library()
 
@@ -16,14 +16,8 @@ def random_sort(tags_list):
     ''' Blends the tag list for the cloud '''
     return sorted(tags_list, key=lambda x: random.random())
 
+
 @register.filter(name='offer_pre_text')
 def offer_pre_text(value):
-    result = re.findall(r'(p|li)>([0-9a-zA-Zа-яА-Я\t&;\.,:\- ]+)<\/(p|li)', value)
-    search_result = ""
-    for result_element in result:
-        #search_result = result[random.randint(0, len(result) - 1)][1]
-        if len(search_result) + len(result_element[1]) <= 200:
-            search_result += result_element[1]
-        else:
-            continue
-    return search_result
+    comments = get_html_comments(value, comment_search_expr)
+    return comments if comments else value[:max(200, len(value) - 1)]
