@@ -102,7 +102,7 @@
                     <div class="catalog-order order-show-list"
                          {% if offer|length <= 2 %}style="margin-right: 20px;"{% endif %}>
 
-                        <div class="catalog-order-image">
+                        <div class="catalog-order-image"> <!-- здесь нужно добавить проверку на наличие "главного" изображения -->
                             <a href="/goods/{{ p.offer_url }}/"><img src="{{ p.get_main_image }}" alt=" "></a>
                         </div>
 
