@@ -217,7 +217,7 @@ class Company(models.Model):
 # Модель товара
 class Offers(models.Model):
     offer_title = models.CharField(max_length=250, verbose_name='Название')
-    offer_price = models.FloatField(default=0, verbose_name='Цена', null=True, blank=True) #удалять
+#    offer_price = models.FloatField(default=0, verbose_name='Цена', null=True, blank=True) #удалять
     offer_value = models.CharField(max_length=50, blank=True, verbose_name='Единица измерения')
     offer_text = models.TextField(verbose_name='Полное описание')
     offer_availability = models.ForeignKey(Availability, verbose_name='Наличие')
@@ -225,7 +225,7 @@ class Offers(models.Model):
     offer_photo = models.ImageField(blank=True, null=True, verbose_name='Фото на страницу')
     offer_tag = models.ForeignKey(Tags, blank=True, verbose_name='Группа 1 уровня')
     offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='Метки')
-#    offer_priority = models.FloatField(default=50, verbose_name='Приоритет в выборке', null=False, blank=False)
+#    offer_popylarity = models.DecimalField(max_digits=2, decimal_places=2, verbose_name='Популярность товара')
     created = models.DateTimeField(verbose_name='Создан', auto_now_add=True, auto_now=False)
 
     class Meta:
