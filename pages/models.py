@@ -110,13 +110,13 @@ class Images(models.Model):
         self.images_file.save(storage.generate_filename(self.images_file.name), File(temp_handle), save=False)
 
 
-# Модель категории
+# Модель названий разделов сайта
 class Category(models.Model):
     category_title = models.CharField(max_length=250)
 
     class Meta:
-        verbose_name = 'Страница сайта'
-        verbose_name_plural = 'Страницы сайта'
+        verbose_name = 'Раздел сайта'
+        verbose_name_plural = 'Разделы сайта'
 
     def __str__(self):
         return self.category_title
