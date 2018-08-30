@@ -451,7 +451,7 @@ class OfferImagesAjaxUpdateView(FormView):
 
 
 def catalog(request, cat_url='nothing'):
-    sort_by = request.GET.get('sort_by', 'priority')
+    sort_by = request.GET.get('sort_by', 'price')
 
     search_title = request.GET.get('search_title', '')
     if len(search_title) < 2:
