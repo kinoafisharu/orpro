@@ -225,7 +225,7 @@ class Offers(models.Model):
     offer_photo = models.ImageField(blank=True, null=True, verbose_name='Фото на страницу')
     offer_tag = models.ForeignKey(Tags, blank=True, verbose_name='Группа 1 уровня')
     offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='Метки')
-#    offer_popylarity = models.DecimalField(max_digits=2, decimal_places=2, verbose_name='Популярность товара')
+    offer_popylarity = models.DecimalField(max_digits=2, decimal_places=2, verbose_name='Популярность товара')
     created = models.DateTimeField(verbose_name='Создан', auto_now_add=True, auto_now=False)
 
     class Meta:
