@@ -113,10 +113,13 @@
                                 <h5>{{ p.offer_title|truncatechars:90 }}</h5>
                             </a>
 
+                            {{ p.offer_availability }}
+
                             {% if p.default_price_value != 0 %}
                                 <b class="order-price">{{ p.default_price_value|stringformat:"i" }} руб.</b>
                             {% else %}
-                                <b class="order-price">Под заказ</b>
+                                <!--<b class="order-price">Под заказ</b>-->
+                                <b class="order-price">{{ p.default_price_value|stringformat:"i" }} руб.</b>
                             {% endif %}
                             <p>{{ p.offer_text|offer_pre_text|safe }}</p>
                         </div>
