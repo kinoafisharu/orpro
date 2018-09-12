@@ -504,11 +504,7 @@ def catalog(request, cat_url='nothing'):
         offers = sorted(offers, key=lambda x: x.offer_title)
 
     elif sort_by == 'priority':
-        offers = Offers.objects.order_by('offer_popylarity')
-# Изменение Иванова Михаила (не работает, увы)
-#        def by_priority_key(offers):
-#            return Subtags.objects.aggregate(Avg('tag_priority'))
-#        offers = sorted(offers, key = by_priority_key) 
+        offers = sorted(offers, key=lambda x: x.offer_popylarity)
 
     elif sort_by == 'price':
         offers = offers.extra(select={
@@ -520,6 +516,8 @@ def catalog(request, cat_url='nothing'):
                 AND p.offer_id = pages_offers.id
             """
         }).order_by('default_price')
+
+    # offers.order_by('offer_availability')
 
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['offer'] = offers
