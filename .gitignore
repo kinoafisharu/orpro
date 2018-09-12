@@ -107,7 +107,10 @@ ENV/
 
 .DS_Store
 Pipfile
+Pipfile.lock
 os.path.join(BASE_DIR, 'db.sqlite3')
 
 #Database
 *.sqlite3
+*.sql
+
