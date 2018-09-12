@@ -12,6 +12,7 @@ from django.core.files.storage import default_storage as storage
 
 class Availability(models.Model):
     availability_title = models.CharField(max_length=50)
+    availability_code = models.IntegerField(default=0)
 
     def __str__(self):
         return self.availability_title
