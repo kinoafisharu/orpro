@@ -451,7 +451,7 @@ class OfferImagesAjaxUpdateView(FormView):
 
 
 def catalog(request, cat_url='nothing'):
-    sort_by = request.GET.get('sort_by', 'price')
+    sort_by = request.GET.get('sort_by')
 
     search_title = request.GET.get('search_title', '')
     if len(search_title) < 2:
@@ -501,18 +501,17 @@ def catalog(request, cat_url='nothing'):
             prices__value__lte=search_price_to)
 
     if sort_by == 'name':
-        offers = sorted(offers, key=lambda x: x.offer_title)
-
-    elif sort_by == 'priority':
-        offers = offers\
-            .annotate(priority=models.Sum('offer_subtags__tag_priority')
-                               /(models.Count('offer_subtags') or 0))\
-            .order_by('priority')
-# Изменение Иванова Михаила (не работает, увы)
-#        def by_priority_key(offers):
-#            return Subtags.objects.aggregate(Avg('tag_priority'))
-#        offers = sorted(offers, key = by_priority_key) 
-
+        offers = sorted(offers, key=lambda x: ((
+            x.offer_availability.availability_code,
+            x.offer_title
+        )))
+    # This sorting is by default when page is loaded first time.
+    # Match it with template, if it'll be changed.
+    elif sort_by == 'priority' or sort_by is None:
+        offers = sorted(offers, key=lambda x: ((
+            x.offer_availability.availability_code,
+            x.offer_popylarity,
+        )))
     elif sort_by == 'price':
         offers = offers.extra(select={
             'default_price': """
@@ -523,6 +522,8 @@ def catalog(request, cat_url='nothing'):
                 AND p.offer_id = pages_offers.id
             """
         }).order_by('default_price')
+        offers = sorted(offers, key=lambda x: (
+            x.offer_availability.availability_code))
 
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['offer'] = offers
