@@ -505,10 +505,13 @@ def catalog(request, cat_url='nothing'):
             x.offer_availability.availability_code,
             x.offer_title
         )))
-
+    # This sorting is by default when page is loaded first time.
+    # Match it with template, if it'll be changed.
     elif sort_by == 'priority' or sort_by is None:
-        offers = sorted(offers, key=lambda x: x.offer_popylarity)
-
+        offers = sorted(offers, key=lambda x: ((
+            x.offer_availability.availability_code,
+            x.offer_popylarity,
+        )))
     elif sort_by == 'price':
         offers = offers.extra(select={
             'default_price': """
@@ -519,6 +522,8 @@ def catalog(request, cat_url='nothing'):
                 AND p.offer_id = pages_offers.id
             """
         }).order_by('default_price')
+        offers = sorted(offers, key=lambda x: (
+            x.offer_availability.availability_code))
 
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['offer'] = offers
