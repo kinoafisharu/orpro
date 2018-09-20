@@ -191,3 +191,6 @@ SUMMERNOTE_CONFIG = {
         'summernote/django_summernote.css',
     ),
 }
+
+# No-photo file
+NO_PHOTO_IMAGE = os.path.join(STATIC_URL, 'images/nophoto.jpg')
