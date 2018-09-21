@@ -241,7 +241,10 @@ class Offers(models.Model):
         img = False
         if self.images.filter(main=True).first():
             img = self.images.filter(main=True).first()
-            img = img.images_file.url
+            if img.images_url != '':
+                img = img.images_file.url
+            else:
+                img = settings.NO_PHOTO_IMAGE
         elif self.images.first():
             img = self.images.first()
             img = img.url
@@ -253,7 +256,6 @@ class Offers(models.Model):
     # fix offer img_main
     def get_main_image_url(self):
         name = str(self.get_main_image)
-        print(name)
         if name:
             # --Вывод Главного изображения товара--
             # Было os.path.exists(os.path.join(settings.MEDIA_ROOT, name)):,
@@ -264,7 +266,7 @@ class Offers(models.Model):
                     return (settings.MEDIA_URL + name)
             except OSError as err:
                 return err
-        return (settings.STATIC_URL + 'images/nophoto.jpg')
+        return (settings.NO_PHOTO_IMAGE)
 
     @models.permalink
     def get_admin_url(self):
