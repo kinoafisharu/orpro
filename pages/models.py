@@ -241,10 +241,13 @@ class Offers(models.Model):
         img = False
         if self.images.filter(main=True).first():
             img = self.images.filter(main=True).first()
-            if img.images_url != '':
+            if img.images_file:
                 img = img.images_file.url
+            elif img.images_url:
+                img = img.images_url
             else:
                 img = settings.NO_PHOTO_IMAGE
+
         elif self.images.first():
             img = self.images.first()
             img = img.url
