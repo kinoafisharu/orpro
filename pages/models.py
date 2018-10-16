@@ -277,7 +277,14 @@ class Offers(models.Model):
 
     @property
     def default_price_value(self):
+        # --Получение главной цены товара--
+        # Раньше ценой по умолчанию была цена без скидки.
+        # Теперь ценой по умолчанию является цена со скидкой.
+        # Но она есть не у всех товаров...
         default_price_obj = self.prices.filter(price_type__is_default=True).first()
+        if default_price_obj is not None:
+            return default_price_obj.value
+        default_price_obj = self.prices.filter(price_type__is_default=False).first()
         if default_price_obj is not None:
             return default_price_obj.value
         return 0
