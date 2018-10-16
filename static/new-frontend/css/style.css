@@ -496,7 +496,7 @@ footer .copyright a:hover {
 	padding: 20px;
 }
 .catalog-order.order-show-list{
-	height: 100px;
+	height: 140px;
 	width: 100%;
 	margin: 5px 0;
 	padding: 10px;
@@ -522,7 +522,7 @@ footer .copyright a:hover {
 .catalog-order.order-show-list > .catalog-order-text{
 	overflow: hidden;
 	display: inline-block;
-	height: 100px;
+	height: 140px;
 	width: 600px;
 	line-height: 24px;
 	margin-left: 20px;
@@ -954,7 +954,7 @@ footer .copyright a:hover {
 	.custom-category-list > ul.marked-list li a p{width: 130px;}
 
 	/* Каталог. Товары. */
-	.catalog-order.order-show-list{width: 100%;height: 100px;}
+	.catalog-order.order-show-list{width: 100%;height: 140px;}
 	.catalog-order.order-show-block{width: 200px;height: 400px;}
 	.catalog-order.order-show-list > .catalog-order-image{height: 100px;width: 90px;}
 	.catalog-order.order-show-block > .catalog-order-image{height: 190px;width: 200px;}
