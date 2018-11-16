@@ -482,7 +482,6 @@ def catalog(request, cat_url='nothing'):
                 sub_tag_list.append(sub_tag_id)
             not_custrom_filter = False
     # Если есть хотя бы одно выбранное ключевое слово товара
-    print(not_custrom_filter, sub_tag_list)
     if sub_tag_list or not_custrom_filter:
         try:
             args['pre'] = 'Группа товаров'
@@ -553,7 +552,6 @@ def catalog(request, cat_url='nothing'):
     # Выборка ключевых слов товара исходя из основного тега
     args['label_tags'] = Tags_search.objects.filter(tag_parent_tag=mt)
     args['cat_title'] = mt
-    print(args['offer'])
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
     args['company'] = Company.objects.get(id=1)
