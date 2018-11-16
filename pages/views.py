@@ -474,13 +474,15 @@ def catalog(request, cat_url='nothing'):
     args = {}
     # Поиск ключевых слов товара в Get запросе
     sub_tag_list = []
+    not_custrom_filter = True
     for r in request.GET:
         if r.find('tag_find') != -1:
             sub_tag_id = request.GET.get(r, None)
             if sub_tag_id:
                 sub_tag_list.append(sub_tag_id)
+            not_custrom_filter = False
     # Если есть хотя бы одно выбранное ключевое слово товара
-    if sub_tag_list:
+    if sub_tag_list or not_custrom_filter:
         try:
             args['pre'] = 'Группа товаров'
             mt = Tags.objects.get(tag_url=cat_url)
