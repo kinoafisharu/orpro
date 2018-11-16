@@ -256,7 +256,7 @@ class Home(View):
         self.context_data['p'] = Personal.objects.all()
         self.context_data['ac1'] = AboutCompany.objects.get(id=1)
         self.context_data['hf'] = HeaderPhoto.objects.get(id=1)
-        # self.context_data['company'] = Company.objects.get(id=1)
+        self.context_data['company'] = Company.objects.get(id=1)
         self.context_data['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
 
     def __init__(self, *args, **kwargs):
@@ -472,62 +472,80 @@ def catalog(request, cat_url='nothing'):
     if cat_url == 'nothing':
         cat_url = Tags.objects.filter(tag_publish=True).order_by('tag_priority')[0].tag_url
     args = {}
-    try:
-        args['pre'] = 'Группа товаров'
-        mt = Tags.objects.get(tag_url=cat_url)
-        offers = Offers.objects.filter(offer_tag=mt)
-        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
-    except Exception:
-        args['pre'] = 'КЛЮЧЕВОЕ СЛОВО'
-        print(cat_url)
-        mt = Subtags.objects.get(tag_url=cat_url)
-        offers = Offers.objects.filter(offer_subtags=mt)
+    # Поиск ключевых слов товара в Get запросе
+    sub_tag_list = []
+    for r in request.GET:
+        if r.find('tag_find') != -1:
+            sub_tag_id = request.GET.get(r, None)
+            if sub_tag_id:
+                sub_tag_list.append(sub_tag_id)
+    # Если есть хотя бы одно выбранное ключевое слово товара
+    if sub_tag_list:
+        try:
+            args['pre'] = 'Группа товаров'
+            mt = Tags.objects.get(tag_url=cat_url)
+            offers = Offers.objects.filter(offer_tag=mt, offer_subtags__in=sub_tag_list)
+            args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
+        except Exception:
+            args['pre'] = 'КЛЮЧЕВОЕ СЛОВО'
+            print(cat_url)
+            mt = Subtags.objects.get(tag_url=cat_url)
+            offers = Offers.objects.filter(offer_subtags=mt, offer_subtags__in=sub_tag_list)
+            args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('tag_priority')[0:100]
 
-        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('tag_priority')[0:100]
+        args['hf'] = HeaderPhoto.objects.get(id=1)
 
-    args['hf'] = HeaderPhoto.objects.get(id=1)
+        if search_title is not None:
+            offers = offers.filter(offer_title__icontains=search_title)
 
-    if search_title is not None:
-        offers = offers.filter(offer_title__icontains=search_title)
+        if search_price_from is not None:
+            offers = offers.filter(
+                prices__price_type__is_default=True,
+                prices__value__gte=search_price_from)
 
-    if search_price_from is not None:
-        offers = offers.filter(
-            prices__price_type__is_default=True,
-            prices__value__gte=search_price_from)
+        if search_price_to is not None:
+            offers = offers.filter(
+                prices__price_type__is_default=True,
+                prices__value__lte=search_price_to)
 
-    if search_price_to is not None:
-        offers = offers.filter(
-            prices__price_type__is_default=True,
-            prices__value__lte=search_price_to)
+        if sort_by == 'name':
+            offers = sorted(offers, key=lambda x: ((
+                x.offer_availability.availability_code,
+                x.offer_title
+            )))
+        # This sorting is by default when page is loaded first time.
+        # Match it with template, if it'll be changed.
+        elif sort_by == 'priority' or sort_by is None:
+            offers = sorted(offers, key=lambda x: ((
+                x.offer_availability.availability_code,
+                x.offer_popylarity,
+            )))
+        elif sort_by == 'price':
+            offers = offers.extra(select={
+                'default_price': """
+                    SELECT p.value
+                    FROM pages_price AS p
+                    LEFT JOIN pages_pricetype AS pt on p.price_type_id = pt.id
+                    WHERE pt.is_default = TRUE 
+                    AND p.offer_id = pages_offers.id
+                """
+            }).order_by('default_price')
+            offers = sorted(offers, key=lambda x: (
+                x.offer_availability.availability_code))
+        args['offer'] = offers
+    else:
+        args['offer'] = []
+        try:
+            mt = Tags.objects.get(tag_url=cat_url)
+            args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
+        except Exception:
+            mt = Subtags.objects.get(tag_url=cat_url)
+            args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('tag_priority')[0:100]
 
-    if sort_by == 'name':
-        offers = sorted(offers, key=lambda x: ((
-            x.offer_availability.availability_code,
-            x.offer_title
-        )))
-    # This sorting is by default when page is loaded first time.
-    # Match it with template, if it'll be changed.
-    elif sort_by == 'priority' or sort_by is None:
-        offers = sorted(offers, key=lambda x: ((
-            x.offer_availability.availability_code,
-            x.offer_popylarity,
-        )))
-    elif sort_by == 'price':
-        offers = offers.extra(select={
-            'default_price': """
-                SELECT p.value
-                FROM pages_price AS p
-                LEFT JOIN pages_pricetype AS pt on p.price_type_id = pt.id
-                WHERE pt.is_default = TRUE 
-                AND p.offer_id = pages_offers.id
-            """
-        }).order_by('default_price')
-        offers = sorted(offers, key=lambda x: (
-            x.offer_availability.availability_code))
-
-    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
-    args['offer'] = offers
+    # Выборка ключевых слов товара исходя из основного тега
+    args['label_tags'] = Tags_search.objects.filter(tag_parent_tag=mt)
     args['cat_title'] = mt
+    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
     args['company'] = Company.objects.get(id=1)
     args['sort'] = sort_by

@@ -82,6 +82,17 @@
 
             <div id="catalog_filters">
                 <form action="" id="filter_form">
+                    {% if label_tags %}
+                        {% for tag in label_tags %}
+                            <select name="tag_find-{{ tag.id }}" id="">
+                                <option disabled selected>{{ tag.label_name }}</option>
+                                {% for s_tags in tag.offer_subtags.all %}
+                                    <option value="{{ s_tags.id }}">{{ s_tags.tag_title }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endfor %}
+                        <br>                        
+                    {% endif %}
                     <input type="text" value="{{ search_title }}" name="search_title" placeholder="Название (от 2 симв)"/>
                     <input type="text" value="{{ search_price_from }}" name="search_price_from" placeholder="Цена от"/> -
                     <input type="text" value="{{ search_price_to }}" name="search_price_to" placeholder="Цена до"/>

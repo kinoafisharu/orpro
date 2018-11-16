@@ -47,6 +47,11 @@ class OfferPrices(admin.StackedInline):
     extra = 0
 
 
+class OfferTagsSearch(admin.StackedInline):
+    model = Tags_search
+    extra = 0
+
+
 class OfferAdmin(TinyMCEAdmin, ImportExportModelAdmin):
     search_fields = ('offer_title', )
     list_display = ('offer_title', 'get_main_image')
@@ -59,12 +64,24 @@ class OfferAdmin(TinyMCEAdmin, ImportExportModelAdmin):
     def get_import_formats(self):
         return [CSV, XLS, XLSX, TSV, JSON, HTML]
 
+
+
+class OfferTags(TinyMCEAdmin, ImportExportModelAdmin):
+    list_display = ('tag_url', 'tag_title')
+    inlines = (OfferTagsSearch, )
+
+    def get_export_formats(self):
+        return [CSV, XLS, XLSX, TSV, JSON, HTML]
+
+    def get_import_formats(self):
+        return [CSV, XLS, XLSX, TSV, JSON, HTML]
+
 admin.site.register(Post, TinyMCEAdmin)
 admin.site.register(Offers, OfferAdmin)
 admin.site.register(AboutCompany, TinyMCEAdmin)
 admin.site.register(Category)
 admin.site.register(Subtags)
-admin.site.register(Tags)
+admin.site.register(Tags, OfferTags)
 admin.site.register(MainBaner)
 admin.site.register(FBlocks)
 admin.site.register(LBlocks)
