@@ -255,8 +255,8 @@ class Home(View):
         self.context_data['sup'] = Support.objects.all()[0]
         self.context_data['p'] = Personal.objects.all()
         self.context_data['ac1'] = AboutCompany.objects.get(id=1)
-        # self.context_data['hf'] = HeaderPhoto.objects.get(id=1)
-        self.context_data['company'] = Company.objects.get(id=1)
+        self.context_data['hf'] = HeaderPhoto.objects.get(id=1)
+        # self.context_data['company'] = Company.objects.get(id=1)
         self.context_data['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
 
     def __init__(self, *args, **kwargs):
@@ -491,6 +491,7 @@ def catalog(request, cat_url='nothing'):
             else:
                 offers = Offers.objects.filter(offer_tag=mt)
             args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
+            args['label_tags'] = Tags_search.objects.filter(tag_parent_tag=mt)
         except Exception:
             args['pre'] = 'КЛЮЧЕВОЕ СЛОВО'
             mt = Subtags.objects.get(tag_url=cat_url)
@@ -499,8 +500,9 @@ def catalog(request, cat_url='nothing'):
             else:
                 offers = Offers.objects.filter(offer_subtags=mt)
             args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('tag_priority')[0:100]
+            args['label_tags'] = Tags_search.objects.filter(tag_parent_tag=mt.tag_parent_tag)
 
-        # args['hf'] = HeaderPhoto.objects.get(id=1)
+        args['hf'] = HeaderPhoto.objects.get(id=1)
 
         if search_title is not None:
             offers = offers.filter(offer_title__icontains=search_title)
@@ -545,12 +547,12 @@ def catalog(request, cat_url='nothing'):
         try:
             mt = Tags.objects.get(tag_url=cat_url)
             args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
+            args['label_tags'] = Tags_search.objects.filter(tag_parent_tag=mt)
         except Exception:
             mt = Subtags.objects.get(tag_url=cat_url)
             args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('tag_priority')[0:100]
-
+            args['label_tags'] = Tags_search.objects.filter(tag_parent_tag=mt.tag_parent_tag)
     # Выборка ключевых слов товара исходя из основного тега
-    args['label_tags'] = Tags_search.objects.filter(tag_parent_tag=mt)
     args['cat_title'] = mt
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
