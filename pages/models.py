@@ -160,7 +160,6 @@ class Tags(models.Model):
     def __str__(self):
         return self.tag_title
 
-
 # Модель ключевых слов товара
 class Subtags(models.Model):
     tag_url = models.CharField(max_length=250, unique=True)  # Ссылка на категорию
@@ -185,6 +184,19 @@ class Subtags(models.Model):
         tag = cls(tag_title=tag_title, tag_url=slugify_url(tag_title))
         tag.save()
         return tag
+
+# Кастомный поиск для различных групп товаров
+class Tags_search(models.Model):
+    tag_parent_tag = models.ForeignKey(Tags, blank=True)  # Parents category
+    label_name = models.CharField(max_length=250)  # Название категории
+    offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='Метки')
+
+    class Meta:
+        verbose_name = 'Кастомный поиск для группы товаров'
+        verbose_name_plural = 'Кастомный поиск для группы товаров'
+        ordering = ['tag_parent_tag']
+
+
 
 
 # модель Организации
