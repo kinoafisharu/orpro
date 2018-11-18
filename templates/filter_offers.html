@@ -1,0 +1,104 @@
+{% extends "base/base.html" %}
+{% load static %} {% load staticfiles %}
+{% load path_list %}
+
+
+{% block additional_head %}
+    <style>
+        #catalog_filters > form > input,
+        #catalog_filters > form > select {
+            height: 25px;
+        }
+
+        #catalog_filters > form > .home-button {
+            height: 28px;
+            margin-top: 2px;
+            padding: 4px 14px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+
+    <!-- Боковое меню -->
+    <div class="grid_3">
+        <div class="hidden-mobile">
+            {% include 'lists/catalog-menu.html' with tags_menu=tags %}
+        </div>
+    </div>
+
+
+    <!-- Основной блок в котором выводится список товаров и отдельный товар -->
+    <div class="grid_8">
+        {% if request.user.is_superuser %}
+            <a href="/api-import">
+                <i class="fas fa-upload"></i>
+            </a>
+        {% endif %}
+
+
+        {% block container_list_offers %}
+
+            <!-- Первых 4 субтега, которые выводятся в каталоге -->
+            <div class="catalog-subtags">
+                <p>{{ name_filter_group }}</p>
+                <ul class="catalog-subtags-ul">
+                    {% for tag in subtags %}
+                        <li class="admin-relative-block">
+                            <a href="{% url 'filter_offers' filter_path=filter_path %}{{ tag.tag_url }}">
+                                {% if tag.tag_image %}
+                                    <img src="{{ tag.tag_image.url }}" alt="Изображение тега">
+                                {% else %}
+                                    <img src="{% static 'images/nophoto.jpg' %}" width="50"
+                                         alt="Изображение тега">
+                                {% endif %}
+                             </a>
+                            <div class="tag_text">
+                                <a href="{% url 'filter_offers' filter_path=filter_path %}{{ tag.tag_url }}">{{ tag.tag_title }}</a>
+                                <p>{{ tag.tag_description|safe }}</p>
+                            </div>
+
+                            {% include 'forms/admin-button-edit.html' with abe_title=tag.tag_url abe_template="subtag_form.html" abe_model=tag %}
+                        </li>
+                    {% endfor %}
+            </div>
+
+        {% endblock container_list_offers %}
+    </div>
+
+{% endblock %}
+
+
+{% block additional_scripts %}
+    <script type="text/javascript">
+        $('#offer-show-block').on('click', function () {
+            if ($('.custom-orders-list > .catalog-order').hasClass('order-show-list')) {
+                $('.custom-orders-list > .catalog-order').toggleClass('order-show-list order-show-block');
+                $('.block-settings-type-view > a:not(.return-to-category)').toggleClass('active');
+            }
+        });
+
+        $('#offer-show-list').on('click', function () {
+            if ($('.custom-orders-list > .catalog-order').hasClass('order-show-block')) {
+                $('.custom-orders-list > .catalog-order').toggleClass('order-show-list order-show-block');
+                $('.block-settings-type-view > a:not(.return-to-category)').toggleClass('active');
+            }
+        });
+
+        $('select[name=sort]').change(function(e){
+            var option = $('select[name=sort] option:selected')[0];
+            var sort_by = option.dataset.sortBy;
+            $('#filter_form input[name=sort_by]').val(sort_by);
+            $('#filter_form').submit();
+        });
+
+        function clearFilter() {
+            var option = $('select[name=sort] option:selected')[0];
+            var sort_by = option.dataset.sortBy;
+            window.location = '{{ request.path }}?sort_by='+sort_by
+        }
+    </script>
+
+
+{% endblock %}
