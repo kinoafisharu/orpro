@@ -190,14 +190,16 @@ class Tags_search(models.Model):
     tag_parent_tag = models.ForeignKey(Tags, blank=True)  # Parents category
     label_name = models.CharField(max_length=250)  # Название категории
     offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='Метки')
+    order_page = models.IntegerField('Номер старницы фильтра', null=True, blank=True)
+    recursive_tag_search = models.ForeignKey('self', null=True, blank=True, verbose_name='Следующий фильтр')
 
     class Meta:
         verbose_name = 'Кастомный поиск для группы товаров'
         verbose_name_plural = 'Кастомный поиск для группы товаров'
         ordering = ['tag_parent_tag']
 
-
-
+    def __str__(self):
+        return self.label_name
 
 # модель Организации
 class Company(models.Model):

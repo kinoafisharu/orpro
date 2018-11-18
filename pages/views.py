@@ -2,6 +2,7 @@
 import os
 import json
 import urllib
+from urllib.parse import urlsplit
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
@@ -450,7 +451,32 @@ class OfferImagesAjaxUpdateView(FormView):
         return kwargs
 
 
-def catalog(request, cat_url='nothing'):
+def catalog(request, cat_url='nothing', filters=False):
+
+    sub_tag_list = []
+    args = {}
+    # Если есть фильтры категорий предметов
+    if filters:
+        mt = filters[0] # Основной тэг
+        sub_tag_list = filters[1:] # категории предметов
+        sub_tag_list = Subtags.objects.filter(tag_url__in=sub_tag_list)
+        mt = Tags.objects.filter(tag_url=mt).first()
+        if not mt:
+            mt = mt = Subtags.objects.filter(tag_url=mt).first()
+    else:
+        mt = Tags.objects.filter(tag_url=cat_url).first()
+        label_tags = False
+        if mt:
+            label_tags = Tags_search.objects.filter(tag_parent_tag=mt)
+        else:
+            mt = Subtags.objects.filter(tag_url=cat_url).first()
+            if mt:
+                label_tags = Tags_search.objects.filter(tag_parent_tag=mt.tag_parent_tag)
+            else:
+                mt = cat_url
+        if label_tags: # Если есть кастомные фильтры у тэга
+            return filter_offers(request, cat_url)
+
     sort_by = request.GET.get('sort_by')
 
     search_title = request.GET.get('search_title', '')
@@ -470,97 +496,89 @@ def catalog(request, cat_url='nothing'):
         search_price_to = None
 
     if cat_url == 'nothing':
+        cat_url = Tags.objects.filter(tag_publish=True).order_by('tag_priority')[0]
+        mt = cat_url
         cat_url = Tags.objects.filter(tag_publish=True).order_by('tag_priority')[0].tag_url
-    args = {}
-    # Поиск ключевых слов товара в Get запросе
-    sub_tag_list = []
-    not_custrom_filter = True
-    for r in request.GET:
-        if r.find('tag_find') != -1:
-            sub_tag_id = request.GET.get(r, None)
-            if sub_tag_id:
-                sub_tag_list.append(sub_tag_id)
-            not_custrom_filter = False
-    # Если есть хотя бы одно выбранное ключевое слово товара
-    if sub_tag_list or not_custrom_filter:
-        try:
-            args['pre'] = 'Группа товаров'
-            mt = Tags.objects.get(tag_url=cat_url)
-            if sub_tag_list:
-                offers = Offers.objects.filter(offer_tag=mt, offer_subtags__in=sub_tag_list)
-            else:
-                offers = Offers.objects.filter(offer_tag=mt)
-            args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
-            args['label_tags'] = Tags_search.objects.filter(tag_parent_tag=mt)
-        except Exception:
-            args['pre'] = 'КЛЮЧЕВОЕ СЛОВО'
-            mt = Subtags.objects.get(tag_url=cat_url)
-            if sub_tag_list:
-                offers = Offers.objects.filter(offer_subtags=mt, offer_subtags__in=sub_tag_list)
-            else:
-                offers = Offers.objects.filter(offer_subtags=mt)
-            args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('tag_priority')[0:100]
-            args['label_tags'] = Tags_search.objects.filter(tag_parent_tag=mt.tag_parent_tag)
 
-        args['hf'] = HeaderPhoto.objects.get(id=1)
+    try:
+        args['pre'] = 'Группа товаров'
+        if mt and sub_tag_list:
+            offers = Offers.objects.filter(offer_tag=mt, offer_subtags__in=sub_tag_list).distinct()
+        elif mt:
+            offers = Offers.objects.filter(offer_tag=mt)
+        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
+    except Exception:
+        args['pre'] = 'КЛЮЧЕВОЕ СЛОВО'
+        if mt and sub_tag_list:
+            offers = Offers.objects.filter(offer_tag=mt, offer_subtags__in=sub_tag_list).distinct()
+        else:
+            offers = Offers.objects.filter(offer_tag=mt)
+        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
 
-        if search_title is not None:
-            offers = offers.filter(offer_title__icontains=search_title)
+    args['hf'] = HeaderPhoto.objects.get(id=1)
 
-        if search_price_from is not None:
-            offers = offers.filter(
-                prices__price_type__is_default=True,
-                prices__value__gte=search_price_from)
+    if search_title is not None:
+        offers = offers.filter(offer_title__icontains=search_title)
 
-        if search_price_to is not None:
-            offers = offers.filter(
-                prices__price_type__is_default=True,
-                prices__value__lte=search_price_to)
+    if search_price_from is not None:
+        offers = offers.filter(
+            prices__price_type__is_default=True,
+            prices__value__gte=search_price_from)
 
-        if sort_by == 'name':
-            offers = sorted(offers, key=lambda x: ((
-                x.offer_availability.availability_code,
-                x.offer_title
-            )))
-        # This sorting is by default when page is loaded first time.
-        # Match it with template, if it'll be changed.
-        elif sort_by == 'priority' or sort_by is None:
-            offers = sorted(offers, key=lambda x: ((
-                x.offer_availability.availability_code,
-                x.offer_popylarity,
-            )))
-        elif sort_by == 'price':
-            offers = offers.extra(select={
-                'default_price': """
-                    SELECT p.value
-                    FROM pages_price AS p
-                    LEFT JOIN pages_pricetype AS pt on p.price_type_id = pt.id
-                    WHERE pt.is_default = TRUE 
-                    AND p.offer_id = pages_offers.id
-                """
-            }).order_by('default_price')
-            offers = sorted(offers, key=lambda x: (
-                x.offer_availability.availability_code))
-        args['offer'] = offers
-    else:
-        args['offer'] = []
-        try:
-            mt = Tags.objects.get(tag_url=cat_url)
-            args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
-            args['label_tags'] = Tags_search.objects.filter(tag_parent_tag=mt)
-        except Exception:
-            mt = Subtags.objects.get(tag_url=cat_url)
-            args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('tag_priority')[0:100]
-            args['label_tags'] = Tags_search.objects.filter(tag_parent_tag=mt.tag_parent_tag)
+    if search_price_to is not None:
+        offers = offers.filter(
+            prices__price_type__is_default=True,
+            prices__value__lte=search_price_to)
+
+    if sort_by == 'name':
+        offers = sorted(offers, key=lambda x: ((
+            x.offer_availability.availability_code,
+            x.offer_title
+        )))
+    # This sorting is by default when page is loaded first time.
+    # Match it with template, if it'll be changed.
+    elif sort_by == 'priority' or sort_by is None:
+        offers = sorted(offers, key=lambda x: ((
+            x.offer_availability.availability_code,
+            x.offer_popylarity,
+        )))
+    elif sort_by == 'price':
+        offers = offers.order_by('prices__value')
+    args['offer'] = offers
+
     # Выборка ключевых слов товара исходя из основного тега
     args['cat_title'] = mt
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
-    args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
     args['company'] = Company.objects.get(id=1)
     args['sort'] = sort_by
+    args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
     args['category_page'] = True
     args['search_title'] = search_title if search_title is not None else ''
     args['search_price_from'] = search_price_from if search_price_from is not None else ''
     args['search_price_to'] = search_price_to if search_price_to is not None else ''
 
+    # for a, i in args.items():
+    #     print(a, i)
+
     return render(request, 'catalog.html', args)
+
+# Фильтр товаров (кастомные)
+def filter_offers(request, filter_path):
+
+    args = {}
+    tags = filter_path.split('/') # Разбиваем url
+    pages_filter = Tags_search.objects.filter(tag_parent_tag__tag_url=tags[0]).order_by('order_page')
+    if len(tags) >= 2: # Если это не основная страница каталога
+        pages_filter = pages_filter.filter(order_page=len(tags))
+    if not pages_filter: 
+        # Если не осталось страниц кастомного поиска
+        # то переходим в каталог и сортируем товар
+        return catalog(request, filter_path, tags)
+    args['subtags'] = pages_filter.first()
+    args['filter_path'] = filter_path
+    args['name_filter_group'] = args['subtags'].label_name
+    args['subtags'] = args['subtags'].offer_subtags.all()
+
+    args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
+
+    return render(request, 'filter_offers.html', args)

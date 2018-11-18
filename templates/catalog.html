@@ -40,28 +40,6 @@
 
         {% block container_list_offers %}
 
-            <!-- Первых 4 субтега, которые выводятся в каталоге -->
-            <div class="catalog-subtags">
-                <ul class="catalog-subtags-ul">
-                    {% for tag in subtags %}
-                        {% if forloop.counter <= 4 %}
-                            <li class="admin-relative-block">
-                                <a href="{% url 'catalog' cat_url=tag.tag_url %}">
-                                    {% if tag.tag_image %}
-                                        <img src="{{ tag.tag_image.url }}" alt="Изображение тега">{% else %}
-                                        <img src="{% static 'images/nophoto.jpg' %}" width="50"
-                                             alt="Изображение тега">{% endif %}</a>
-                                <div class="tag_text">
-                                    <a href="{% url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
-                                    <p>{{ tag.tag_description|safe }}</p>
-                                </div>
-
-                                {% include 'forms/admin-button-edit.html' with abe_title=tag.tag_url abe_template="subtag_form.html" abe_model=tag %}
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-            </div>
-
             <!-- Панель отображения товаров(списком или блочно) и название категории -->
             <div class="custom-viewers-line">
                 <div class="block-settings-type-sorted"></div>
@@ -82,17 +60,6 @@
 
             <div id="catalog_filters">
                 <form action="" id="filter_form">
-                    {% if label_tags %}
-                        {% for tag in label_tags %}
-                            <select name="tag_find-{{ tag.id }}" id="">
-                                <option disabled selected>{{ tag.label_name }}</option>
-                                {% for s_tags in tag.offer_subtags.all %}
-                                    <option value="{{ s_tags.id }}">{{ s_tags.tag_title }}</option>
-                                {% endfor %}
-                            </select>
-                        {% endfor %}
-                        <br>                        
-                    {% endif %}
                     <input type="text" value="{{ search_title }}" name="search_title" placeholder="Название (от 2 симв)"/>
                     <input type="text" value="{{ search_price_from }}" name="search_price_from" placeholder="Цена от"/> -
                     <input type="text" value="{{ search_price_to }}" name="search_price_to" placeholder="Цена до"/>

@@ -49,6 +49,7 @@ class OfferPrices(admin.StackedInline):
 
 class OfferTagsSearch(admin.StackedInline):
     model = Tags_search
+    filter_horizontal = ('offer_subtags',)
     extra = 0
 
 
