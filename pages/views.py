@@ -111,7 +111,7 @@ def review(request):
     else:
         form = ReviewsForm()
 
-    # args['hf'] = HeaderPhoto.objects.get(id=1)
+    args['hf'] = HeaderPhoto.objects.get(id=1)
 
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['reviews'] = Reviews.objects.filter(publish=True).order_by('-date')
@@ -256,7 +256,7 @@ class Home(View):
         self.context_data['sup'] = Support.objects.all()[0]
         self.context_data['p'] = Personal.objects.all()
         self.context_data['ac1'] = AboutCompany.objects.get(id=1)
-        # self.context_data['hf'] = HeaderPhoto.objects.get(id=1)
+        self.context_data['hf'] = HeaderPhoto.objects.get(id=1)
         # self.context_data['company'] = Company.objects.get(id=1)
         self.context_data['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
 
@@ -329,7 +329,7 @@ class SinglePageAjaxUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         if not self.request.is_ajax():
-            # ctx['hf'] = HeaderPhoto.objects.get(id=1)
+            ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
             ctx['post'] = Post.objects.get(post_seourl=self.object.post_seourl)
             ctx['tags'] = Subtags.objects.all().order_by('?')[0:100]
@@ -393,7 +393,7 @@ class OfferAjaxUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         if not self.request.is_ajax():
-            # ctx['hf'] = HeaderPhoto.objects.get(id=1)
+            ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
             # ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_subtags)\
@@ -515,7 +515,7 @@ def catalog(request, cat_url='nothing', filters=False):
             offers = Offers.objects.filter(offer_tag=mt)
         args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
 
-    # args['hf'] = HeaderPhoto.objects.get(id=1)
+    args['hf'] = HeaderPhoto.objects.get(id=1)
 
     if search_title is not None:
         offers = offers.filter(offer_title__icontains=search_title)
