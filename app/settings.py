@@ -23,11 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'ge69cxw&hpbqdeyev_jykmjp8myq%$ig#@f(2o0x!g_mcl(c07'
 
-SECRET_KEY = 'afaf'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = True
+DEBUG = config('DJANGO_DEBUG', cast=bool)
 
 ALLOWED_HOSTS = ['*']
 
@@ -93,8 +93,16 @@ DATABASES = {'default': {}}
 try:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': config('DB_ENGINE'),
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': '5432',
+            # 'OPTIONS': {
+            #    'init_command': 'SET innodb_strict_mode=1',
+            #    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            # },
         }
     }
 except UndefinedValueError:
@@ -148,15 +156,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 # Подключение Амазона(основные настройки),
 # устанавливаем через pip - boto3(для доступа и отправки файлов на Амазон),django-storages(для управления файлами)
-AWS_ACCESS_KEY_ID = 'asf'
-AWS_SECRET_ACCESS_KEY = 'asf'
-AWS_STORAGE_BUCKET_NAME = 'asf'
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
 # Название основной папки на Амазоне
 AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
-REGION_NAME = 'asdf'
+REGION_NAME = config('REGION_NAME')
 AWS_LOCATION = 'static'
 AWS_MEDIA = 'media'
 
@@ -173,7 +181,7 @@ AWS_PUBLIC_MEDIA_LOCATION = 'media'
 # Создаем внешнийф файл storage_backends.py, в котором укажем путь для сохранения файлов
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
-RECAPTCHA_SECRET_KEY = 'ASDR'
+RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
 
 # django-summernote
 SUMMERNOTE_CONFIG = {
