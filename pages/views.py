@@ -503,7 +503,9 @@ def catalog(request, cat_url='nothing', filters=False):
     try:
         args['pre'] = 'Группа товаров'
         if mt and sub_tag_list:
-            offers = Offers.objects.filter(offer_tag=mt, offer_subtags__in=sub_tag_list).distinct()
+            offers = Offers.objects.filter(offer_tag=mt)
+            for s in sub_tag_list:
+                offers = offers.filter(offer_subtags=s)
         elif mt:
             offers = Offers.objects.filter(offer_tag=mt)
         args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
@@ -567,16 +569,33 @@ def filter_offers(request, filter_path):
 
     args = {}
     tags = filter_path.split('/') # Разбиваем url
-    pages_filter = Tags_search.objects.filter(tag_parent_tag__tag_url=tags[0]).order_by('order_page')
+    # print(tags)
+    string_name_filter = ""
     if len(tags) >= 2: # Если это не основная страница каталога
-        pages_filter = pages_filter.filter(order_page=len(tags))
+        string_name_filter = ""
+        pages_filter = Tags_search.objects.filter(tag_parent_tag__tag_url=tags[0], first_page_filtr=True).order_by('order_page').first()
+        string_name_filter += ' ' + pages_filter.label_name
+        # print(pages_filter)
+        for t in tags[1:]:
+            # print(t)
+            s = Subtags.objects.filter(tag_url=t)
+            # print(s)
+            pages_filter = Tags_search.objects.filter(recursive_tag_search=s).order_by('order_page')
+            string_name_filter += ' \ ' + s.first().tag_title
+            # print(pages_filter)
+        # pages_filter = pages_filter.filter(order_page=len(tags))
+    else:
+        pages_filter = Tags_search.objects.filter(tag_parent_tag__tag_url=tags[0], first_page_filtr=True).order_by('order_page')
+        string_name_filter += ' ' + pages_filter.first().label_name
     if not pages_filter: 
         # Если не осталось страниц кастомного поиска
         # то переходим в каталог и сортируем товар
         return catalog(request, filter_path, tags)
     args['subtags'] = pages_filter.first()
     args['filter_path'] = filter_path
-    args['name_filter_group'] = args['subtags'].label_name
+    args['name_filter_group'] = string_name_filter
+    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
+    args['company'] = Company.objects.get(id=1)
     args['subtags'] = args['subtags'].offer_subtags.all()
 
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
