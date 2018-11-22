@@ -50,6 +50,7 @@ class OfferPrices(admin.StackedInline):
 class OfferTagsSearch(admin.StackedInline):
     model = Tags_search
     filter_horizontal = ('offer_subtags',)
+    raw_id_fields = ("recursive_tag_search",)
     extra = 0
 
 
