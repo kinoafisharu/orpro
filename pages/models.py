@@ -198,7 +198,7 @@ class Tags_search(models.Model):
     class Meta:
         verbose_name = 'Кастомный поиск для группы товаров'
         verbose_name_plural = 'Кастомный поиск для группы товаров'
-        ordering = ['tag_parent_tag']
+        ordering = ['order_page']
 
     def __str__(self):
         return self.label_name
