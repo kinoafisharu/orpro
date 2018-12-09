@@ -597,7 +597,7 @@ def filter_offers(request, filter_path):
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['company'] = Company.objects.get(id=1)
     args['subtags'] = args['subtags'].offer_subtags.all()
-
+    args['hf'] = HeaderPhoto.objects.get(id=1)
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
 
     return render(request, 'filter_offers.html', args)
