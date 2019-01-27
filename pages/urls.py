@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^delete$', comment_delete, name='comment_delete'),
     # url(r'^1g$', pars_cat),
     # url(r'^2g$', pars_goods),
-    url(r'^catalog/(?P<cat_url>[A-Za-z0-9_-]+)$', catalog, name='catalog'),
+    url(r'^catalog/(?P<cat_url>[A-Za-z0-9_-]+)$', catalog2, name='catalog'),
     url(r'^filter/(?P<filter_path>[-/\w]+)/$', filter_offers, name='filter_offers'),
     url(r'^otzyvy', review, name='review'),
     url(r'^catalog', catalog, name='cat_redirect'),
