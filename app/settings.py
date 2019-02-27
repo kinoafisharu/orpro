@@ -201,6 +201,8 @@ CSRF_COOKIE_SECURE = True
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+PREPEND_WWW = False
+
 BASE_URL = "https://orpro.ru"
 
 ALLOWED_HOSTS = ['www.orpro.ru', 'orpro.ru']
