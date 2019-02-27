@@ -29,8 +29,6 @@ SECRET_KEY = config('SECRET_KEY')
 # DEBUG = True
 DEBUG = config('DJANGO_DEBUG', cast=bool)
 
-ALLOWED_HOSTS = ['*']
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -194,3 +192,17 @@ SUMMERNOTE_CONFIG = {
 
 # No-photo file
 NO_PHOTO_IMAGE = os.path.join(STATIC_URL, 'images/nophoto.jpg')
+
+SECURE_SSL_REDIRECT = True
+
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SECURE = True
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+PREPEND_WWW = True
+
+BASE_URL = "https://orpro.ru"
+
+ALLOWED_HOSTS = ['www.orpro.ru', 'orpro.ru']
