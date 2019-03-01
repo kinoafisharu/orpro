@@ -27,5 +27,6 @@ urlpatterns = [
 	url(r'^', include('pages.urls')),
 	url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt'), name="robots"),
 	url(r'^sitemap\.xml$', TemplateView.as_view(template_name='sitemap.xml'), name="sitemap"),
+	url(r'^favicon\.ico$', TemplateView.as_view(template_name='favicon.ico'), name="favicon"),
 ]
 # ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
