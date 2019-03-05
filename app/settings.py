@@ -205,4 +205,4 @@ NO_PHOTO_IMAGE = os.path.join(STATIC_URL, 'images/nophoto.jpg')
 
 # BASE_URL = "https://orpro.ru"
 
-# ALLOWED_HOSTS = ['www.orpro.ru', 'orpro.ru']
+ALLOWED_HOSTS = ['www.orpro.ru', 'orpro.ru']
