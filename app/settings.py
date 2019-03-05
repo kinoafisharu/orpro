@@ -193,16 +193,16 @@ SUMMERNOTE_CONFIG = {
 # No-photo file
 NO_PHOTO_IMAGE = os.path.join(STATIC_URL, 'images/nophoto.jpg')
 
-SECURE_SSL_REDIRECT = True
+# SECURE_SSL_REDIRECT = True
 
-SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
-CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-PREPEND_WWW = False
+# PREPEND_WWW = False
 
-BASE_URL = "https://orpro.ru"
+# BASE_URL = "https://orpro.ru"
 
-ALLOWED_HOSTS = ['www.orpro.ru', 'orpro.ru']
+# ALLOWED_HOSTS = ['www.orpro.ru', 'orpro.ru']
